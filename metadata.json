@@ -1,0 +1,6 @@
+{
+  "name": "Plataforma de Modelado de Riesgo Sismico Latam Desarrollada por Geologol para la Mejora continua en la Ingeniería Civil y RRD",
+  "description": "Evaluador rápido de riesgo sísmico y comportamiento estructural MDOF para Latinoamérica.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
