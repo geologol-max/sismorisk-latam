@@ -41,6 +41,7 @@ const VulnerabilidadVenezuela = React.lazy(() => import("./components/Vulnerabil
 const FemaP154 = React.lazy(() => import("./components/FemaP154"));
 const GndtVulnerability = React.lazy(() => import("./components/GndtVulnerability"));
 const LandingPage = React.lazy(() => import("./components/LandingPage"));
+const SimuladorSismos = React.lazy(() => import("./components/SimuladorSismos"));
 
 // Componente de carga — fallback para Suspense mientras se descarga el chunk
 const ModuleLoader = () => (
@@ -139,7 +140,7 @@ export default function App() {
   const [activeAccordion, setActiveAccordion] = useState<number>(1);
 
   // --- Estados de Visualización ---
-  const [activeTab, setActiveTab] = useState<"inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt">("inicio");
+  const [activeTab, setActiveTab] = useState<"inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador">("inicio");
   const [activeGuideTab, setActiveGuideTab] = useState<"funcionamiento" | "real">("funcionamiento");
   const [animating, setAnimating] = useState(false);
   const [animTime, setAnimTime] = useState(0);
@@ -575,11 +576,28 @@ export default function App() {
             <Activity className="h-3.5 w-3.5" />
             <span>Índice de Vulnerabilidad (GNDT)</span>
           </button>
+          <button
+            onClick={() => setActiveTab("simulador")}
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+              activeTab === "simulador"
+                ? "bg-white text-blue-600 shadow-sm border border-slate-200/50"
+                : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+            <span>Simulador Sismológico</span>
+          </button>
         </div>
       </div>
 
       {/* CUERPO PRINCIPAL DEL PANEL */}
-      {activeTab === "vulnerabilidad" ? (
+      {activeTab === "simulador" ? (
+        <main className="flex-1 max-w-[1700px] w-full mx-auto p-4 lg:p-6 print:block">
+          <React.Suspense fallback={<ModuleLoader />}>
+            <SimuladorSismos />
+          </React.Suspense>
+        </main>
+      ) : activeTab === "vulnerabilidad" ? (
         <main className="flex-1 max-w-[1700px] w-full mx-auto p-4 lg:p-6 print:block">
           <React.Suspense fallback={<ModuleLoader />}>
             <VulnerabilidadVenezuela />

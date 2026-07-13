@@ -26,9 +26,11 @@ import {
   Building2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import heroSeismologists from "../assets/hero_seismologists.jpg";
+import earthStructure from "../assets/earth_structure.jpg";
 
 interface LandingPageProps {
-  onNavigate: (tab: "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt") => void;
+  onNavigate: (tab: "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
 }
 
 // ----------------------------------------------------
@@ -322,152 +324,55 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </header>
 
       {/* COMPOSICIÓN DE CUATRO PANELES GRANDES (MOCKUP ORIGINAL) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-slate-900/50 flex-1 w-full max-w-[1920px] mx-auto border-b border-slate-900">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 flex-1 w-full max-w-[1920px] mx-auto border-b border-slate-900">
         
         {/* =====================================================================
             PANEL SUPERIOR IZQUIERDO: HÉROE Y CTA (CINE, EMOCIÓN Y ACCIÓN)
             ===================================================================== */}
-        <section className="relative overflow-hidden min-h-[500px] lg:min-h-[580px] flex flex-col justify-between p-8 lg:p-12 bg-slate-950">
-          {/* Fondo Cielo Dividido: Izquierda Soleada, Derecha Tormentosa con Rayos CSS */}
-          <div className="absolute inset-0 z-0 flex">
-            {/* Mitad Izquierda: Soleado, Luz, Esperanza */}
-            <div className="w-1/2 h-full bg-gradient-to-tr from-sky-900/40 via-blue-950/30 to-indigo-950/20 relative">
-              <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-bounce" style={{ animationDuration: '15s' }}></div>
-            </div>
-            {/* Mitad Derecha: Tormentoso, Peligro, Sismo */}
-            <div className="w-1/2 h-full bg-gradient-to-br from-indigo-950/40 via-slate-950 to-zinc-950 relative border-l border-slate-900/10">
-              <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-rose-950/20 rounded-full blur-3xl animate-pulse"></div>
-              {/* Relámpago CSS animado en el fondo */}
-              <div className="absolute top-10 right-20 w-px h-64 bg-blue-400/20 opacity-20 blur-[1px] animate-pulse"></div>
-            </div>
-          </div>
-          
-          {/* Capa de rejilla técnica decorativa */}
-          <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(15,23,42,0.4)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.4)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        <section 
+          className="lg:col-span-5 relative overflow-hidden min-h-[450px] lg:min-h-[620px] flex flex-col justify-between p-8 lg:p-12"
+          style={{
+            backgroundImage: `url(${heroSeismologists})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+          }}
+        >
+          {/* Superposición Degradada Oscura */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/45 z-0"></div>
 
-          {/* Badge superior */}
-          <div className="relative z-10 self-start bg-slate-900/80 border border-slate-800/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full flex items-center space-x-2 shadow-lg">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
-            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest font-mono">Plataforma Activa • Edición Especial 2026</span>
+          {/* Sello de Geologol */}
+          <div className="relative z-10">
+            <span className="bg-blue-500/20 text-blue-400 border border-blue-500/30 font-mono text-[9px] font-bold px-2.5 py-1 rounded-md uppercase tracking-widest">
+              GEOLOGOL | CIENCIAS DE LA TIERRA
+            </span>
           </div>
 
-          {/* Gráfico Ilustrativo de Personajes en el centro */}
-          <div className="relative z-10 my-8 flex items-center justify-center">
-            <div className="relative w-full max-w-lg bg-slate-900/40 border border-slate-800/60 rounded-2xl p-6 backdrop-blur-sm shadow-2xl flex flex-col md:flex-row gap-6">
-              
-              {/* Representación conceptual de los 3 personajes y el perro de la imagen de referencia */}
-              <div className="flex flex-col space-y-4 flex-1">
-                <span className="text-[10px] font-bold text-blue-400 tracking-wider uppercase">Fuerzas Unidas ante Desastres</span>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Ingeniera */}
-                  <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
-                    <div className="h-9 w-9 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0">
-                      <Shield className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-white leading-tight">Ingeniera Civil</p>
-                      <p className="text-[10px] text-slate-400 mt-0.5">Normas & Diseño</p>
-                    </div>
-                  </div>
-                  {/* Rescatista */}
-                  <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
-                    <div className="h-9 w-9 rounded-lg bg-orange-600/20 border border-orange-500/30 flex items-center justify-center text-orange-400 shrink-0">
-                      <Flame className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-white leading-tight">Rescatista USAR</p>
-                      <p className="text-[10px] text-orange-400 mt-0.5">Búsqueda Activa</p>
-                    </div>
-                  </div>
-                  {/* Civil */}
-                  <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
-                    <div className="h-9 w-9 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
-                      <Users className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-white leading-tight">Comunidad Civil</p>
-                      <p className="text-[10px] text-slate-400 mt-0.5">Autoprotección</p>
-                    </div>
-                  </div>
-                  {/* Perro de rescate Golden Retriever */}
-                  <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
-                    <div className="h-9 w-9 rounded-lg bg-yellow-600/20 border border-yellow-500/30 flex items-center justify-center text-yellow-400 shrink-0">
-                      <Heart className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-white leading-tight">Golden K9</p>
-                      <p className="text-[10px] text-yellow-400 mt-0.5">Detección Vital</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Lado derecho ilustrativo con sismógrafo y ondas */}
-              <div className="md:w-1/3 flex flex-col justify-between bg-slate-950/60 rounded-xl p-4 border border-slate-800">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
-                  <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase font-mono">REGISTRO SÍSMICO</span>
-                  <span className="h-2 w-2 rounded-full bg-red-500 animate-ping"></span>
-                </div>
-                <div className="h-16 flex items-end gap-0.5 overflow-hidden py-1">
-                  {Array.from({ length: 18 }).map((_, i) => {
-                    const h = [20, 15, 35, 12, 45, 60, 15, 22, 50, 75, 40, 10, 30, 15, 25, 42, 10, 5][i % 18];
-                    return (
-                      <div 
-                        key={i} 
-                        className={`w-full bg-gradient-to-t ${i > 7 && i < 12 ? 'from-red-600 to-rose-400' : 'from-blue-600 to-cyan-400'} rounded-t-sm`}
-                        style={{ height: `${h}%`, animation: 'pulse 1.5s infinite', animationDelay: `${i * 0.05}s` }}
-                      ></div>
-                    );
-                  })}
-                </div>
-                <div className="mt-2 text-center border-t border-slate-800 pt-2">
-                  <p className="text-[9px] font-mono text-slate-400 uppercase">Aceleración Crítica</p>
-                  <p className="text-xs font-mono font-bold text-red-400">0.45g (Max)</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Bloque de Textos Principales y Botón de Acción */}
-          <div className="relative z-10 space-y-6">
-            <div className="space-y-3">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight text-white leading-none uppercase">
-                RESILIENCE <br className="hidden sm:inline" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-sky-400 to-indigo-400">AGAINST RISK</span>
-              </h1>
-              <p className="text-sm sm:text-md text-slate-300 font-medium leading-relaxed max-w-xl">
-                Latin American Seismic Risk Modeling Platform Developed by Geologol for Continuous Improvement in Civil Engineering and DRR.
-              </p>
-              <p className="text-xs text-slate-400 border-l-2 border-blue-500 pl-3 italic max-w-lg">
-                Plataforma de Modelado de Riesgo Sísmico en Latinoamérica desarrollada por Geologol para la mejora continua en la Ingeniería Civil y la Reducción del Riesgo de Desastres.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-4">
+          {/* Contenido del Hero */}
+          <div className="relative z-10 space-y-4 max-w-lg mt-auto">
+            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-white uppercase font-display leading-[0.95] drop-shadow-md">
+              RESILIENCE<br />AGAINST RISK
+            </h1>
+            <p className="text-xs text-slate-300 font-medium leading-relaxed drop-shadow">
+              Latin American Seismic Risk Modeling Platform Developed by Geologol for Continuous Improvement in Civil Engineering and DRR.
+            </p>
+            <div className="pt-2">
               <button 
                 onClick={() => {
                   const el = document.getElementById("study-tools-panel");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase px-6 py-3.5 rounded-xl transition duration-300 cursor-pointer shadow-lg shadow-blue-500/20 flex items-center space-x-2 group"
+                className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-6 py-3 rounded-xl transition cursor-pointer shadow-lg shadow-blue-500/20 uppercase tracking-wider flex items-center gap-2 group"
               >
-                <span>EXPLORE LATAM TOOLS</span>
-                <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
-              </button>
-              
-              <button 
-                onClick={() => {
-                  const el = document.getElementById("nuestro-planeta-panel");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 hover:border-slate-700 font-bold text-xs uppercase px-6 py-3.5 rounded-xl transition duration-300 cursor-pointer flex items-center space-x-2"
-              >
-                <Globe className="h-4 w-4 text-blue-400" />
-                <span>VER GEODINÁMICA GLOBAL</span>
+                <span>Explorar Herramientas Latam</span>
+                <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
+          </div>
+
+          {/* Indicador K9 en el pie de la imagen */}
+          <div className="relative z-10 flex items-center space-x-2 mt-6 text-[9px] font-mono text-slate-400">
+            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></div>
+            <span>Monitoreo Activo & Prevención en Campo</span>
           </div>
 
         </section>
@@ -475,41 +380,41 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         {/* =====================================================================
             PANEL SUPERIOR DERECHO: CUADRÍCULA DE HERRAMIENTAS (ANÁLISIS SÍSMICO)
             ===================================================================== */}
-        <section id="study-tools-panel" className="bg-slate-950 p-8 lg:p-12 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-900">
+        <section id="study-tools-panel" className="lg:col-span-7 bg-slate-950 p-6 lg:p-10 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-900">
           
           <div className="space-y-6">
             <div className="flex items-center justify-between border-b border-slate-900 pb-4">
               <div className="space-y-1">
-                <h2 className="text-lg font-black tracking-widest text-white uppercase font-display flex items-center gap-2">
+                <h2 className="text-lg font-black tracking-wider text-white uppercase font-display flex items-center gap-2">
                   <Layers className="h-5 w-5 text-blue-500" />
                   LATAM RISK ANALYSIS AND STUDY TOOLS
                 </h2>
-                <p className="text-xs text-slate-400">Seleccione un módulo interactivo para iniciar la evaluación estructural o consultar recursos técnicos.</p>
+                <p className="text-xs text-slate-400">Seleccione un módulo interactivo para iniciar la simulación, evaluación estructural o consultar recursos didácticos.</p>
               </div>
-              <span className="hidden sm:inline bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono text-[10px] font-bold px-2.5 py-1 rounded-md uppercase">8 MÓDULOS</span>
+              <span className="hidden sm:inline bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono text-[9px] font-bold px-2.5 py-1 rounded-md uppercase">9 MÓDULOS</span>
             </div>
 
-            {/* CUADRÍCULA DE 8 MÓDULOS INTERACTIVOS dispuestos en 2 filas de 4 (en pantallas grandes) o adaptativos */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            {/* Cuadrícula de 9 módulos dispuestos en un grid 3x3 altamente uniforme */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               
               {/* Módulo 1: Plataforma de Modelado */}
               <div 
                 onClick={() => onNavigate("modelo")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[160px] relative overflow-hidden shadow-md"
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-blue-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
               >
                 <div className="absolute top-0 right-0 h-16 w-16 bg-blue-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs font-bold text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded">1</span>
-                    <Map className="h-4 w-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
+                    <Activity className="h-4 w-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
                   </div>
                   <h3 className="text-xs font-bold text-white uppercase group-hover:text-blue-400 transition-colors tracking-wide leading-tight">
-                    PLATAFORMA DE MODELADO DE RIESGO SÍSMICO LATAM
+                    PLATAFORMA DE RIESGO SÍSMICO LATAM
                   </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Mapa sísmico 3D y análisis modal MDOF dinámico.</p>
+                  <p className="text-[10px] text-slate-400 line-clamp-2">Espectros de aceleración y análisis dinámico MDOF por piso.</p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-blue-400 tracking-wider uppercase font-mono">SIMULACIÓN GLOBAL</span>
+                  <span className="text-[9px] font-bold text-blue-400 tracking-wider uppercase font-mono">SIMULACIÓN DINÁMICA</span>
                   <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
@@ -517,7 +422,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               {/* Módulo 2: FUNVISIS */}
               <div 
                 onClick={() => onNavigate("vulnerabilidad")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-indigo-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[160px] relative overflow-hidden shadow-md"
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-indigo-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
               >
                 <div className="absolute top-0 right-0 h-16 w-16 bg-indigo-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
                 <div className="space-y-2">
@@ -526,9 +431,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     <Building2 className="h-4 w-4 text-slate-500 group-hover:text-indigo-400 transition-colors" />
                   </div>
                   <h3 className="text-xs font-bold text-white uppercase group-hover:text-indigo-400 transition-colors tracking-wide leading-tight">
-                    EVALUACIÓN DE VULNERABILIDAD EN EDIFICACIONES FUNVISIS
+                    VULNERABILIDAD EDIFICACIONES FUNVISIS
                   </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Formulario oficial venezolano basado en sismicidad andina y costera.</p>
+                  <p className="text-[10px] text-slate-400 line-clamp-2">Evaluación y priorización sísmica oficial según COVENIN 1756.</p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
                   <span className="text-[9px] font-bold text-indigo-400 tracking-wider uppercase font-mono">NORMATIVA VENEZUELA</span>
@@ -539,7 +444,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               {/* Módulo 3: FEMA */}
               <div 
                 onClick={() => onNavigate("fema")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-red-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[160px] relative overflow-hidden shadow-md"
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-red-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
               >
                 <div className="absolute top-0 right-0 h-16 w-16 bg-red-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
                 <div className="space-y-2">
@@ -548,9 +453,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     <FileText className="h-4 w-4 text-slate-500 group-hover:text-red-400 transition-colors" />
                   </div>
                   <h3 className="text-xs font-bold text-white uppercase group-hover:text-red-400 transition-colors tracking-wide leading-tight">
-                    EVALUACIÓN DE VULNERABILIDAD EN EDIFICACIONES FEMA
+                    VULNERABILIDAD EDIFICACIONES FEMA
                   </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Cribado visual rápido FEMA P-154 con nivel sismológico local.</p>
+                  <p className="text-[10px] text-slate-400 line-clamp-2">Cribado visual rápido FEMA P-154 con modificadores locales.</p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
                   <span className="text-[9px] font-bold text-red-400 tracking-wider uppercase font-mono">U.S. STANDARD FOCUS</span>
@@ -561,7 +466,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               {/* Módulo 4: GNDT */}
               <div 
                 onClick={() => onNavigate("gndt")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[160px] relative overflow-hidden shadow-md"
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-emerald-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
               >
                 <div className="absolute top-0 right-0 h-16 w-16 bg-emerald-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
                 <div className="space-y-2">
@@ -570,7 +475,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     <Activity className="h-4 w-4 text-slate-500 group-hover:text-emerald-400 transition-colors" />
                   </div>
                   <h3 className="text-xs font-bold text-white uppercase group-hover:text-emerald-400 transition-colors tracking-wide leading-tight">
-                    EVALUACIÓN DE VULNERABILIDAD EN EDIFICACIONES GNDT
+                    VULNERABILIDAD EDIFICACIONES GNDT
                   </h3>
                   <p className="text-[10px] text-slate-400 line-clamp-2">Metodología italiana de 11 parámetros críticos para mampostería.</p>
                 </div>
@@ -580,21 +485,43 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 </div>
               </div>
 
-              {/* Módulo 5: Aula de clases */}
+              {/* Módulo 5: Simulador Sismológico (NUEVO) */}
+              <div 
+                onClick={() => onNavigate("simulador")}
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-blue-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md ring-1 ring-blue-500/25"
+              >
+                <div className="absolute top-0 right-0 h-16 w-16 bg-blue-500/10 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs font-bold text-blue-400 bg-blue-500/20 px-2 py-0.5 rounded">NUEVO</span>
+                    <Sparkles className="h-4 w-4 text-blue-400 group-hover:text-blue-300 transition-colors" />
+                  </div>
+                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-blue-400 transition-colors tracking-wide leading-tight">
+                    SIMULADOR SÍSMICO VENEZUELA
+                  </h3>
+                  <p className="text-[10px] text-slate-400 line-clamp-2">Simula epicentros, hipocentros y detecta fallas geológicas reales de FUNVISIS.</p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
+                  <span className="text-[9px] font-bold text-blue-400 tracking-wider uppercase font-mono">EDUCACIÓN Y PREVENCIÓN</span>
+                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+
+              {/* Módulo 6: Aula de clases */}
               <div 
                 onClick={() => setActiveModal("aula")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-yellow-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[160px] relative overflow-hidden shadow-md"
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-yellow-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
               >
                 <div className="absolute top-0 right-0 h-16 w-16 bg-yellow-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-yellow-500 bg-yellow-500/10 px-2 py-0.5 rounded">5</span>
+                    <span className="font-mono text-xs font-bold text-yellow-500 bg-yellow-500/10 px-2 py-0.5 rounded">6</span>
                     <BookOpen className="h-4 w-4 text-slate-500 group-hover:text-yellow-400 transition-colors" />
                   </div>
                   <h3 className="text-xs font-bold text-white uppercase group-hover:text-yellow-400 transition-colors tracking-wide leading-tight">
                     AULA DE CLASES SISMOLÓGICA
                   </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Aprende sobre Ondas Sísmicas, Períodos y Resonancia de forma visual.</p>
+                  <p className="text-[10px] text-slate-400 line-clamp-2">Animaciones de ondas sísmicas, periodos de vibración y resonancia.</p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
                   <span className="text-[9px] font-bold text-yellow-400 tracking-wider uppercase font-mono">EDUCACIÓN INTERACTIVA</span>
@@ -602,15 +529,15 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 </div>
               </div>
 
-              {/* Módulo 6: Material Bibliográfico */}
+              {/* Módulo 7: Material Bibliográfico */}
               <div 
                 onClick={() => setActiveModal("biblioteca")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[160px] relative overflow-hidden shadow-md"
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-cyan-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
               >
                 <div className="absolute top-0 right-0 h-16 w-16 bg-cyan-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-cyan-500 bg-cyan-500/10 px-2 py-0.5 rounded">6</span>
+                    <span className="font-mono text-xs font-bold text-cyan-500 bg-cyan-500/10 px-2 py-0.5 rounded">7</span>
                     <FileText className="h-4 w-4 text-slate-500 group-hover:text-cyan-400 transition-colors" />
                   </div>
                   <h3 className="text-xs font-bold text-white uppercase group-hover:text-cyan-400 transition-colors tracking-wide leading-tight">
@@ -624,21 +551,21 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 </div>
               </div>
 
-              {/* Módulo 7: Héroes Anónimos */}
+              {/* Módulo 8: Héroes Anónimos */}
               <div 
                 onClick={() => setActiveModal("heroes")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-orange-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[160px] relative overflow-hidden shadow-md"
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-orange-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
               >
                 <div className="absolute top-0 right-0 h-16 w-16 bg-orange-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-orange-500 bg-orange-500/10 px-2 py-0.5 rounded">7</span>
+                    <span className="font-mono text-xs font-bold text-orange-500 bg-orange-500/10 px-2 py-0.5 rounded">8</span>
                     <Users className="h-4 w-4 text-slate-500 group-hover:text-orange-400 transition-colors" />
                   </div>
                   <h3 className="text-xs font-bold text-white uppercase group-hover:text-orange-400 transition-colors tracking-wide leading-tight">
-                    HÉROES ANÓNIMOS DEL RIESGO SÍSMICO
+                    HÉROES ANÓNIMOS DEL RIESGO
                   </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Historias de valor de rescatistas, brigadas caninas K9 y sismólogos en campo.</p>
+                  <p className="text-[10px] text-slate-400 line-clamp-2">Historias de rescatistas, brigadas caninas K9 y científicos de campo.</p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
                   <span className="text-[9px] font-bold text-orange-400 tracking-wider uppercase font-mono">HISTORIAS DE VALOR</span>
@@ -646,24 +573,24 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 </div>
               </div>
 
-              {/* Módulo 8: Blogs Especialistas */}
+              {/* Módulo 9: Blogs Especialistas */}
               <div 
                 onClick={() => setActiveModal("blogs")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-800 hover:border-purple-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[160px] relative overflow-hidden shadow-md"
+                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-purple-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
               >
                 <div className="absolute top-0 right-0 h-16 w-16 bg-purple-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-purple-500 bg-purple-500/10 px-2 py-0.5 rounded">8</span>
+                    <span className="font-mono text-xs font-bold text-purple-500 bg-purple-500/10 px-2 py-0.5 rounded">9</span>
                     <HelpCircle className="h-4 w-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
                   </div>
                   <h3 className="text-xs font-bold text-white uppercase group-hover:text-purple-400 transition-colors tracking-wide leading-tight">
                     BLOGS Y ARTÍCULOS ESPECIALISTAS
                   </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Análisis de fallas tectónicas, ductilidad y disipadores basales por expertos.</p>
+                  <p className="text-[10px] text-slate-400 line-clamp-2">Análisis de fallas tectónicas, ductilidad y disipadores basales.</p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-purple-400 tracking-wider uppercase font-mono">OPINIONES DE EXPERTOS</span>
+                  <span className="text-[9px] font-bold text-purple-400 tracking-wider uppercase font-mono">OPINIONES EXPERTAS</span>
                   <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
@@ -672,7 +599,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
 
           {/* Información complementaria rápida */}
-          <div className="mt-8 p-4 bg-slate-900/40 border border-slate-850/80 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="mt-6 p-4 bg-slate-900/40 border border-slate-850/80 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-blue-500/10 rounded-xl text-blue-400 shrink-0">
                 <Info className="h-5 w-5" />
@@ -844,219 +771,122 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               </div>
 
               {/* Lado derecho: El gráfico interactivo animado de la Tierra */}
-              <div className="md:col-span-8 flex flex-col items-center justify-center relative min-h-[340px] bg-slate-950/80 rounded-2xl border border-slate-900 p-4">
+              <div className="md:col-span-8 flex flex-col items-center justify-center relative min-h-[360px] bg-slate-950/80 rounded-2xl border border-slate-900 overflow-hidden p-0 group">
                 
-                {/* SVG del Planeta con Corte transversal, placas, volcán y ondas sísmicas animadas */}
-                <svg viewBox="0 0 400 400" className="w-full max-w-[320px] drop-shadow-2xl">
-                  {/* Definición de gradientes y animaciones */}
-                  <defs>
-                    <radialGradient id="innerCoreGrad">
-                      <stop offset="0%" stopColor="#ffffff" />
-                      <stop offset="60%" stopColor="#ffea00" />
-                      <stop offset="100%" stopColor="#ff7b00" />
-                    </radialGradient>
-                    <radialGradient id="outerCoreGrad">
-                      <stop offset="0%" stopColor="#ff9f00" />
-                      <stop offset="70%" stopColor="#ff3c00" />
-                      <stop offset="100%" stopColor="#7e0000" />
-                    </radialGradient>
-                    <radialGradient id="mantleGrad">
-                      <stop offset="0%" stopColor="#e02c00" />
-                      <stop offset="85%" stopColor="#5c0700" />
-                      <stop offset="100%" stopColor="#1b0000" />
-                    </radialGradient>
-                    
-                    {/* Filtro para brillo de los núcleos */}
-                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                      <feGaussianBlur stdDeviation="6" result="blur" />
-                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
-                  </defs>
+                {/* La ilustración científica de fondo */}
+                <img 
+                  src={earthStructure} 
+                  alt="Estructura de la Tierra" 
+                  className="w-full h-auto max-h-[380px] object-cover opacity-75 group-hover:opacity-90 transition-opacity duration-500"
+                />
+                
+                {/* Sutil degradado lateral */}
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/20 pointer-events-none"></div>
 
-                  {/* Espacio exterior estelar decorativo */}
-                  <g>
-                    <circle cx="50" cy="50" r="1" fill="#fff" opacity="0.5" />
-                    <circle cx="340" cy="80" r="1" fill="#fff" opacity="0.3" />
-                    <circle cx="80" cy="300" r="1.5" fill="#fff" opacity="0.6" className="animate-pulse" />
-                    <circle cx="320" cy="350" r="1" fill="#fff" opacity="0.4" />
-                  </g>
+                {/* Hotspots interactivos overlay con coordenadas relativas y brillo animado */}
+                
+                {/* Corteza */}
+                <div 
+                  onMouseEnter={() => setHoveredPlanetSection("corteza")}
+                  onMouseLeave={() => setHoveredPlanetSection(null)}
+                  onClick={() => setSelectedPlanetSection("corteza")}
+                  style={{ top: "15%", left: "50%" }}
+                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
+                    selectedPlanetSection === "corteza" || hoveredPlanetSection === "corteza" ? "bg-amber-400 scale-125 shadow-lg shadow-amber-400/80" : "bg-amber-500/50 hover:bg-amber-400"
+                  }`}
+                  title="Corteza Terrestre"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                </div>
 
-                  {/* 1. MANTO TERRESTRE (Círculo base) */}
-                  <g 
-                    onMouseEnter={() => setHoveredPlanetSection("manto")}
-                    onMouseLeave={() => setHoveredPlanetSection(null)}
-                    onClick={() => setSelectedPlanetSection("manto")}
-                    className="cursor-pointer"
-                  >
-                    <circle 
-                      cx="200" 
-                      cy="200" 
-                      r="160" 
-                      fill="url(#mantleGrad)" 
-                      stroke="#000" 
-                      strokeWidth="2" 
-                      className={`transition-all duration-300 ${
-                        selectedPlanetSection === "manto" || hoveredPlanetSection === "manto" ? "filter brightness-125 stroke-orange-500" : "opacity-90"
-                      }`}
-                    />
-                  </g>
+                {/* Manto */}
+                <div 
+                  onMouseEnter={() => setHoveredPlanetSection("manto")}
+                  onMouseLeave={() => setHoveredPlanetSection(null)}
+                  onClick={() => setSelectedPlanetSection("manto")}
+                  style={{ top: "35%", left: "48%" }}
+                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
+                    selectedPlanetSection === "manto" || hoveredPlanetSection === "manto" ? "bg-orange-500 scale-125 shadow-lg shadow-orange-500/80" : "bg-orange-500/50 hover:bg-orange-500"
+                  }`}
+                  title="Manto Terrestre"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                </div>
 
-                  {/* 2. NÚCLEO EXTERNO */}
-                  <g 
-                    onMouseEnter={() => setHoveredPlanetSection("nucleo_externo")}
-                    onMouseLeave={() => setHoveredPlanetSection(null)}
-                    onClick={() => setSelectedPlanetSection("nucleo_externo")}
-                    className="cursor-pointer"
-                  >
-                    <circle 
-                      cx="200" 
-                      cy="200" 
-                      r="100" 
-                      fill="url(#outerCoreGrad)" 
-                      className={`transition-all duration-300 ${
-                        selectedPlanetSection === "nucleo_externo" || hoveredPlanetSection === "nucleo_externo" ? "filter brightness-125 stroke-yellow-500 stroke-2" : ""
-                      }`}
-                    />
-                  </g>
+                {/* Núcleo Externo */}
+                <div 
+                  onMouseEnter={() => setHoveredPlanetSection("nucleo_externo")}
+                  onMouseLeave={() => setHoveredPlanetSection(null)}
+                  onClick={() => setSelectedPlanetSection("nucleo_externo")}
+                  style={{ top: "54%", left: "48%" }}
+                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
+                    selectedPlanetSection === "nucleo_externo" || hoveredPlanetSection === "nucleo_externo" ? "bg-yellow-500 scale-125 shadow-lg shadow-yellow-500/80" : "bg-yellow-500/50 hover:bg-yellow-500"
+                  }`}
+                  title="Núcleo Externo"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                </div>
 
-                  {/* 3. NÚCLEO INTERNO */}
-                  <g 
-                    onMouseEnter={() => setHoveredPlanetSection("nucleo_interno")}
-                    onMouseLeave={() => setHoveredPlanetSection(null)}
-                    onClick={() => setSelectedPlanetSection("nucleo_interno")}
-                    className="cursor-pointer"
-                  >
-                    <circle 
-                      cx="200" 
-                      cy="200" 
-                      r="50" 
-                      fill="url(#innerCoreGrad)" 
-                      filter="url(#glow)" 
-                      className={`transition-all duration-300 ${
-                        selectedPlanetSection === "nucleo_interno" || hoveredPlanetSection === "nucleo_interno" ? "stroke-white stroke-2" : ""
-                      }`}
-                    />
-                    {/* Núcleo girando con movimiento animado */}
-                    <circle cx="200" cy="200" r="4" fill="#ffffff" opacity="0.8" />
-                  </g>
+                {/* Núcleo Interno */}
+                <div 
+                  onMouseEnter={() => setHoveredPlanetSection("nucleo_interno")}
+                  onMouseLeave={() => setHoveredPlanetSection(null)}
+                  onClick={() => setSelectedPlanetSection("nucleo_interno")}
+                  style={{ top: "72%", left: "48%" }}
+                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
+                    selectedPlanetSection === "nucleo_interno" || hoveredPlanetSection === "nucleo_interno" ? "bg-white scale-125 shadow-lg shadow-white" : "bg-white/50 hover:bg-white"
+                  }`}
+                  title="Núcleo Interno"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                </div>
 
-                  {/* 4. CORTEZA TERRESTRE (Línea límite exterior y tierra visible en la mitad izquierda) */}
-                  <g 
-                    onMouseEnter={() => setHoveredPlanetSection("corteza")}
-                    onMouseLeave={() => setHoveredPlanetSection(null)}
-                    onClick={() => setSelectedPlanetSection("corteza")}
-                    className="cursor-pointer"
-                  >
-                    {/* Capas oceánicas y siluetas continentales (Sudamérica conceptual en el lado izquierdo) */}
-                    <path 
-                      d="M 60,140 Q 90,160 110,120 T 130,160 T 100,240 T 70,300 Q 52,250 43,210 Z" 
-                      fill="#2e7d32" 
-                      className="opacity-70 transition-opacity hover:opacity-90"
-                    />
-                    <path 
-                      d="M 120,60 Q 150,90 130,130 Q 100,100 120,60 Z" 
-                      fill="#1b5e20" 
-                      className="opacity-60"
-                    />
-                    {/* Océano restante */}
-                    <path 
-                      d="M 200,40 A 160,160 0 0,0 40,200 A 160,160 0 0,0 200,360 L 200,200 Z" 
-                      fill="#1565c0" 
-                      opacity="0.35" 
-                      className="pointer-events-none"
-                    />
-                    {/* Arco de corteza fina */}
-                    <path 
-                      d="M 200,40 A 160,160 0 0,0 40,200 A 160,160 0 0,0 200,360" 
-                      fill="none" 
-                      stroke="#4e342e" 
-                      strokeWidth="6" 
-                      className={`transition-all duration-300 ${
-                        selectedPlanetSection === "corteza" || hoveredPlanetSection === "corteza" ? "stroke-amber-400 stroke-[8px]" : ""
-                      }`}
-                    />
-                  </g>
+                {/* Subducción */}
+                <div 
+                  onMouseEnter={() => setHoveredPlanetSection("subduccion")}
+                  onMouseLeave={() => setHoveredPlanetSection(null)}
+                  onClick={() => setSelectedPlanetSection("subduccion")}
+                  style={{ top: "25%", left: "75%" }}
+                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
+                    selectedPlanetSection === "subduccion" || hoveredPlanetSection === "subduccion" ? "bg-cyan-400 scale-125 shadow-lg shadow-cyan-400/80" : "bg-cyan-500/50 hover:bg-cyan-400"
+                  }`}
+                  title="Zona de Subducción"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                </div>
 
-                  {/* 5. SUBDUCCIÓN Y FALLA SÍSMICA EN EL LADO DERECHO */}
-                  {/* Flechas indicadoras de placas tectónicas chocando */}
-                  <g>
-                    {/* Nazca empujando derecha */}
-                    <path d="M 160,35 L 185,45 M 185,45 L 178,38 M 185,45 L 175,48" stroke="#00d2ff" strokeWidth="2.5" fill="none" className="animate-pulse" />
-                    <text x="110" y="30" fill="#00d2ff" fontSize="9" fontWeight="bold" fontFamily="monospace">P. NAZCA ➜</text>
-                    
-                    {/* Sudamericana empujando izquierda */}
-                    <path d="M 270,30 L 245,40 M 245,40 L 252,47 M 245,40 L 255,35" stroke="#ff4d4d" strokeWidth="2.5" fill="none" className="animate-pulse" />
-                    <text x="260" y="25" fill="#ff4d4d" fontSize="9" fontWeight="bold" fontFamily="monospace">M. CONTINENTAL 🠔</text>
-                  </g>
+                {/* Volcanes */}
+                <div 
+                  onMouseEnter={() => setHoveredPlanetSection("volcanes")}
+                  onMouseLeave={() => setHoveredPlanetSection(null)}
+                  onClick={() => setSelectedPlanetSection("volcanes")}
+                  style={{ top: "18%", left: "84%" }}
+                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
+                    selectedPlanetSection === "volcanes" || hoveredPlanetSection === "volcanes" ? "bg-red-500 scale-125 shadow-lg shadow-red-500/80" : "bg-red-500/50 hover:bg-red-500"
+                  }`}
+                  title="Arco Volcánico"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                </div>
 
-                  {/* Placa subduciendo en diagonal hacia el interior */}
-                  <g 
-                    onMouseEnter={() => setHoveredPlanetSection("subduccion")}
-                    onMouseLeave={() => setHoveredPlanetSection(null)}
-                    onClick={() => setSelectedPlanetSection("subduccion")}
-                    className="cursor-pointer"
-                  >
-                    {/* Placa deslizándose bajo el manto */}
-                    <path 
-                      d="M 340,110 C 310,130 280,160 260,200" 
-                      fill="none" 
-                      stroke="#00e5ff" 
-                      strokeWidth="5" 
-                      strokeLinecap="round"
-                      className={`transition-all duration-300 ${
-                        selectedPlanetSection === "subduccion" || hoveredPlanetSection === "subduccion" ? "stroke-cyan-300 stroke-[8px]" : "opacity-80"
-                      }`}
-                    />
-                    <text x="240" y="150" fill="#00e5ff" fontSize="8" fontWeight="bold" transform="rotate(-30 240,150)">SUBDUCCIÓN</text>
-                  </g>
+                {/* Ondas Sísmicas */}
+                <div 
+                  onMouseEnter={() => setHoveredPlanetSection("ondas")}
+                  onMouseLeave={() => setHoveredPlanetSection(null)}
+                  onClick={() => setSelectedPlanetSection("ondas")}
+                  style={{ top: "32%", left: "68%" }}
+                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
+                    selectedPlanetSection === "ondas" || hoveredPlanetSection === "ondas" ? "bg-rose-500 scale-125 shadow-lg shadow-rose-500/80" : "bg-rose-500/50 hover:bg-rose-500"
+                  }`}
+                  title="Ondas Sísmicas / Foco"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                </div>
 
-                  {/* VOLCÁN ERUPTANDO Y ARCO VOLCÁNICO (Lado derecho exterior) */}
-                  <g 
-                    onMouseEnter={() => setHoveredPlanetSection("volcanes")}
-                    onMouseLeave={() => setHoveredPlanetSection(null)}
-                    onClick={() => setSelectedPlanetSection("volcanes")}
-                    className="cursor-pointer"
-                  >
-                    {/* Perfil del volcán en la corteza */}
-                    <polygon 
-                      points="340,90 355,120 325,120" 
-                      fill="#37474f" 
-                      stroke="#ff3c00" 
-                      strokeWidth="1.5"
-                      className={`${selectedPlanetSection === "volcanes" || hoveredPlanetSection === "volcanes" ? "fill-slate-700 brightness-125" : ""}`}
-                    />
-                    {/* Cámara magmática ascendiendo */}
-                    <path d="M 280,180 Q 320,150 340,105" fill="none" stroke="#ff5722" strokeWidth="3" className="animate-pulse" />
-                    {/* Humo y lava saliendo del volcán */}
-                    <path d="M 335,85 Q 330,70 320,65 T 310,50" fill="none" stroke="#78909c" strokeWidth="4" strokeLinecap="round" opacity="0.6" />
-                    <circle cx="340" cy="85" r="3" fill="#ffea00" className="animate-ping" />
-                    <text x="358" y="105" fill="#ff5722" fontSize="9" fontWeight="bold">VOLCÁN</text>
-                  </g>
-
-                  {/* ONDAS SÍSMICAS PULSANTES (Desde la zona de fricción en la placa subducida) */}
-                  <g 
-                    onMouseEnter={() => setHoveredPlanetSection("ondas")}
-                    onMouseLeave={() => setHoveredPlanetSection(null)}
-                    onClick={() => setSelectedPlanetSection("ondas")}
-                    className="cursor-pointer"
-                  >
-                    {/* Foco o Hipocentro sísmico */}
-                    <circle cx="295" cy="150" r="5" fill="#ff1744" className="animate-ping" />
-                    <polygon points="295,142 300,152 290,152" fill="#ffff00" />
-                    
-                    {/* Ondas expansivas concéntricas */}
-                    <circle cx="295" cy="150" r="15" fill="none" stroke="#ff1744" strokeWidth="1.5" strokeDasharray="3 3" className="animate-pulse" />
-                    <circle cx="295" cy="150" r="30" fill="none" stroke="#ff1744" strokeWidth="1" strokeDasharray="4 4" className="animate-pulse" />
-                    <circle cx="295" cy="150" r="45" fill="none" stroke="#ff5252" strokeWidth="0.8" opacity="0.8" />
-                    
-                    <text x="310" y="155" fill="#ff1744" fontSize="8" fontWeight="black" fontFamily="sans-serif">HIPOCENTRO</text>
-                  </g>
-                </svg>
-
-                {/* Botón indicador para simular movimiento */}
-                <div className="absolute bottom-3 right-3 flex items-center space-x-1.5 bg-slate-900/95 border border-slate-800/80 px-2.5 py-1 rounded-full text-[10px] font-bold text-slate-400 font-mono">
+                {/* Sello de Simulación en vivo */}
+                <div className="absolute bottom-3 right-3 flex items-center space-x-1.5 bg-slate-950/90 border border-slate-900 px-3 py-1.5 rounded-full text-[10px] font-bold text-slate-400 font-mono shadow-md">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                  <span>SIMULACIÓN ACTIVA EN VIVO</span>
+                  <span>MODELO CIENTÍFICO INTERACTIVO</span>
                 </div>
 
               </div>

@@ -384,6 +384,85 @@ No uses auto-alabanzas ni afirmaciones exageradas, mantén la máxima objetivida
   }
 });
 
+// API Endpoint para generar reporte de simulación educativa de sismo en Venezuela
+app.post("/api/generate-simulation-report", aiRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
+  try {
+    const {
+      magnitude,
+      depth,
+      crustMaterial,
+      waveVelocities,
+      detectedFault,
+      affectedCities,
+    } = req.body;
+
+    const ai = getGeminiClient();
+
+    const citiesDescription = affectedCities.map((c: any) => 
+      `- **${c.name}**: Distancia epicentral: ${c.distance.toFixed(1)} km. Tiempo llegada Onda P: ${c.arrivalTimes.p.toFixed(2)}s, Onda S: ${c.arrivalTimes.s.toFixed(2)}s. Intensidad Estimada (Mercalli): ${c.estimatedIntensity}. Riesgo de Daños: ${c.damageEstimate}`
+    ).join("\n");
+
+    const prompt = `
+Actúa como un destacado Sismólogo y Especialista en Prevención de Desastres de la Fundación Venezolana de Investigaciones Sismológicas (FUNVISIS).
+Genera un reporte técnico de simulación sísmica con fines educativos e informativos en Español, analizando de forma rigurosa y clara el sismo simulado en Venezuela.
+
+DATOS DEL SISMO SIMULADO:
+- Magnitud de Momento (Mw): ${magnitude}
+- Profundidad Focal (Hipocentro): ${depth} km (Clasificación: ${depth <= 70 ? 'Superficial (0-70 km)' : depth <= 300 ? 'Intermedio (70-300 km)' : 'Profundo (300-700 km)'})
+- Material de la Corteza Seleccionado: ${crustMaterial}
+- Velocidades de Ondas Estimadas:
+  * Onda P (Primaria): ${waveVelocities.p.toFixed(2)} km/s
+  * Onda S (Secundaria): ${waveVelocities.s.toFixed(2)} km/s
+  * Onda R (Rayleigh): ${waveVelocities.r.toFixed(2)} km/s
+  * Onda L (Love): ${waveVelocities.l.toFixed(2)} km/s
+
+FALLA SISMOGÉNICA DETECTADA:
+- Nombre: ${detectedFault ? detectedFault.name : 'Ninguna falla principal identificada en la cercanía'}
+- Tipo de Falla (Neotectónica): ${detectedFault ? detectedFault.type : 'S/N'}
+- Tasa de Desplazamiento (Slip Rate): ${detectedFault ? detectedFault.slipRate : 'S/N'}
+- Extensión Probable de la Falla: ${detectedFault ? detectedFault.extension : 'S/N'}
+- Distancia desde el Epicentro a la Falla: ${detectedFault ? detectedFault.distance.toFixed(1) + ' km' : 'N/A'}
+
+CIUDADES EVALUADAS POR PROXIMIDAD:
+${citiesDescription}
+
+INSTRUCCIONES PARA LA REDACCIÓN DEL REPORTE:
+1. Adopta un tono académico, técnico pero sumamente didáctico y preventivo, ideal para estudiantes, docentes y el público general interesado en la sismología en Venezuela (Aula Sísmica).
+2. Organiza el reporte usando Markdown claro con las siguientes secciones obligatorias:
+   - ### **1. Diagnóstico del Evento y Contexto Tectónico**
+     * Explica qué tipo de sismo ocurrió de acuerdo a su magnitud y profundidad focal. 
+     * Describe la falla geológica detectada (${detectedFault ? detectedFault.name : 'Ninguna'}), su comportamiento neotectónico habitual en el límite de placas Caribe-Sudamericana, y cómo su ubicación geográfica coincide con el epicentro simulado.
+   - ### **2. Física de las Ondas Sísmicas y Tiempos de Viaje**
+     * Explica didácticamente la diferencia entre las ondas corporales (P y S) y las ondas superficiales (Rayleigh y Love), detallando cómo el material de la corteza (${crustMaterial}) influye en sus velocidades.
+     * Analiza el tiempo que tardaron las ondas en llegar a las ciudades más expuestas y explica cómo se siente el arribo de cada tipo de onda (compresión vs sacudida lateral/elíptica).
+   - ### **3. Estimación de Daños y Escala de Mercalli**
+     * Explica la diferencia fundamental entre Magnitud (energía liberada en el foco) e Intensidad (percepción y daños en superficie, escala de Mercalli Modificada).
+     * Detalla los niveles de daños esperados en las poblaciones más próximas de acuerdo a su cercanía y la magnitud simulada, enfatizando la vulnerabilidad del tipo de construcción típico (mampostería informal, edificios sismorresistentes, etc.).
+   - ### **4. Medidas de Autoprotección y Cultura Preventiva (RRD)**
+     * Proporciona pautas de conducta claras y organizadas sobre qué hacer **ANTES, DURANTE y DESPUÉS** de un sismo de este tipo (enfoque educativo de prevención de FUNVISIS).
+
+Mantén la redacción objetiva pero con un fuerte llamado a la prevención y la educación comunitaria.
+    `.trim();
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.5-flash",
+      contents: prompt,
+      config: {
+        temperature: 0.3,
+      }
+    });
+
+    const reportText = response.text || "No se pudo generar el reporte de simulación. Intente de nuevo.";
+
+    res.json({ report: reportText });
+  } catch (error: any) {
+    console.error("Error generating simulation report:", error);
+    res.status(500).json({
+      error: error.message || "Error interno del servidor al procesar la solicitud con la IA.",
+    });
+  }
+});
+
 // Setup de Vite Middleware o servir archivos estáticos compilados
 async function setupServer() {
   if (process.env.NODE_ENV !== "production") {
