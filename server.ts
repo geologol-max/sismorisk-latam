@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai";
 import { createServer as createViteServer } from "vite";
 import rateLimit from "express-rate-limit";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -463,6 +464,37 @@ Mantén la redacción objetiva pero con un fuerte llamado a la prevención y la 
   }
 });
 
+// Configuración diferida de Nodemailer para evitar errores si no hay variables de entorno en desarrollo
+let mailTransporter: nodemailer.Transporter | null = null;
+
+function getMailTransporter(): nodemailer.Transporter {
+  if (!mailTransporter) {
+    const host = process.env.SMTP_HOST;
+    const port = parseInt(process.env.SMTP_PORT || "465", 10);
+    const user = process.env.SMTP_USER;
+    const pass = process.env.SMTP_PASS;
+
+    if (!host || !user || !pass) {
+      throw new Error("La configuración SMTP (SMTP_HOST, SMTP_USER, SMTP_PASS) no está completa en las variables de entorno.");
+    }
+
+    mailTransporter = nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465, // true para puerto 465 (SSL), false para otros (TLS)
+      auth: {
+        user,
+        pass,
+      },
+      tls: {
+        // Permitir certificados autofirmados si es necesario
+        rejectUnauthorized: false,
+      },
+    });
+  }
+  return mailTransporter;
+}
+
 // Endpoint para procesar el formulario de contacto
 app.post("/api/contact", async (req: express.Request, res: express.Response): Promise<void> => {
   try {
@@ -477,13 +509,56 @@ app.post("/api/contact", async (req: express.Request, res: express.Response): Pr
     console.log(`NUEVO MENSAJE DE CONTACTO RECIBIDO - ${new Date().toISOString()}`);
     console.log(`De: ${name} <${email}>`);
     console.log(`Asunto: ${subject || "Sin asunto"}`);
-    console.log(`Mensaje: ${message}`);
     console.log("=========================================");
 
-    res.json({ success: true, message: "Mensaje recibido correctamente. Nos pondremos en contacto a la brevedad." });
+    // Envío del correo real a través de SMTP
+    const transporter = getMailTransporter();
+    const mailOptions = {
+      from: `"${name} (Contacto Web)" <${process.env.SMTP_USER}>`, // El remitente autenticado
+      replyTo: email, // Responder al correo del usuario
+      to: "contacto@grdesastres.com",
+      subject: `[Contacto Web] ${subject || "Nuevo Mensaje de Contacto"}`,
+      text: `Has recibido un nuevo mensaje desde el formulario de contacto de tu sitio web:
+
+Nombre: ${name}
+Correo: ${email}
+Asunto: ${subject || "Sin Asunto"}
+Mensaje:
+----------------------------------------
+${message}
+----------------------------------------
+
+Fecha: ${new Date().toLocaleString()}
+`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;">
+          <h2 style="color: #1e3a8a; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; margin-top: 0;">Nuevo mensaje de contacto</h2>
+          <p style="margin: 15px 0;"><strong>Nombre:</strong> ${name}</p>
+          <p style="margin: 15px 0;"><strong>Correo:</strong> <a href="mailto:${email}" style="color: #3b82f6; text-decoration: none;">${email}</a></p>
+          <p style="margin: 15px 0;"><strong>Asunto:</strong> ${subject || "Sin Asunto"}</p>
+          
+          <div style="margin: 20px 0; padding: 15px; background-color: #ffffff; border-left: 4px solid #3b82f6; border-radius: 4px; color: #334155; line-height: 1.6;">
+            <strong>Mensaje:</strong><br />
+            ${message.replace(/\n/g, "<br />")}
+          </div>
+          
+          <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+          <p style="font-size: 11px; color: #64748b; text-align: center; margin: 0;">Este correo fue enviado automáticamente desde el formulario de contacto de grdesastres.com</p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Correo enviado con éxito a contacto@grdesastres.com");
+
+    res.json({ success: true, message: "¡Mensaje recibido correctamente! El correo ha sido enviado a la bandeja." });
   } catch (error: any) {
-    console.error("Error processing contact message:", error);
-    res.status(500).json({ error: "Error al procesar el mensaje de contacto. Intente más tarde." });
+    console.error("Error al procesar/enviar mensaje de contacto:", error);
+    if (error.message && error.message.includes("La configuración SMTP")) {
+      res.status(500).json({ error: "El servicio de correo no está configurado en el servidor (variables de entorno SMTP faltantes)." });
+    } else {
+      res.status(500).json({ error: "Error interno al enviar el correo. Por favor, intente más tarde." });
+    }
   }
 });
 
