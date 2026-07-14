@@ -11,3 +11,5 @@ coverage/
 .env.staging
 # Mantener el ejemplo de variables para onboarding
 !.env.example
+
+.vercel
