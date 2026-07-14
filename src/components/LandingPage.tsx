@@ -23,7 +23,9 @@ import {
   ArrowRight,
   Sparkles,
   Heart,
-  Building2
+  Building2,
+  Mail,
+  Send
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import heroSeismologists from "../assets/hero_seismologists.jpg";
@@ -219,6 +221,63 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
   // --- Blogs: Post seleccionado para leer completo ---
   const [selectedBlogPost, setSelectedBlogPost] = useState<BlogItem | null>(null);
+
+  // --- Estados para Formulario de Contacto ---
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactSubject, setContactSubject] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactName || !contactEmail || !contactMessage) {
+      setSubmitStatus("error");
+      setSubmitMessage("Por favor, completa todos los campos obligatorios.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: contactName,
+          email: contactEmail,
+          subject: contactSubject,
+          message: contactMessage,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSubmitStatus("success");
+        setSubmitMessage("¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.");
+        // Limpiar campos
+        setContactName("");
+        setContactEmail("");
+        setContactSubject("");
+        setContactMessage("");
+      } else {
+        setSubmitStatus("error");
+        setSubmitMessage(data.error || "Hubo un problema al enviar el mensaje. Intente de nuevo.");
+      }
+    } catch (err) {
+      console.error("Error submitting contact form:", err);
+      setSubmitStatus("error");
+      setSubmitMessage("Error de red. Por favor, verifica tu conexión e intenta de nuevo.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Animación del Aula
   useEffect(() => {
@@ -940,6 +999,132 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
       </div>
 
+      {/* SECCIÓN DE CONTACTO PREMIUM */}
+      <section id="contacto-section" className="bg-slate-900/40 border-t border-slate-900 py-16 px-8 relative overflow-hidden">
+        {/* Luces de fondo (glow effects) */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Información de contacto */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="space-y-2">
+              <span className="bg-blue-500/20 text-blue-400 border border-blue-500/30 font-mono text-[9px] font-bold px-2.5 py-1 rounded-md uppercase tracking-widest inline-block">
+                Contacto RRD
+              </span>
+              <h3 className="text-2xl lg:text-3xl font-black text-white font-display uppercase tracking-tight leading-none">
+                Conéctate con Nosotros
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed max-w-md">
+                ¿Tienes consultas sobre el modelado sísmico, interés en colaboración de investigación, o soporte sobre las herramientas de evaluación? Escríbenos.
+              </p>
+            </div>
+
+            <div className="space-y-4 pt-4">
+              <div className="flex items-center space-x-4 bg-slate-950/40 border border-slate-900 p-4 rounded-xl">
+                <div className="h-10 w-10 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">Correo Principal</p>
+                  <a href="mailto:contacto@grdesastres.com" className="text-sm font-bold text-white hover:text-blue-400 transition">
+                    contacto@grdesastres.com
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4 bg-slate-950/40 border border-slate-900 p-4 rounded-xl">
+                <div className="h-10 w-10 rounded-lg bg-indigo-600/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                  <Compass className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">Ámbito de Cobertura</p>
+                  <p className="text-sm font-bold text-slate-300">Latinoamérica y el Caribe (LATAM)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Formulario */}
+          <div className="lg:col-span-7 bg-slate-950/50 border border-slate-900 p-8 rounded-3xl relative overflow-hidden backdrop-blur-sm">
+            <form onSubmit={handleContactSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label htmlFor="contact-name" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Nombre Completo *</label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    value={contactName}
+                    onChange={(e) => setContactName(e.target.value)}
+                    placeholder="Ej. Ing. Carlos Mendoza"
+                    required
+                    className="w-full bg-slate-900/50 border border-slate-850 hover:border-slate-800 focus:border-blue-600 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="contact-email" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Correo Electrónico *</label>
+                  <input
+                    type="email"
+                    id="contact-email"
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    placeholder="Ej. carlos.mendoza@universidad.edu"
+                    required
+                    className="w-full bg-slate-900/50 border border-slate-850 hover:border-slate-800 focus:border-blue-600 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="contact-subject" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Asunto / Motivo</label>
+                <input
+                  type="text"
+                  id="contact-subject"
+                  value={contactSubject}
+                  onChange={(e) => setContactSubject(e.target.value)}
+                  placeholder="Ej. Consulta sobre metodología GNDT"
+                  className="w-full bg-slate-900/50 border border-slate-850 hover:border-slate-800 focus:border-blue-600 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="contact-message" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Mensaje *</label>
+                <textarea
+                  id="contact-message"
+                  value={contactMessage}
+                  onChange={(e) => setContactMessage(e.target.value)}
+                  rows={4}
+                  placeholder="Detalla tu consulta técnica o propuesta de investigación aquí..."
+                  required
+                  className="w-full bg-slate-900/50 border border-slate-850 hover:border-slate-800 focus:border-blue-600 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition resize-none"
+                />
+              </div>
+
+              {submitStatus && (
+                <div className={`p-4 rounded-xl border text-xs font-semibold ${
+                  submitStatus === "success" 
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" 
+                    : "bg-red-500/10 border-red-500/30 text-red-400"
+                }`}>
+                  {submitMessage}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-widest py-3.5 rounded-xl transition duration-200 cursor-pointer shadow-lg shadow-blue-500/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              >
+                <span>{isSubmitting ? "Enviando..." : "Enviar Mensaje"}</span>
+                {!isSubmitting && <Send className="h-3 w-3" />}
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </section>
+
       {/* PIE DE PÁGINA PREMIUM (DERECHOS DE AUTOR Y ENLACES DEL MOCKUP) */}
       <footer className="border-t border-slate-900 bg-slate-950 px-8 py-6 text-slate-500 text-xs mt-auto">
         <div className="max-w-[1920px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
@@ -964,6 +1149,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             }} className="hover:text-blue-500 transition cursor-pointer">Geodinámica</button>
             <span className="text-slate-800">|</span>
             <button onClick={() => setActiveModal("biblioteca")} className="hover:text-blue-500 transition cursor-pointer">Unete & Recursos</button>
+            <span className="text-slate-800">|</span>
+            <button onClick={() => {
+              const el = document.getElementById("contacto-section");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }} className="hover:text-blue-500 transition cursor-pointer">Contacto</button>
           </div>
         </div>
       </footer>

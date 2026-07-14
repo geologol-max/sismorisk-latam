@@ -463,6 +463,30 @@ Mantén la redacción objetiva pero con un fuerte llamado a la prevención y la 
   }
 });
 
+// Endpoint para procesar el formulario de contacto
+app.post("/api/contact", async (req: express.Request, res: express.Response): Promise<void> => {
+  try {
+    const { name, email, subject, message } = req.body;
+
+    if (!name || !email || !message) {
+      res.status(400).json({ error: "Por favor complete los campos obligatorios: Nombre, Correo y Mensaje." });
+      return;
+    }
+
+    console.log("=========================================");
+    console.log(`NUEVO MENSAJE DE CONTACTO RECIBIDO - ${new Date().toISOString()}`);
+    console.log(`De: ${name} <${email}>`);
+    console.log(`Asunto: ${subject || "Sin asunto"}`);
+    console.log(`Mensaje: ${message}`);
+    console.log("=========================================");
+
+    res.json({ success: true, message: "Mensaje recibido correctamente. Nos pondremos en contacto a la brevedad." });
+  } catch (error: any) {
+    console.error("Error processing contact message:", error);
+    res.status(500).json({ error: "Error al procesar el mensaje de contacto. Intente más tarde." });
+  }
+});
+
 // Setup de Vite Middleware o servir archivos estáticos compilados
 async function setupServer() {
   if (process.env.NODE_ENV !== "production") {
