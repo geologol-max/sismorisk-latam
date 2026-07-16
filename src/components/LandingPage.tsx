@@ -364,8 +364,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             alt="Colapso Sísmico" 
             className="w-full h-full object-cover opacity-100"
           />
-          {/* Solo degradados suaves en los extremos para navbar y mezcla de color, sin capas oscuras en el centro */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40" />
+          {/* Degradados perimetrales ultra precisos: 0-12% y 88-100%, dejando el 76% central de la foto totalmente limpio */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              backgroundImage: 'linear-gradient(to top, rgba(2, 6, 23, 1) 0%, rgba(2, 6, 23, 0) 12%, rgba(2, 6, 23, 0) 88%, rgba(2, 6, 23, 0.2) 100%)' 
+            }}
+          />
         </div>
 
         {/* Luces y efectos de fondo */}
