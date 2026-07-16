@@ -42,6 +42,7 @@ import jairoData from "../assets/jairo_data.jpg";
 import jairoPelambres from "../assets/jairo_pelambres.jpg";
 import jairoNera from "../assets/jairo_nera.jpg";
 import jairoPc from "../assets/jairo_pc.jpg";
+import jairoMolinstec from "../assets/jairo_molinstec.jpg";
 import earthStructure from "../assets/earth_structure.jpg";
 
 interface LandingPageProps {
@@ -354,14 +355,23 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       {/* =========================================================================
           SECCIÓN HERO (CABECERA)
           ========================================================================= */}
-      <header className="relative pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[85vh]">
+      <header className="relative pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center justify-center text-center min-h-[85vh]">
+        {/* Imagen de fondo de la estructura terrestre a lo ancho de la página */}
+        <div className="absolute inset-0 -z-20 overflow-hidden">
+          <img 
+            src={earthStructure} 
+            alt="Estructura Terrestre" 
+            className="w-full h-full object-cover opacity-15"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-slate-950" />
+        </div>
+
         {/* Luces y efectos de fondo */}
-        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl -z-10 pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 rounded-full bg-emerald-500/5 blur-3xl -z-10 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl -z-10 pointer-events-none" />
 
         {/* Textos Informativos */}
-        <div className="lg:col-span-7 space-y-6 text-left">
-          <div className="inline-flex items-center space-x-2 bg-slate-900 border border-slate-850 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-cyan-400 tracking-wider uppercase">
+        <div className="space-y-6 flex flex-col items-center max-w-3xl">
+          <div className="inline-flex items-center space-x-2 bg-slate-900 border border-slate-855 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-cyan-400 tracking-wider uppercase">
             <Sparkles className="h-3 w-3" />
             <span>Ingeniero de Proyectos & Desarrollador</span>
           </div>
@@ -378,14 +388,14 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             </p>
           </div>
 
-          <p className="text-sm md:text-base text-slate-400 leading-relaxed max-w-xl text-left">
+          <p className="text-sm md:text-base text-slate-400 leading-relaxed max-w-xl text-center">
             Comprometido, responsable, entusiasta y creativo. Cuento con una sólida experiencia en la 
             <strong> Gestión y Administración de Contratos</strong> en minería y obras civiles, combinada con 
             habilidades de programación aplicadas al <strong>Análisis de Datos con Python</strong> y la 
             visualización interactiva de información técnica.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
             <a 
               href="#portafolio" 
               className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold text-xs uppercase px-6 py-3 rounded-xl transition shadow-lg shadow-cyan-500/10 cursor-pointer flex items-center space-x-2"
@@ -399,25 +409,6 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             >
               Ver Experiencia Laboral
             </a>
-          </div>
-        </div>
-
-        {/* Imagen de Perfil Enmarcada */}
-        <div className="lg:col-span-5 flex justify-center">
-          <div className="relative group">
-            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-cyan-500 to-emerald-500 opacity-30 blur group-hover:opacity-40 transition duration-1000" />
-            <div className="relative bg-slate-900 border border-slate-850 p-3 rounded-2xl max-w-xs md:max-w-sm">
-              <img 
-                src={jairoSnow} 
-                alt="Jairo Alonso Ovallos" 
-                className="w-full h-80 object-cover rounded-xl"
-              />
-              <div className="mt-3 text-center">
-                <p className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider">
-                  Faena Minera SQM — Norte de Chile
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </header>
@@ -662,7 +653,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group">
               <div className="relative h-48 w-full overflow-hidden shrink-0">
                 <img 
-                  src={earthStructure} 
+                  src={jairoMolinstec} 
                   alt="Molinstec" 
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                 />
