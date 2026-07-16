@@ -362,10 +362,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <img 
             src={earthquakeHero} 
             alt="Colapso Sísmico" 
-            className="w-full h-full object-cover opacity-75"
+            className="w-full h-full object-cover opacity-90"
           />
           {/* Capas oscuras para asegurar la legibilidad del texto */}
-          <div className="absolute inset-0 bg-slate-950/50" />
+          <div className="absolute inset-0 bg-slate-950/45" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-slate-950" />
         </div>
 
