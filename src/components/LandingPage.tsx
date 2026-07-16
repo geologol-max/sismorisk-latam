@@ -362,11 +362,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <img 
             src={earthquakeHero} 
             alt="Colapso Sísmico" 
-            className="w-full h-full object-cover opacity-90"
+            className="w-full h-full object-cover opacity-100"
           />
-          {/* Capas oscuras para asegurar la legibilidad del texto */}
-          <div className="absolute inset-0 bg-slate-950/25" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-slate-950" />
+          {/* Solo degradados suaves en los extremos para navbar y mezcla de color, sin capas oscuras en el centro */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40" />
         </div>
 
         {/* Luces y efectos de fondo */}
