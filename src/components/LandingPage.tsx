@@ -41,6 +41,7 @@ import jairoNepal from "../assets/jairo_nepal.jpg";
 import jairoData from "../assets/jairo_data.jpg";
 import jairoPelambres from "../assets/jairo_pelambres.jpg";
 import jairoNera from "../assets/jairo_nera.jpg";
+import jairoPc from "../assets/jairo_pc.jpg";
 import earthStructure from "../assets/earth_structure.jpg";
 
 interface LandingPageProps {
@@ -985,14 +986,20 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               </div>
 
               {/* Proyecto 6: PC Táchira */}
-              <div className="bg-slate-900 border border-slate-855 p-5 rounded-2xl flex flex-col justify-between gap-4">
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-white uppercase">Operaciones Protección Civil Táchira</h4>
-                  <p className="text-[11px] text-slate-400 leading-normal">
-                    12 años dedicados al servicio público en Táchira en labores de prevención sísmica, planificación ante emergencias y comando de incidentes civiles.
-                  </p>
+              <div className="bg-slate-900 border border-slate-855 rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div className="h-36 w-full relative overflow-hidden shrink-0">
+                  <img src={jairoPc} alt="PC Tachira" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/10 to-transparent" />
                 </div>
-                <span className="text-[9px] font-mono text-slate-500 uppercase">Gestión de Emergencias</span>
+                <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-bold text-white uppercase">Operaciones Protección Civil Táchira</h4>
+                    <p className="text-[11px] text-slate-400 leading-normal">
+                      12 años dedicados al servicio público en Táchira en labores de prevención sísmica, planificación ante emergencias y comando de incidentes civiles.
+                    </p>
+                  </div>
+                  <span className="text-[9px] font-mono text-slate-500 uppercase mt-2">Gestión de Emergencias</span>
+                </div>
               </div>
 
             </div>
