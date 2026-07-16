@@ -39,6 +39,7 @@ import jairoClass from "../assets/jairo_class.jpg";
 import jairoEcuador from "../assets/jairo_ecuador.jpg";
 import jairoNepal from "../assets/jairo_nepal.jpg";
 import jairoData from "../assets/jairo_data.jpg";
+import jairoPelambres from "../assets/jairo_pelambres.jpg";
 import earthStructure from "../assets/earth_structure.jpg";
 
 interface LandingPageProps {
@@ -898,14 +899,20 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               
               {/* Proyecto 1: Minera Los Pelambres */}
-              <div className="bg-slate-900 border border-slate-855 p-5 rounded-2xl flex flex-col justify-between gap-4">
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-white uppercase">Minera Los Pelambres (Servicios)</h4>
-                  <p className="text-[11px] text-slate-400 leading-normal">
-                    Liderazgo en terreno desempeñándome desde Brigadista de Emergencia y Encargado de Logística hasta Jefe de Operaciones para una empresa colaboradora de servicios industriales.
-                  </p>
+              <div className="bg-slate-900 border border-slate-855 rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div className="h-36 w-full relative overflow-hidden shrink-0">
+                  <img src={jairoPelambres} alt="Los Pelambres" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/10 to-transparent" />
                 </div>
-                <span className="text-[9px] font-mono text-slate-500 uppercase">Jefe de Operaciones</span>
+                <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-bold text-white uppercase">Minera Los Pelambres (Servicios)</h4>
+                    <p className="text-[11px] text-slate-400 leading-normal">
+                      Liderazgo en terreno desempeñándome desde Brigadista de Emergencia y Encargado de Logística hasta Jefe de Operaciones para una empresa colaboradora de servicios industriales.
+                    </p>
+                  </div>
+                  <span className="text-[9px] font-mono text-slate-500 uppercase mt-2">Jefe de Operaciones</span>
+                </div>
               </div>
 
               {/* Proyecto 2: Terremoto Nepal 2015 */}
