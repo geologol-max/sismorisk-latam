@@ -356,40 +356,42 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       {/* =========================================================================
           SECCIÓN HERO (CABECERA)
           ========================================================================= */}
-      <header className="relative pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center justify-center text-center min-h-[85vh]">
+      <header className="relative w-full pt-32 pb-24 px-6 md:px-12 flex flex-col items-center justify-center text-center min-h-[85vh] overflow-hidden">
         {/* Imagen de fondo de colapso sísmico a lo ancho de la página */}
-        <div className="absolute inset-0 -z-20 overflow-hidden">
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img 
             src={earthquakeHero} 
             alt="Colapso Sísmico" 
-            className="w-full h-full object-cover opacity-20"
+            className="w-full h-full object-cover opacity-35"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950" />
+          {/* Capas oscuras para asegurar la legibilidad del texto */}
+          <div className="absolute inset-0 bg-slate-950/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-slate-950" />
         </div>
 
         {/* Luces y efectos de fondo */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl -z-10 pointer-events-none" />
 
         {/* Textos Informativos */}
-        <div className="space-y-6 flex flex-col items-center max-w-3xl">
-          <div className="inline-flex items-center space-x-2 bg-slate-900 border border-slate-855 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-cyan-400 tracking-wider uppercase">
+        <div className="relative z-10 space-y-6 flex flex-col items-center max-w-3xl">
+          <div className="inline-flex items-center space-x-2 bg-slate-900/90 border border-slate-855 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-cyan-400 tracking-wider uppercase backdrop-blur-sm">
             <Sparkles className="h-3 w-3" />
             <span>Ingeniero de Proyectos & Desarrollador</span>
           </div>
 
           <div className="space-y-2">
-            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-white leading-none">
+            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-white leading-none drop-shadow-md">
               Jairo Alonso <br />
               <span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 bg-clip-text text-transparent">
                 Ovallos Cañas
               </span>
             </h1>
-            <p className="font-display text-lg md:text-xl font-bold text-slate-300">
+            <p className="font-display text-lg md:text-xl font-bold text-slate-200 drop-shadow-sm">
               Ingeniero Civil Construcción e Ingeniero en Geociencias
             </p>
           </div>
 
-          <p className="text-sm md:text-base text-slate-400 leading-relaxed max-w-xl text-center">
+          <p className="text-sm md:text-base text-slate-300 leading-relaxed max-w-xl text-center drop-shadow">
             Comprometido, responsable, entusiasta y creativo. Cuento con una sólida experiencia en la 
             <strong> Gestión y Administración de Contratos</strong> en minería y obras civiles, combinada con 
             habilidades de programación aplicadas al <strong>Análisis de Datos con Python</strong> y la 
@@ -399,14 +401,14 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
             <a 
               href="#portafolio" 
-              className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold text-xs uppercase px-6 py-3 rounded-xl transition shadow-lg shadow-cyan-500/10 cursor-pointer flex items-center space-x-2"
+              className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold text-xs uppercase px-6 py-3 rounded-xl transition shadow-lg shadow-cyan-500/20 cursor-pointer flex items-center space-x-2"
             >
               <span>Abrir Plataforma Sísmica</span>
               <ArrowRight className="h-4 w-4" />
             </a>
             <a 
               href="#experiencia" 
-              className="bg-slate-900 hover:bg-slate-855 border border-slate-800 hover:border-slate-700 text-slate-300 font-bold text-xs uppercase px-6 py-3 rounded-xl transition cursor-pointer"
+              className="bg-slate-900/90 hover:bg-slate-855 border border-slate-800 hover:border-slate-700 text-slate-300 font-bold text-xs uppercase px-6 py-3 rounded-xl transition cursor-pointer backdrop-blur-sm"
             >
               Ver Experiencia Laboral
             </a>
