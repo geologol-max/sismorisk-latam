@@ -43,6 +43,7 @@ import jairoPelambres from "../assets/jairo_pelambres.jpg";
 import jairoNera from "../assets/jairo_nera.jpg";
 import jairoPc from "../assets/jairo_pc.jpg";
 import jairoMolinstec from "../assets/jairo_molinstec.jpg";
+import earthquakeHero from "../assets/earthquake_hero.jpg";
 import earthStructure from "../assets/earth_structure.jpg";
 
 interface LandingPageProps {
@@ -356,14 +357,14 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           SECCIÓN HERO (CABECERA)
           ========================================================================= */}
       <header className="relative pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center justify-center text-center min-h-[85vh]">
-        {/* Imagen de fondo de la estructura terrestre a lo ancho de la página */}
+        {/* Imagen de fondo de colapso sísmico a lo ancho de la página */}
         <div className="absolute inset-0 -z-20 overflow-hidden">
           <img 
-            src={earthStructure} 
-            alt="Estructura Terrestre" 
-            className="w-full h-full object-cover opacity-15"
+            src={earthquakeHero} 
+            alt="Colapso Sísmico" 
+            className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-slate-950" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950" />
         </div>
 
         {/* Luces y efectos de fondo */}
