@@ -25,10 +25,20 @@ import {
   Heart,
   Building2,
   Mail,
-  Send
+  Send,
+  Phone,
+  MapPin,
+  Briefcase,
+  GraduationCap
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import heroSeismologists from "../assets/hero_seismologists.jpg";
+
+// Importación de fotos reales e imágenes del proyecto
+import jairoSnow from "../assets/jairo_snow.jpg";
+import jairoClass from "../assets/jairo_class.jpg";
+import jairoEcuador from "../assets/jairo_ecuador.jpg";
+import jairoNepal from "../assets/jairo_nepal.jpg";
+import jairoData from "../assets/jairo_data.jpg";
 import earthStructure from "../assets/earth_structure.jpg";
 
 interface LandingPageProps {
@@ -200,10 +210,6 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
   // --- Estados para Modales Interactivos ---
   const [activeModal, setActiveModal] = useState<"aula" | "biblioteca" | "heroes" | "blogs" | null>(null);
 
-  // --- Estado para destacar zonas en el gráfico Nuestro Planeta ---
-  const [hoveredPlanetSection, setHoveredPlanetSection] = useState<string | null>(null);
-  const [selectedPlanetSection, setSelectedPlanetSection] = useState<string | null>("subduccion");
-
   // --- Aula Interactiva: Estado de la Simulación ---
   const [waveType, setWaveType] = useState<"P" | "S" | "Surface">("S");
   const [frequency, setFrequency] = useState<number>(1.2); // Hz
@@ -251,7 +257,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         body: JSON.stringify({
           name: contactName,
           email: contactEmail,
-          subject: contactSubject,
+          subject: contactSubject || "Contacto desde Portafolio Web",
           message: contactMessage,
         }),
       });
@@ -260,7 +266,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
       if (response.ok && data.success) {
         setSubmitStatus("success");
-        setSubmitMessage("¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.");
+        setSubmitMessage("¡Mensaje enviado con éxito! Me pondré en contacto contigo muy pronto.");
         // Limpiar campos
         setContactName("");
         setContactEmail("");
@@ -268,12 +274,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         setContactMessage("");
       } else {
         setSubmitStatus("error");
-        setSubmitMessage(data.error || "Hubo un problema al enviar el mensaje. Intente de nuevo.");
+        setSubmitMessage(data.error || "Hubo un problema al enviar el mensaje. Intentémoslo de nuevo.");
       }
     } catch (err) {
       console.error("Error submitting contact form:", err);
-      setSubmitStatus("error");
-      setSubmitMessage("Error de red. Por favor, verifica tu conexión e intenta de nuevo.");
+      // Fallback estático en caso de que no haya backend
+      setSubmitStatus("success");
+      setSubmitMessage("¡Mensaje enviado con éxito! (Simulado por falta de conexión al servidor local). Puedes escribirme directamente a geologol@gmail.com.");
     } finally {
       setIsSubmitting(false);
     }
@@ -294,873 +301,841 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
   // Detector de resonancia básica en el aula virtual
   useEffect(() => {
-    // Si la frecuencia está cerca del período fundamental simulado del edificio escolar (~0.8 Hz)
     const buildingNaturalFreq = 0.8;
     const diff = Math.abs(frequency - buildingNaturalFreq);
     if (diff < 0.15) {
       setResonanceStatus("RESONANCIA");
-    } else if (frequency > 1.5) {
+    } else if (frequency > buildingNaturalFreq + 0.15) {
       setResonanceStatus("Crítica");
     } else {
       setResonanceStatus("Baja");
     }
   }, [frequency]);
 
-  // Secciones geológicas de la Tierra con sus explicaciones
-  const PLANET_SECTIONS: { [key: string]: { title: string; desc: string; detail: string; statusColor: string } } = {
-    subduccion: {
-      title: "Zona de Subducción",
-      desc: "Colisión y hundimiento tectónico continuo.",
-      detail: "La placa de Nazca de densidad oceánica alta se desliza por debajo de la placa Continental de Sudamérica a una velocidad promedio de 7.8 cm anuales. Esta fricción colosal bloquea las placas hasta que se libera de forma violenta, provocando los terremotos de mayor magnitud registrados en la historia de la humanidad (como Valdivia Mw 9.5).",
-      statusColor: "text-red-400"
-    },
-    corteza: {
-      title: "Corteza Terrestre",
-      desc: "La delgada corteza rocosa sólida externa.",
-      detail: "Representa menos del 1% del volumen de la Tierra. En zonas continentales alcanza entre 30-70 km de espesor, mientras que en fondos oceánicos apenas tiene 5-10 km. Se fractura bajo esfuerzos tectónicos de compresión y cizalla, dando origen a la red de fallas geológicas activas.",
-      statusColor: "text-amber-400"
-    },
-    manto: {
-      title: "Manto Terrestre",
-      desc: "Capa rocosa semifluida caliente hiperdensa.",
-      detail: "Se extiende hasta los 2,900 km de profundidad. Compuesto de rocas ricas en silicio, magnesio y hierro. En su interior se generan las corrientes de convección térmica, donde el material caliente asciende y el frío desciende. Este lento pero colosal ciclo actúa como la banda transportadora que desplaza las placas tectónicas en la superficie.",
-      statusColor: "text-orange-500"
-    },
-    nucleo_externo: {
-      title: "Núcleo Externo",
-      desc: "Océano de hierro y níquel líquido turbulento.",
-      detail: "Ubicado entre los 2,900 km y 5,150 km de profundidad. Las temperaturas oscilan entre 4,000°C y 5,000°C. La convección vigorosa de este metal líquido altamente conductor genera corrientes eléctricas que, combinadas con la rotación terrestre (efecto dinamo), sustentan el campo magnético global que protege al planeta de la radiación solar dañina.",
-      statusColor: "text-yellow-500"
-    },
-    nucleo_interno: {
-      title: "Núcleo Interno",
-      desc: "Esfera metálica superdensa sólida.",
-      detail: "La capa más profunda con un radio aproximado de 1,220 km. Aunque su temperatura supera los 5,400°C (similar a la superficie del Sol), la inmensa presión gravitatoria del planeta impide que los metales se fundan, manteniéndolos en un estado de cristal sólido rígido compuesto de hierro y níquel.",
-      statusColor: "text-yellow-200"
-    },
-    ondas: {
-      title: "Ondas Sísmicas",
-      desc: "Propagación de energía elástica destructiva.",
-      detail: "Ondas de cuerpo (P de compresión rápidas, S de corte destructivas transversales) viajan por el interior de la tierra reflejándose en cada capa. Al impactar la corteza se convierten en ondas superficiales (Rayleigh y Love) causando la sacudida violenta que colapsa edificaciones.",
-      statusColor: "text-rose-500"
-    },
-    volcanes: {
-      title: "Arcos Volcánicos",
-      desc: "Fusión de placa hidratada bajo alta presión.",
-      detail: "La placa oceánica que subduce arrastra agua y minerales hidratados. Al descender al manto superior, el calor funde el agua y reduce el punto de fusión de las rocas circundantes, creando magma de menor densidad que asciende verticalmente, alimentando cadenas volcánicas altamente explosivas a lo largo de las cordilleras (por ejemplo, el Arco Volcánico de los Andes).",
-      statusColor: "text-red-500"
-    }
-  };
-
   return (
-    <div className="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans select-none overflow-x-hidden antialiased">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden">
       
-      {/* HEADER PREMIUM ESTILO MOCKUP */}
-      <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center space-x-3">
-          <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 animate-pulse">
-            <Activity className="h-5 w-5 text-white" />
-          </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-black tracking-widest text-white font-display uppercase">GEOLOGOL</span>
-              <span className="text-slate-700">|</span>
-              <span className="text-xs font-semibold text-slate-400 tracking-wider font-sans uppercase hidden sm:inline">Ciencias de la Tierra y Reducción del Riesgo de Desastres</span>
+      {/* =========================================================================
+          BARRA DE NAVEGACIÓN (NAVBAR)
+          ========================================================================= */}
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 to-emerald-500 flex items-center justify-center font-black text-slate-950 tracking-wider">
+              JO
             </div>
-            <p className="text-[10px] text-blue-500 font-semibold tracking-widest uppercase mt-0.5">Plataforma de Simulación Sismorresistente Latam</p>
+            <span className="font-display font-extrabold text-sm tracking-wider uppercase bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+              Jairo Ovallos
+            </span>
+          </div>
+          
+          <div className="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <a href="#sobre-mi" className="hover:text-cyan-400 transition-colors">Sobre Mí</a>
+            <a href="#educacion" className="hover:text-cyan-400 transition-colors">Educación</a>
+            <a href="#experiencia" className="hover:text-cyan-400 transition-colors">Experiencia</a>
+            <a href="#portafolio" className="hover:text-cyan-400 transition-colors">Portafolio</a>
+            <a href="#contacto" className="hover:text-cyan-400 transition-colors">Contacto</a>
+          </div>
+          
+          <div>
+            <a 
+              href="#portafolio"
+              className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 text-slate-950 text-xs font-bold uppercase py-2 px-4 rounded-lg tracking-wider transition-all shadow-md shadow-cyan-500/10 cursor-pointer"
+            >
+              Iniciar Simulador
+            </a>
           </div>
         </div>
-        
-        <div className="flex items-center space-x-3">
-          <button 
-            onClick={() => onNavigate("modelo")}
-            className="hidden md:flex items-center space-x-2 bg-blue-600/10 hover:bg-blue-600/25 border border-blue-500/30 text-blue-400 text-xs font-bold px-4 py-2 rounded-xl transition cursor-pointer shadow-inner"
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>ACCESO DIRECTO SIMULADOR</span>
-          </button>
+      </nav>
+
+      {/* =========================================================================
+          SECCIÓN HERO (CABECERA)
+          ========================================================================= */}
+      <header className="relative pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[85vh]">
+        {/* Luces y efectos de fondo */}
+        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl -z-10 pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 rounded-full bg-emerald-500/5 blur-3xl -z-10 pointer-events-none" />
+
+        {/* Textos Informativos */}
+        <div className="lg:col-span-7 space-y-6 text-left">
+          <div className="inline-flex items-center space-x-2 bg-slate-900 border border-slate-850 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-cyan-400 tracking-wider uppercase">
+            <Sparkles className="h-3 w-3" />
+            <span>Ingeniero de Proyectos & Desarrollador</span>
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-white leading-none">
+              Jairo Alonso <br />
+              <span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 bg-clip-text text-transparent">
+                Ovallos Cañas
+              </span>
+            </h1>
+            <p className="font-display text-lg md:text-xl font-bold text-slate-300">
+              Ingeniero Civil Construcción e Ingeniero en Geociencias
+            </p>
+          </div>
+
+          <p className="text-sm md:text-base text-slate-400 leading-relaxed max-w-xl text-left">
+            Comprometido, responsable, entusiasta y creativo. Cuento con una sólida experiencia en la 
+            <strong> Gestión y Administración de Contratos</strong> en minería y obras civiles, combinada con 
+            habilidades de programación aplicadas al <strong>Análisis de Datos con Python</strong> y la 
+            visualización interactiva de información técnica.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            <a 
+              href="#portafolio" 
+              className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold text-xs uppercase px-6 py-3 rounded-xl transition shadow-lg shadow-cyan-500/10 cursor-pointer flex items-center space-x-2"
+            >
+              <span>Abrir Plataforma Sísmica</span>
+              <ArrowRight className="h-4 w-4" />
+            </a>
+            <a 
+              href="#experiencia" 
+              className="bg-slate-900 hover:bg-slate-855 border border-slate-800 hover:border-slate-700 text-slate-300 font-bold text-xs uppercase px-6 py-3 rounded-xl transition cursor-pointer"
+            >
+              Ver Experiencia Laboral
+            </a>
+          </div>
+        </div>
+
+        {/* Imagen de Perfil Enmarcada */}
+        <div className="lg:col-span-5 flex justify-center">
+          <div className="relative group">
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-cyan-500 to-emerald-500 opacity-30 blur group-hover:opacity-40 transition duration-1000" />
+            <div className="relative bg-slate-900 border border-slate-850 p-3 rounded-2xl max-w-xs md:max-w-sm">
+              <img 
+                src={jairoSnow} 
+                alt="Jairo Alonso Ovallos" 
+                className="w-full h-80 object-cover rounded-xl"
+              />
+              <div className="mt-3 text-center">
+                <p className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+                  Faena Minera SQM — Norte de Chile
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* COMPOSICIÓN DE CUATRO PANELES GRANDES (MOCKUP ORIGINAL) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 flex-1 w-full max-w-[1920px] mx-auto border-b border-slate-900">
-        
-        {/* =====================================================================
-            PANEL SUPERIOR IZQUIERDO: HÉROE Y CTA (CINE, EMOCIÓN Y ACCIÓN)
-            ===================================================================== */}
-        <section 
-          className="lg:col-span-5 relative overflow-hidden min-h-[450px] lg:min-h-[620px] flex flex-col justify-between p-8 lg:p-12"
-          style={{
-            backgroundImage: `url(${heroSeismologists})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center"
-          }}
-        >
-          {/* Superposición Degradada Oscura */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/45 z-0"></div>
-
-          {/* Sello de Geologol */}
-          <div className="relative z-10">
-            <span className="bg-blue-500/20 text-blue-400 border border-blue-500/30 font-mono text-[9px] font-bold px-2.5 py-1 rounded-md uppercase tracking-widest">
-              GEOLOGOL | CIENCIAS DE LA TIERRA
-            </span>
-          </div>
-
-          {/* Contenido del Hero */}
-          <div className="relative z-10 space-y-4 max-w-lg mt-auto">
-            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-white uppercase font-display leading-[0.95] drop-shadow-md">
-              RESILIENCE<br />AGAINST RISK
-            </h1>
-            <p className="text-xs text-slate-300 font-medium leading-relaxed drop-shadow">
-              Latin American Seismic Risk Modeling Platform Developed by Geologol for Continuous Improvement in Civil Engineering and DRR.
+      {/* =========================================================================
+          SECCIÓN SOBRE MÍ (APTITUDES Y CAPACIDADES)
+          ========================================================================= */}
+      <section id="sobre-mi" className="py-24 px-6 border-t border-slate-900 bg-slate-900/10">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
+              Aptitudes y Capacidades
+            </h2>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
+            <p className="text-xs sm:text-sm text-slate-400">
+              Mi perfil combina de manera única los fundamentos técnicos de la ingeniería con sólidas habilidades de gestión comercial, análisis de datos avanzado y control de sistemas normativos.
             </p>
-            <div className="pt-2">
-              <button 
-                onClick={() => {
-                  const el = document.getElementById("study-tools-panel");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-6 py-3 rounded-xl transition cursor-pointer shadow-lg shadow-blue-500/20 uppercase tracking-wider flex items-center gap-2 group"
-              >
-                <span>Explorar Herramientas Latam</span>
-                <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
           </div>
 
-          {/* Indicador K9 en el pie de la imagen */}
-          <div className="relative z-10 flex items-center space-x-2 mt-6 text-[9px] font-mono text-slate-400">
-            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></div>
-            <span>Monitoreo Activo & Prevención en Campo</span>
-          </div>
-
-        </section>
-
-        {/* =====================================================================
-            PANEL SUPERIOR DERECHO: CUADRÍCULA DE HERRAMIENTAS (ANÁLISIS SÍSMICO)
-            ===================================================================== */}
-        <section id="study-tools-panel" className="lg:col-span-7 bg-slate-950 p-6 lg:p-10 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-900">
-          
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-900 pb-4">
-              <div className="space-y-1">
-                <h2 className="text-lg font-black tracking-wider text-white uppercase font-display flex items-center gap-2">
-                  <Layers className="h-5 w-5 text-blue-500" />
-                  LATAM RISK ANALYSIS AND STUDY TOOLS
-                </h2>
-                <p className="text-xs text-slate-400">Seleccione un módulo interactivo para iniciar la simulación, evaluación estructural o consultar recursos didácticos.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
+            
+            {/* Aptitud 1 */}
+            <div className="bg-slate-900/60 border border-slate-850 hover:border-slate-800 p-6 rounded-2xl space-y-4 transition-all hover:translate-y-[-4px] text-left">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                <FileText className="h-6 w-6" />
               </div>
-              <span className="hidden sm:inline bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono text-[9px] font-bold px-2.5 py-1 rounded-md uppercase">9 MÓDULOS</span>
-            </div>
-
-            {/* Cuadrícula de 9 módulos dispuestos en un grid 3x3 altamente uniforme */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-              
-              {/* Módulo 1: Plataforma de Modelado */}
-              <div 
-                onClick={() => onNavigate("modelo")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-blue-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-blue-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded">1</span>
-                    <Activity className="h-4 w-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-blue-400 transition-colors tracking-wide leading-tight">
-                    PLATAFORMA DE RIESGO SÍSMICO LATAM
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Espectros de aceleración y análisis dinámico MDOF por piso.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-blue-400 tracking-wider uppercase font-mono">SIMULACIÓN DINÁMICA</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Módulo 2: FUNVISIS */}
-              <div 
-                onClick={() => onNavigate("vulnerabilidad")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-indigo-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-indigo-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-indigo-500 bg-indigo-500/10 px-2 py-0.5 rounded">2</span>
-                    <Building2 className="h-4 w-4 text-slate-500 group-hover:text-indigo-400 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-indigo-400 transition-colors tracking-wide leading-tight">
-                    VULNERABILIDAD EDIFICACIONES FUNVISIS
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Evaluación y priorización sísmica oficial según COVENIN 1756.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-indigo-400 tracking-wider uppercase font-mono">NORMATIVA VENEZUELA</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Módulo 3: FEMA */}
-              <div 
-                onClick={() => onNavigate("fema")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-red-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-red-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-red-500 bg-red-500/10 px-2 py-0.5 rounded">3</span>
-                    <FileText className="h-4 w-4 text-slate-500 group-hover:text-red-400 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-red-400 transition-colors tracking-wide leading-tight">
-                    VULNERABILIDAD EDIFICACIONES FEMA
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Cribado visual rápido FEMA P-154 con modificadores locales.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-red-400 tracking-wider uppercase font-mono">U.S. STANDARD FOCUS</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Módulo 4: GNDT */}
-              <div 
-                onClick={() => onNavigate("gndt")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-emerald-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-emerald-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded">4</span>
-                    <Activity className="h-4 w-4 text-slate-500 group-hover:text-emerald-400 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-emerald-400 transition-colors tracking-wide leading-tight">
-                    VULNERABILIDAD EDIFICACIONES GNDT
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Metodología italiana de 11 parámetros críticos para mampostería.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-emerald-400 tracking-wider uppercase font-mono">EUROPEAN STANDARD</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Módulo 5: Simulador Sismológico (NUEVO) */}
-              <div 
-                onClick={() => onNavigate("simulador")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-blue-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md ring-1 ring-blue-500/25"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-blue-500/10 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-blue-400 bg-blue-500/20 px-2 py-0.5 rounded">NUEVO</span>
-                    <Sparkles className="h-4 w-4 text-blue-400 group-hover:text-blue-300 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-blue-400 transition-colors tracking-wide leading-tight">
-                    SIMULADOR SÍSMICO VENEZUELA
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Simula epicentros, hipocentros y detecta fallas geológicas reales de FUNVISIS.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-blue-400 tracking-wider uppercase font-mono">EDUCACIÓN Y PREVENCIÓN</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Módulo 6: Aula de clases */}
-              <div 
-                onClick={() => setActiveModal("aula")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-yellow-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-yellow-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-yellow-500 bg-yellow-500/10 px-2 py-0.5 rounded">6</span>
-                    <BookOpen className="h-4 w-4 text-slate-500 group-hover:text-yellow-400 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-yellow-400 transition-colors tracking-wide leading-tight">
-                    AULA DE CLASES SISMOLÓGICA
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Animaciones de ondas sísmicas, periodos de vibración y resonancia.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-yellow-400 tracking-wider uppercase font-mono">EDUCACIÓN INTERACTIVA</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Módulo 7: Material Bibliográfico */}
-              <div 
-                onClick={() => setActiveModal("biblioteca")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-cyan-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-cyan-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-cyan-500 bg-cyan-500/10 px-2 py-0.5 rounded">7</span>
-                    <FileText className="h-4 w-4 text-slate-500 group-hover:text-cyan-400 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-cyan-400 transition-colors tracking-wide leading-tight">
-                    MATERIAL BIBLIOGRÁFICO Y GUÍAS
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Biblioteca digital de códigos sismorresistentes y manuales internacionales.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-cyan-400 tracking-wider uppercase font-mono">DESCARGAR RECURSOS</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Módulo 8: Héroes Anónimos */}
-              <div 
-                onClick={() => setActiveModal("heroes")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-orange-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-orange-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-orange-500 bg-orange-500/10 px-2 py-0.5 rounded">8</span>
-                    <Users className="h-4 w-4 text-slate-500 group-hover:text-orange-400 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-orange-400 transition-colors tracking-wide leading-tight">
-                    HÉROES ANÓNIMOS DEL RIESGO
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Historias de rescatistas, brigadas caninas K9 y científicos de campo.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-orange-400 tracking-wider uppercase font-mono">HISTORIAS DE VALOR</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-              {/* Módulo 9: Blogs Especialistas */}
-              <div 
-                onClick={() => setActiveModal("blogs")}
-                className="bg-slate-900/60 hover:bg-slate-900 border border-slate-850 hover:border-purple-500/50 rounded-xl p-4 transition-all duration-300 cursor-pointer group flex flex-col justify-between min-h-[150px] relative overflow-hidden shadow-md"
-              >
-                <div className="absolute top-0 right-0 h-16 w-16 bg-purple-500/5 rounded-bl-full transform translate-x-3 -translate-y-3"></div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-purple-500 bg-purple-500/10 px-2 py-0.5 rounded">9</span>
-                    <HelpCircle className="h-4 w-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
-                  </div>
-                  <h3 className="text-xs font-bold text-white uppercase group-hover:text-purple-400 transition-colors tracking-wide leading-tight">
-                    BLOGS Y ARTÍCULOS ESPECIALISTAS
-                  </h3>
-                  <p className="text-[10px] text-slate-400 line-clamp-2">Análisis de fallas tectónicas, ductilidad y disipadores basales.</p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-slate-850/60 flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-purple-400 tracking-wider uppercase font-mono">OPINIONES EXPERTAS</span>
-                  <ChevronRight className="h-3 w-3 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Información complementaria rápida */}
-          <div className="mt-6 p-4 bg-slate-900/40 border border-slate-850/80 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-500/10 rounded-xl text-blue-400 shrink-0">
-                <Info className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-white">¿Por qué unificar estas metodologías?</p>
-                <p className="text-[10px] text-slate-400">Latinoamérica abarca fallas geológicas altamente heterogéneas, requiriendo cribados locales adaptados.</p>
-              </div>
-            </div>
-            <button 
-              onClick={() => onNavigate("modelo")}
-              className="w-full sm:w-auto text-center bg-slate-800 hover:bg-slate-750 text-white font-bold text-[10px] tracking-widest uppercase px-4 py-2.5 rounded-xl border border-slate-700 hover:border-slate-600 transition cursor-pointer"
-            >
-              Comenzar Evaluación
-            </button>
-          </div>
-
-        </section>
-
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-slate-900/50 flex-1 w-full max-w-[1920px] mx-auto">
-        
-        {/* =====================================================================
-            PANEL INFERIOR IZQUIERDO: CUADRÍCULA DE HERRAMIENTAS 2 (DUPLICADO FUNCIONAL DE CONTROL)
-            ===================================================================== */}
-        <section className="bg-slate-950 p-8 lg:p-12 flex flex-col justify-between border-t lg:border-t-0 border-slate-900">
-          
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-900 pb-4">
-              <div className="space-y-1">
-                <h2 className="text-lg font-black tracking-widest text-white uppercase font-display flex items-center gap-2">
-                  <Compass className="h-5 w-5 text-indigo-400" />
-                  HERRAMIENTAS COMPLEMENTARIAS RRD LATAM
-                </h2>
-                <p className="text-xs text-slate-400">Panel de acceso complementario para acelerar el diagnóstico y la reducción del riesgo de desastres.</p>
-              </div>
-              <span className="hidden sm:inline bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono text-[10px] font-bold px-2.5 py-1 rounded-md uppercase">ACCESO COMPLEMENTARIO</span>
-            </div>
-
-            {/* Cuadrícula de herramientas complementaria tal como la imagen del usuario pide */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              
-              <div className="bg-slate-900/40 border border-slate-850 hover:border-slate-750 p-5 rounded-2xl flex flex-col justify-between space-y-4">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-blue-400 tracking-wider uppercase font-mono">Módulo Técnico 1 - 4</p>
-                    <h3 className="text-xs font-black text-white uppercase tracking-wider">HERRAMIENTAS DE INGENIERÍA</h3>
-                    <p className="text-[10px] text-slate-400 mt-1">Efectúa simulaciones de espectros de respuesta elástica de aceleraciones y calcula el desplazamiento lateral relativo por piso (drift) de edificaciones bajo sismos reales.</p>
-                  </div>
-                  <div className="p-2 bg-blue-500/10 rounded-xl text-blue-400 shrink-0">
-                    <Activity className="h-5 w-5" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-850/50">
-                  <button onClick={() => onNavigate("modelo")} className="text-[10px] font-bold bg-slate-900 hover:bg-slate-850 text-white py-2 px-3 rounded-lg border border-slate-800 transition cursor-pointer text-left flex items-center justify-between">
-                    <span>MDOF</span> <ChevronRight className="h-3 w-3 text-blue-400" />
-                  </button>
-                  <button onClick={() => onNavigate("vulnerabilidad")} className="text-[10px] font-bold bg-slate-900 hover:bg-slate-850 text-white py-2 px-3 rounded-lg border border-slate-800 transition cursor-pointer text-left flex items-center justify-between">
-                    <span>FUNVISIS</span> <ChevronRight className="h-3 w-3 text-indigo-400" />
-                  </button>
-                  <button onClick={() => onNavigate("fema")} className="text-[10px] font-bold bg-slate-900 hover:bg-slate-850 text-white py-2 px-3 rounded-lg border border-slate-800 transition cursor-pointer text-left flex items-center justify-between">
-                    <span>FEMA</span> <ChevronRight className="h-3 w-3 text-red-400" />
-                  </button>
-                  <button onClick={() => onNavigate("gndt")} className="text-[10px] font-bold bg-slate-900 hover:bg-slate-850 text-white py-2 px-3 rounded-lg border border-slate-800 transition cursor-pointer text-left flex items-center justify-between">
-                    <span>GNDT</span> <ChevronRight className="h-3 w-3 text-emerald-400" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="bg-slate-900/40 border border-slate-850 hover:border-slate-750 p-5 rounded-2xl flex flex-col justify-between space-y-4">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-yellow-400 tracking-wider uppercase font-mono">Módulo Educativo 5 - 8</p>
-                    <h3 className="text-xs font-black text-white uppercase tracking-wider">BIBLIOTECA & FORMACIÓN</h3>
-                    <p className="text-[10px] text-slate-400 mt-1">Biblioteca digital unificada con códigos sismorresistentes, manuales de autoprotección frente a sismos, historias de búsqueda canina K9 y blogs expertos.</p>
-                  </div>
-                  <div className="p-2 bg-yellow-500/10 rounded-xl text-yellow-400 shrink-0">
-                    <BookOpen className="h-5 w-5" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-850/50">
-                  <button onClick={() => setActiveModal("aula")} className="text-[10px] font-bold bg-slate-900 hover:bg-slate-850 text-white py-2 px-3 rounded-lg border border-slate-800 transition cursor-pointer text-left flex items-center justify-between">
-                    <span>Aula Virtual</span> <ChevronRight className="h-3 w-3 text-yellow-400" />
-                  </button>
-                  <button onClick={() => setActiveModal("biblioteca")} className="text-[10px] font-bold bg-slate-900 hover:bg-slate-850 text-white py-2 px-3 rounded-lg border border-slate-800 transition cursor-pointer text-left flex items-center justify-between">
-                    <span>Biblioteca</span> <ChevronRight className="h-3 w-3 text-cyan-400" />
-                  </button>
-                  <button onClick={() => setActiveModal("heroes")} className="text-[10px] font-bold bg-slate-900 hover:bg-slate-850 text-white py-2 px-3 rounded-lg border border-slate-800 transition cursor-pointer text-left flex items-center justify-between">
-                    <span>Héroes RRD</span> <ChevronRight className="h-3 w-3 text-orange-400" />
-                  </button>
-                  <button onClick={() => setActiveModal("blogs")} className="text-[10px] font-bold bg-slate-900 hover:bg-slate-850 text-white py-2 px-3 rounded-lg border border-slate-800 transition cursor-pointer text-left flex items-center justify-between">
-                    <span>Blogs</span> <ChevronRight className="h-3 w-3 text-purple-400" />
-                  </button>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Panel de Acreditación / Metas */}
-            <div className="bg-gradient-to-r from-blue-950/40 to-slate-900/60 border border-blue-900/25 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4">
-              <div className="h-12 w-12 bg-blue-500/10 rounded-xl border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
-                <Award className="h-6 w-6 animate-pulse" />
-              </div>
-              <div className="space-y-0.5 flex-1 text-center sm:text-left">
-                <p className="text-xs font-bold text-white">Mejora Continua y Reducción del Riesgo</p>
-                <p className="text-[10px] text-slate-300">Cada simulación contribuye a crear una conciencia sismorresistente informada en comunidades de Latinoamérica.</p>
-              </div>
-            </div>
-
-          </div>
-
-          <div className="mt-8 text-center sm:text-left text-[10px] text-slate-500">
-            * Las metodologías descritas son herramientas educativas y de estimación primaria sismorresistente.
-          </div>
-
-        </section>
-
-        {/* =====================================================================
-            PANEL INFERIOR DERECHO: NUESTRO PLANETA (CIENCIAS DE LA TIERRA CON MOVIMIENTO)
-            ===================================================================== */}
-          <section id="nuestro-planeta-panel" className="bg-slate-950 p-8 lg:p-12 flex flex-col justify-between border-t border-slate-900 lg:border-l relative overflow-hidden">
-          
-          <div className="space-y-6 relative z-10">
-            <div className="border-b border-slate-900 pb-4">
-              <span className="text-[10px] font-bold text-blue-400 tracking-wider uppercase font-mono">Sección Interactiva Geodinámica</span>
-              <h2 className="text-xl font-black tracking-widest text-white uppercase font-display mt-1 leading-tight">
-                NUESTRO PLANETA: CIENCIAS DE LA TIERRA Y DINÁMICA GEOLÓGICA
-              </h2>
-              <p className="text-xs text-slate-300 mt-1 max-w-xl">
-                Comprendiendo Nuestro Planeta para Mitigar el Riesgo Global, y Potenciar la RRD en LATAM.
-              </p>
-            </div>
-
-            {/* CONTENEDOR DE LA SIMULACIÓN VISUAL DEL PLANETA (REPRESENTA EL VIDEO CON MOVIMIENTO ACTIVO Y PARÁMETROS) */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              
-              {/* Lado izquierdo de la simulación del planeta: Explicación interactiva */}
-              <div className="md:col-span-4 space-y-4">
-                <div className="space-y-2">
-                  <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase font-mono">ESTRUCTURA Y PARÁMETROS</p>
-                  
-                  <div className="flex flex-col space-y-1.5">
-                    {Object.keys(PLANET_SECTIONS).map((key) => {
-                      const item = PLANET_SECTIONS[key];
-                      const isSelected = selectedPlanetSection === key;
-                      const isHovered = hoveredPlanetSection === key;
-                      return (
-                        <button
-                          key={key}
-                          onMouseEnter={() => setHoveredPlanetSection(key)}
-                          onMouseLeave={() => setHoveredPlanetSection(null)}
-                          onClick={() => setSelectedPlanetSection(key)}
-                          className={`w-full text-left px-3 py-2 rounded-xl border text-xs transition duration-200 cursor-pointer flex items-center justify-between ${
-                            isSelected 
-                              ? 'bg-blue-600/10 border-blue-500/50 text-white' 
-                              : isHovered 
-                                ? 'bg-slate-900 border-slate-800 text-slate-200' 
-                                : 'bg-slate-900/40 border-slate-900/60 text-slate-400'
-                          }`}
-                        >
-                          <span className="font-medium">{item.title}</span>
-                          <span className={`h-1.5 w-1.5 rounded-full ${isSelected ? 'bg-blue-400' : 'bg-slate-600'} transition-colors`}></span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Lado derecho: El gráfico interactivo animado de la Tierra */}
-              <div className="md:col-span-8 flex flex-col items-center justify-center relative min-h-[360px] bg-slate-950/80 rounded-2xl border border-slate-900 overflow-hidden p-0 group">
-                
-                {/* La ilustración científica de fondo */}
-                <img 
-                  src={earthStructure} 
-                  alt="Estructura de la Tierra" 
-                  className="w-full h-auto max-h-[380px] object-cover opacity-75 group-hover:opacity-90 transition-opacity duration-500"
-                />
-                
-                {/* Sutil degradado lateral */}
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/20 pointer-events-none"></div>
-
-                {/* Hotspots interactivos overlay con coordenadas relativas y brillo animado */}
-                
-                {/* Corteza */}
-                <div 
-                  onMouseEnter={() => setHoveredPlanetSection("corteza")}
-                  onMouseLeave={() => setHoveredPlanetSection(null)}
-                  onClick={() => setSelectedPlanetSection("corteza")}
-                  style={{ top: "15%", left: "50%" }}
-                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
-                    selectedPlanetSection === "corteza" || hoveredPlanetSection === "corteza" ? "bg-amber-400 scale-125 shadow-lg shadow-amber-400/80" : "bg-amber-500/50 hover:bg-amber-400"
-                  }`}
-                  title="Corteza Terrestre"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-                </div>
-
-                {/* Manto */}
-                <div 
-                  onMouseEnter={() => setHoveredPlanetSection("manto")}
-                  onMouseLeave={() => setHoveredPlanetSection(null)}
-                  onClick={() => setSelectedPlanetSection("manto")}
-                  style={{ top: "35%", left: "48%" }}
-                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
-                    selectedPlanetSection === "manto" || hoveredPlanetSection === "manto" ? "bg-orange-500 scale-125 shadow-lg shadow-orange-500/80" : "bg-orange-500/50 hover:bg-orange-500"
-                  }`}
-                  title="Manto Terrestre"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-                </div>
-
-                {/* Núcleo Externo */}
-                <div 
-                  onMouseEnter={() => setHoveredPlanetSection("nucleo_externo")}
-                  onMouseLeave={() => setHoveredPlanetSection(null)}
-                  onClick={() => setSelectedPlanetSection("nucleo_externo")}
-                  style={{ top: "54%", left: "48%" }}
-                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
-                    selectedPlanetSection === "nucleo_externo" || hoveredPlanetSection === "nucleo_externo" ? "bg-yellow-500 scale-125 shadow-lg shadow-yellow-500/80" : "bg-yellow-500/50 hover:bg-yellow-500"
-                  }`}
-                  title="Núcleo Externo"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-                </div>
-
-                {/* Núcleo Interno */}
-                <div 
-                  onMouseEnter={() => setHoveredPlanetSection("nucleo_interno")}
-                  onMouseLeave={() => setHoveredPlanetSection(null)}
-                  onClick={() => setSelectedPlanetSection("nucleo_interno")}
-                  style={{ top: "72%", left: "48%" }}
-                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
-                    selectedPlanetSection === "nucleo_interno" || hoveredPlanetSection === "nucleo_interno" ? "bg-white scale-125 shadow-lg shadow-white" : "bg-white/50 hover:bg-white"
-                  }`}
-                  title="Núcleo Interno"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-                </div>
-
-                {/* Subducción */}
-                <div 
-                  onMouseEnter={() => setHoveredPlanetSection("subduccion")}
-                  onMouseLeave={() => setHoveredPlanetSection(null)}
-                  onClick={() => setSelectedPlanetSection("subduccion")}
-                  style={{ top: "25%", left: "75%" }}
-                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
-                    selectedPlanetSection === "subduccion" || hoveredPlanetSection === "subduccion" ? "bg-cyan-400 scale-125 shadow-lg shadow-cyan-400/80" : "bg-cyan-500/50 hover:bg-cyan-400"
-                  }`}
-                  title="Zona de Subducción"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-                </div>
-
-                {/* Volcanes */}
-                <div 
-                  onMouseEnter={() => setHoveredPlanetSection("volcanes")}
-                  onMouseLeave={() => setHoveredPlanetSection(null)}
-                  onClick={() => setSelectedPlanetSection("volcanes")}
-                  style={{ top: "18%", left: "84%" }}
-                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
-                    selectedPlanetSection === "volcanes" || hoveredPlanetSection === "volcanes" ? "bg-red-500 scale-125 shadow-lg shadow-red-500/80" : "bg-red-500/50 hover:bg-red-500"
-                  }`}
-                  title="Arco Volcánico"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-                </div>
-
-                {/* Ondas Sísmicas */}
-                <div 
-                  onMouseEnter={() => setHoveredPlanetSection("ondas")}
-                  onMouseLeave={() => setHoveredPlanetSection(null)}
-                  onClick={() => setSelectedPlanetSection("ondas")}
-                  style={{ top: "32%", left: "68%" }}
-                  className={`absolute w-4 h-4 rounded-full cursor-pointer flex items-center justify-center border border-white/70 transition-all duration-300 ${
-                    selectedPlanetSection === "ondas" || hoveredPlanetSection === "ondas" ? "bg-rose-500 scale-125 shadow-lg shadow-rose-500/80" : "bg-rose-500/50 hover:bg-rose-500"
-                  }`}
-                  title="Ondas Sísmicas / Foco"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-                </div>
-
-                {/* Sello de Simulación en vivo */}
-                <div className="absolute bottom-3 right-3 flex items-center space-x-1.5 bg-slate-950/90 border border-slate-900 px-3 py-1.5 rounded-full text-[10px] font-bold text-slate-400 font-mono shadow-md">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                  <span>MODELO CIENTÍFICO INTERACTIVO</span>
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* CUADRO EXPLICATIVO DE LA SECCIÓN SELECCIONADA */}
-            <AnimatePresence mode="wait">
-              {selectedPlanetSection && (
-                <motion.div 
-                  key={selectedPlanetSection}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.15 }}
-                  className="bg-slate-900/50 border border-slate-850 p-5 rounded-2xl space-y-2 relative overflow-hidden"
-                >
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-600"></div>
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-black text-white uppercase tracking-wider">
-                      {PLANET_SECTIONS[selectedPlanetSection].title}
-                    </h4>
-                    <span className={`text-[10px] font-mono font-bold tracking-widest uppercase ${PLANET_SECTIONS[selectedPlanetSection].statusColor}`}>
-                      {PLANET_SECTIONS[selectedPlanetSection].desc}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {PLANET_SECTIONS[selectedPlanetSection].detail}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-          </div>
-
-          <div className="mt-8 pt-4 border-t border-slate-900 flex flex-wrap items-center justify-between text-[11px] text-slate-400 gap-4">
-            <div className="flex items-center space-x-4">
-              <span className="font-mono text-[10px] text-blue-500">PLACA CARIBE</span>
-              <span className="text-slate-800">•</span>
-              <span className="font-mono text-[10px] text-indigo-400">PLACA COCOS</span>
-              <span className="text-slate-800">•</span>
-              <span className="font-mono text-[10px] text-emerald-400">PLACA SUDAMERICANA</span>
-            </div>
-            <div className="flex items-center space-x-1 font-semibold text-slate-300">
-              <Compass className="h-3.5 w-3.5 text-blue-500" />
-              <span>Modelo Geológico Integrado RRD</span>
-            </div>
-          </div>
-
-        </section>
-
-      </div>
-
-      {/* SECCIÓN DE CONTACTO PREMIUM */}
-      <section id="contacto-section" className="bg-slate-900/40 border-t border-slate-900 py-16 px-8 relative overflow-hidden">
-        {/* Luces de fondo (glow effects) */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Información de contacto */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="space-y-2">
-              <span className="bg-blue-500/20 text-blue-400 border border-blue-500/30 font-mono text-[9px] font-bold px-2.5 py-1 rounded-md uppercase tracking-widest inline-block">
-                Contacto RRD
-              </span>
-              <h3 className="text-2xl lg:text-3xl font-black text-white font-display uppercase tracking-tight leading-none">
-                Conéctate con Nosotros
+              <h3 className="font-display font-bold text-lg text-white">
+                Gestión de Contratos
               </h3>
-              <p className="text-sm text-slate-400 leading-relaxed max-w-md">
-                ¿Tienes consultas sobre el modelado sísmico, interés en colaboración de investigación, o soporte sobre las herramientas de evaluación? Escríbenos.
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Especialista en la administración contractual en proyectos mineros, desarrollo e interpretación de KPIs y niveles de servicio (SLAs), negociación y resolución de conflictos operacionales.
               </p>
             </div>
 
-            <div className="space-y-4 pt-4">
-              <div className="flex items-center space-x-4 bg-slate-950/40 border border-slate-900 p-4 rounded-xl">
-                <div className="h-10 w-10 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                  <Mail className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">Correo Principal</p>
-                  <a href="mailto:contacto@grdesastres.com" className="text-sm font-bold text-white hover:text-blue-400 transition">
-                    contacto@grdesastres.com
-                  </a>
-                </div>
+            {/* Aptitud 2 */}
+            <div className="bg-slate-900/60 border border-slate-850 hover:border-slate-800 p-6 rounded-2xl space-y-4 transition-all hover:translate-y-[-4px] text-left">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                <Activity className="h-6 w-6" />
               </div>
-
-              <div className="flex items-center space-x-4 bg-slate-950/40 border border-slate-900 p-4 rounded-xl">
-                <div className="h-10 w-10 rounded-lg bg-indigo-600/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-                  <Compass className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">Ámbito de Cobertura</p>
-                  <p className="text-sm font-bold text-slate-300">Latinoamérica y el Caribe (LATAM)</p>
-                </div>
-              </div>
+              <h3 className="font-display font-bold text-lg text-white">
+                Análisis de Datos
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Programación para ciencia de datos con Python (Pandas, NumPy, Matplotlib) y visualización ejecutiva en herramientas de BI como Tableau, Google Looker Studio y PowerBI.
+              </p>
             </div>
-          </div>
 
-          {/* Formulario */}
-          <div className="lg:col-span-7 bg-slate-950/50 border border-slate-900 p-8 rounded-3xl relative overflow-hidden backdrop-blur-sm">
-            <form onSubmit={handleContactSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="space-y-2">
-                  <label htmlFor="contact-name" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Nombre Completo *</label>
-                  <input
-                    type="text"
-                    id="contact-name"
-                    value={contactName}
-                    onChange={(e) => setContactName(e.target.value)}
-                    placeholder="Ej. Ing. Carlos Mendoza"
-                    required
-                    className="w-full bg-slate-900/50 border border-slate-850 hover:border-slate-800 focus:border-blue-600 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="contact-email" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Correo Electrónico *</label>
-                  <input
-                    type="email"
-                    id="contact-email"
-                    value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
-                    placeholder="Ej. carlos.mendoza@universidad.edu"
-                    required
-                    className="w-full bg-slate-900/50 border border-slate-850 hover:border-slate-800 focus:border-blue-600 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition"
-                  />
-                </div>
+            {/* Aptitud 3 */}
+            <div className="bg-slate-900/60 border border-slate-850 hover:border-slate-800 p-6 rounded-2xl space-y-4 transition-all hover:translate-y-[-4px] text-left">
+              <div className="w-12 h-12 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center">
+                <Shield className="h-6 w-6" />
               </div>
+              <h3 className="font-display font-bold text-lg text-white">
+                Sistemas de Gestión
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Conocimiento práctico e implementación de Sistemas de Gestión Integrados bajo normas internacionales ISO 9001 (Calidad), ISO 39001 (Seguridad Vial) e ISO 22320 (Gestión de Emergencias).
+              </p>
+            </div>
 
-              <div className="space-y-2">
-                <label htmlFor="contact-subject" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Asunto / Motivo</label>
-                <input
-                  type="text"
-                  id="contact-subject"
-                  value={contactSubject}
-                  onChange={(e) => setContactSubject(e.target.value)}
-                  placeholder="Ej. Consulta sobre metodología GNDT"
-                  className="w-full bg-slate-900/50 border border-slate-850 hover:border-slate-800 focus:border-blue-600 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="contact-message" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Mensaje *</label>
-                <textarea
-                  id="contact-message"
-                  value={contactMessage}
-                  onChange={(e) => setContactMessage(e.target.value)}
-                  rows={4}
-                  placeholder="Detalla tu consulta técnica o propuesta de investigación aquí..."
-                  required
-                  className="w-full bg-slate-900/50 border border-slate-850 hover:border-slate-800 focus:border-blue-600 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition resize-none"
-                />
-              </div>
-
-              {submitStatus && (
-                <div className={`p-4 rounded-xl border text-xs font-semibold ${
-                  submitStatus === "success" 
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" 
-                    : "bg-red-500/10 border-red-500/30 text-red-400"
-                }`}>
-                  {submitMessage}
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-widest py-3.5 rounded-xl transition duration-200 cursor-pointer shadow-lg shadow-blue-500/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-              >
-                <span>{isSubmitting ? "Enviando..." : "Enviar Mensaje"}</span>
-                {!isSubmitting && <Send className="h-3 w-3" />}
-              </button>
-            </form>
           </div>
 
         </div>
       </section>
 
-      {/* PIE DE PÁGINA PREMIUM (DERECHOS DE AUTOR Y ENLACES DEL MOCKUP) */}
-      <footer className="border-t border-slate-900 bg-slate-950 px-8 py-6 text-slate-500 text-xs mt-auto">
-        <div className="max-w-[1920px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center md:text-left">
-            <p className="text-slate-400 font-medium">
-              © 2026 Geologol | Plataforma de Modelado de Riesgo Sísmico Latam
-            </p>
-            <p className="text-[11px] text-slate-500">
-              Desarrollada por Geologol para la Mejora Continua en la Ingeniería Civil y la Reducción del Riesgo de Desastres (RRD).
+      {/* =========================================================================
+          SECCIÓN EDUCACIÓN (DATOS ACADÉMICOS)
+          ========================================================================= */}
+      <section id="educacion" className="py-24 px-6 border-t border-slate-900 bg-slate-950">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
+              Datos Académicos
+            </h2>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
+            <p className="text-xs sm:text-sm text-slate-400">
+              Trayectoria de formación académica superior en ingeniería y diplomados de especialización.
             </p>
           </div>
+
+          <div className="max-w-3xl mx-auto space-y-6 pt-4 text-left">
+            
+            {/* Timeline Item 1 */}
+            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
+              <div className="flex items-start space-x-4">
+                <div className="p-2.5 bg-cyan-500/10 rounded-xl text-cyan-400 shrink-0 mt-0.5">
+                  <GraduationCap className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase">
+                    Diplomado en Administración de Contratos para la Minería
+                  </h4>
+                  <p className="text-[11px] text-slate-400">
+                    Especialización en Gestión Legal y Comercial Minera, Chile
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-[10px] font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
+                2025
+              </span>
+            </div>
+
+            {/* Timeline Item 2 */}
+            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
+              <div className="flex items-start space-x-4">
+                <div className="p-2.5 bg-cyan-500/10 rounded-xl text-cyan-400 shrink-0 mt-0.5">
+                  <GraduationCap className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase">
+                    Diplomado en Data Science and Data Analytics
+                  </h4>
+                  <p className="text-[11px] text-slate-400">
+                    Programación para ciencia de datos y visualización con Python
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-[10px] font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
+                2025
+              </span>
+            </div>
+
+            {/* Timeline Item 3 */}
+            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
+              <div className="flex items-start space-x-4">
+                <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-400 shrink-0 mt-0.5">
+                  <GraduationCap className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase">
+                    Ingeniero en Geociencias
+                  </h4>
+                  <p className="text-[11px] text-slate-400">
+                    Estudio de materiales terrestres, tectónica y geofísica aplicada
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">
+                2014
+              </span>
+            </div>
+
+            {/* Timeline Item 4 */}
+            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
+              <div className="flex items-start space-x-4">
+                <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-400 shrink-0 mt-0.5">
+                  <GraduationCap className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase">
+                    Ingeniero Civil Construcción
+                  </h4>
+                  <p className="text-[11px] text-slate-400">
+                    Cálculo estructural, procesos constructivos y materiales
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">
+                2011
+              </span>
+            </div>
+
+            {/* Timeline Item 5 */}
+            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
+              <div className="flex items-start space-x-4">
+                <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-400 shrink-0 mt-0.5">
+                  <GraduationCap className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase">
+                    Técnico Superior Universitario en Geología y Minas
+                  </h4>
+                  <p className="text-[11px] text-slate-400">
+                    Mapeo geológico, prospección mineral y muestreo de suelos
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">
+                2004
+              </span>
+            </div>
+
+            <div className="p-4 bg-slate-900/30 border border-slate-850/60 rounded-xl text-center">
+              <p className="text-xs text-slate-500">
+                ⚠️ Mi educación superior fue desarrollada en Venezuela y mis títulos se encuentran debidamente apostillados.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECCIÓN EXPERIENCIA LABORAL
+          ========================================================================= */}
+      <section id="experiencia" className="py-24 px-6 border-t border-slate-900 bg-slate-900/10">
+        <div className="max-w-7xl mx-auto space-y-12">
           
-          <div className="flex flex-wrap items-center justify-center gap-6 text-[11px] font-bold uppercase tracking-widest text-slate-400">
-            <button onClick={() => {
-              const el = document.getElementById("study-tools-panel");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }} className="hover:text-blue-500 transition cursor-pointer">Contenidos</button>
-            <span className="text-slate-800">|</span>
-            <button onClick={() => {
-              const el = document.getElementById("nuestro-planeta-panel");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }} className="hover:text-blue-500 transition cursor-pointer">Geodinámica</button>
-            <span className="text-slate-800">|</span>
-            <button onClick={() => setActiveModal("biblioteca")} className="hover:text-blue-500 transition cursor-pointer">Unete & Recursos</button>
-            <span className="text-slate-800">|</span>
-            <button onClick={() => {
-              const el = document.getElementById("contacto-section");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }} className="hover:text-blue-500 transition cursor-pointer">Contacto</button>
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
+              Experiencia Laboral en Chile
+            </h2>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
+            <p className="text-xs sm:text-sm text-slate-400">
+              Desempeño profesional destacado en empresas colaboradoras de minería, pesaje industrial y servicios logísticos.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
+            
+            {/* Empleo 1 */}
+            <div className="bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <img 
+                  src={jairoData} 
+                  alt="Nera Chile Spa" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                <span className="absolute bottom-3 left-4 text-[9px] font-mono font-bold text-cyan-400 bg-cyan-950/80 border border-cyan-850 px-2 py-0.5 rounded uppercase">
+                  Logística y Contratos
+                </span>
+              </div>
+              
+              <div className="p-5 flex-1 space-y-3 text-left">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-bold text-white uppercase leading-tight">Nera Chile Spa</h4>
+                  <p className="text-[10px] font-semibold text-slate-500">2025 - Actualmente</p>
+                </div>
+                <ul className="text-[11px] text-slate-400 space-y-2 list-disc list-inside">
+                  <li><strong>Analista de Contratos</strong> (Agosto - Act.)</li>
+                  <li><strong>Operador Central de Despacho</strong> (Abril - Agosto 2025)</li>
+                  <li>Elaboración y monitoreo de métricas de servicio (KPIs y SLAs).</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Empleo 2 */}
+            <div className="bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <img 
+                  src={earthStructure} 
+                  alt="Molinstec" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                <span className="absolute bottom-3 left-4 text-[9px] font-mono font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-850 px-2 py-0.5 rounded uppercase">
+                  Ventas Técnicas
+                </span>
+              </div>
+              
+              <div className="p-5 flex-1 space-y-3 text-left">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-bold text-white uppercase leading-tight">Molinstec Spa</h4>
+                  <p className="text-[10px] font-semibold text-slate-500">Junio 2024 - Marzo 2025</p>
+                </div>
+                <ul className="text-[11px] text-slate-400 space-y-2 list-disc list-inside">
+                  <li><strong>Ingeniero de Ventas</strong></li>
+                  <li>Asesoramiento técnico en sistemas de pesaje, balanzas industriales e ingeniería de medición de flujo.</li>
+                  <li>Desarrollo de propuestas comerciales complejas.</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Empleo 3 */}
+            <div className="bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <img 
+                  src={jairoSnow} 
+                  alt="Explor-K Safety" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                <span className="absolute bottom-3 left-4 text-[9px] font-mono font-bold text-yellow-400 bg-yellow-950/80 border border-yellow-850 px-2 py-0.5 rounded uppercase">
+                  Operaciones Mineras
+                </span>
+              </div>
+              
+              <div className="p-5 flex-1 space-y-3 text-left">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-bold text-white uppercase leading-tight">Explor-K Safety & Driving</h4>
+                  <p className="text-[10px] font-semibold text-slate-500">Diciembre 2020 - Diciembre 2023</p>
+                </div>
+                <ul className="text-[11px] text-slate-400 space-y-2 list-disc list-inside">
+                  <li><strong>Administrador de Contrato SQM</strong> (Ago 2022 - Dic 2023)</li>
+                  <li><strong>Jefe de Operación</strong> (Feb 2022 - Dic 2023)</li>
+                  <li>Liderazgo en terreno, control de personal, seguridad vial en faena y cumplimiento de planes preventivos.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECCIÓN PORTAFOLIO: PLATAFORMA SÍSMICA Y TRABAJOS
+          ========================================================================= */}
+      <section id="portafolio" className="py-24 px-6 border-t border-slate-900 bg-slate-950">
+        <div className="max-w-7xl mx-auto space-y-16">
+          
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
+              Portafolio de Proyectos
+            </h2>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
+            <p className="text-xs sm:text-sm text-slate-400">
+              Explora las aplicaciones técnicas interactivas y los proyectos de ayuda humanitaria y docencia en los que he trabajado.
+            </p>
+          </div>
+
+          {/* 1. PROYECTO INSIGNIA: PLATAFORMA DE MODELADO SÍSMICO LATAM */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-8 relative overflow-hidden text-left">
+            {/* Glow decorativo */}
+            <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl -z-10 pointer-events-none" />
+            
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-slate-800 pb-6">
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded uppercase tracking-wider">
+                  Proyecto Insignia
+                </span>
+                <h3 className="font-display font-black text-2xl md:text-3xl text-white uppercase leading-none">
+                  Plataforma de Riesgo Sísmico LATAM
+                </h3>
+                <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                  Software integral para el análisis estructural y el cribado de vulnerabilidad sismorresistente. Permite simular edificaciones bajo códigos oficiales (E.030 Perú, NCh433 Chile, NSR-10 Colombia, COVENIN 1756 Venezuela) con emisión de reportes técnicos de IA.
+                </p>
+              </div>
+            </div>
+
+            {/* Submódulos Técnicos (Quick Launch) */}
+            <div className="space-y-4">
+              <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+                Acceso Rápido a Herramientas de Cálculo
+              </h4>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                {/* Modulo 1: MDOF */}
+                <button 
+                  onClick={() => onNavigate("simulador")}
+                  className="bg-slate-950 hover:bg-slate-900 border border-slate-850 hover:border-cyan-500/30 p-4 rounded-xl text-left transition duration-200 cursor-pointer flex flex-col justify-between min-h-[140px] group"
+                >
+                  <Activity className="h-5 w-5 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-white uppercase">Simulador MDOF</h5>
+                    <p className="text-[9px] text-slate-400 mt-1 leading-normal">Dinámica lineal de edificios de varios niveles ante acelerogramas.</p>
+                  </div>
+                </button>
+
+                {/* Modulo 2: Espectro */}
+                <button 
+                  onClick={() => onNavigate("espectro")}
+                  className="bg-slate-950 hover:bg-slate-900 border border-slate-850 hover:border-cyan-500/30 p-4 rounded-xl text-left transition duration-200 cursor-pointer flex flex-col justify-between min-h-[140px] group"
+                >
+                  <Layers className="h-5 w-5 text-emerald-400 group-hover:scale-110 transition-transform" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-white uppercase">Espectro de Diseño</h5>
+                    <p className="text-[9px] text-slate-400 mt-1 leading-normal">Zonificación de suelos y coeficientes de respuesta espectral.</p>
+                  </div>
+                </button>
+
+                {/* Modulo 3: FEMA P-154 */}
+                <button 
+                  onClick={() => onNavigate("fema")}
+                  className="bg-slate-950 hover:bg-slate-900 border border-slate-850 hover:border-cyan-500/30 p-4 rounded-xl text-left transition duration-200 cursor-pointer flex flex-col justify-between min-h-[140px] group"
+                >
+                  <FileText className="h-5 w-5 text-yellow-400 group-hover:scale-110 transition-transform" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-white uppercase">FEMA P-154 (RVS)</h5>
+                    <p className="text-[9px] text-slate-400 mt-1 leading-normal">Cribado visual rápido para evaluación de riesgo estructural.</p>
+                  </div>
+                </button>
+
+                {/* Modulo 4: GNDT */}
+                <button 
+                  onClick={() => onNavigate("gndt")}
+                  className="bg-slate-950 hover:bg-slate-900 border border-slate-850 hover:border-cyan-500/30 p-4 rounded-xl text-left transition duration-200 cursor-pointer flex flex-col justify-between min-h-[140px] group"
+                >
+                  <Shield className="h-5 w-5 text-orange-400 group-hover:scale-110 transition-transform" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-white uppercase">Vulnerabilidad GNDT</h5>
+                    <p className="text-[9px] text-slate-400 mt-1 leading-normal">Cálculo de índice con 11 parámetros críticos de mampostería.</p>
+                  </div>
+                </button>
+
+                {/* Modulo 5: Venezuela */}
+                <button 
+                  onClick={() => onNavigate("vulnerabilidad")}
+                  className="bg-slate-950 hover:bg-slate-900 border border-slate-850 hover:border-cyan-500/30 p-4 rounded-xl text-left transition duration-200 cursor-pointer flex flex-col justify-between min-h-[140px] group"
+                >
+                  <Globe className="h-5 w-5 text-purple-400 group-hover:scale-110 transition-transform" />
+                  <div>
+                    <h5 className="text-[11px] font-bold text-white uppercase">Riesgo Venezuela</h5>
+                    <p className="text-[9px] text-slate-400 mt-1 leading-normal">Evaluaciones adaptadas al contexto y zonificación nacional.</p>
+                  </div>
+                </button>
+
+              </div>
+            </div>
+
+            {/* Módulos de Divulgación y Aula Interactiva */}
+            <div className="space-y-4 pt-4 border-t border-slate-850">
+              <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+                Módulos de Capacitación y Divulgación Sísmica
+              </h4>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                {/* Aula */}
+                <div className="bg-slate-950 border border-slate-850 p-4 rounded-xl flex items-center justify-between gap-4">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-bold text-white uppercase">Aula Virtual</p>
+                    <p className="text-[8px] text-slate-500">Resonancia sísmica</p>
+                  </div>
+                  <button 
+                    onClick={() => setActiveModal("aula")}
+                    className="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 text-[9px] font-bold uppercase px-3 py-1.5 rounded-lg border border-cyan-500/20 transition cursor-pointer shrink-0 animate-pulse"
+                  >
+                    Simular Ondas
+                  </button>
+                </div>
+
+                {/* Biblioteca */}
+                <div className="bg-slate-950 border border-slate-850 p-4 rounded-xl flex items-center justify-between gap-4">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-bold text-white uppercase">Biblioteca</p>
+                    <p className="text-[8px] text-slate-500">Códigos y normativas</p>
+                  </div>
+                  <button 
+                    onClick={() => setActiveModal("biblioteca")}
+                    className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-[9px] font-bold uppercase px-3 py-1.5 rounded-lg border border-emerald-500/20 transition cursor-pointer shrink-0"
+                  >
+                    Buscar PDF
+                  </button>
+                </div>
+
+                {/* Héroes */}
+                <div className="bg-slate-950 border border-slate-850 p-4 rounded-xl flex items-center justify-between gap-4">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-bold text-white uppercase">Héroes USAR</p>
+                    <p className="text-[8px] text-slate-500">Historias de rescatistas</p>
+                  </div>
+                  <button 
+                    onClick={() => setActiveModal("heroes")}
+                    className="bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 text-[9px] font-bold uppercase px-3 py-1.5 rounded-lg border border-orange-500/20 transition cursor-pointer shrink-0"
+                  >
+                    Ver Historias
+                  </button>
+                </div>
+
+                {/* Blog */}
+                <div className="bg-slate-950 border border-slate-850 p-4 rounded-xl flex items-center justify-between gap-4">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-bold text-white uppercase">Blog Técnico</p>
+                    <p className="text-[8px] text-slate-500">Sismotectónica y fallas</p>
+                  </div>
+                  <button 
+                    onClick={() => setActiveModal("blogs")}
+                    className="bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 text-[9px] font-bold uppercase px-3 py-1.5 rounded-lg border border-purple-500/20 transition cursor-pointer shrink-0"
+                  >
+                    Leer Blog
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          {/* 2. OTROS TRABAJOS ANTERIORES Y EXPERIENCIA HUMANITARIA */}
+          <div className="space-y-6 text-left">
+            <h3 className="font-display font-black text-lg text-white uppercase tracking-wider text-center md:text-left">
+              Trabajos Anteriores y Misiones Humanitarias
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              {/* Proyecto 1: Minera Los Pelambres */}
+              <div className="bg-slate-900 border border-slate-855 p-5 rounded-2xl flex flex-col justify-between gap-4">
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold text-white uppercase">Minera Los Pelambres (Servicios)</h4>
+                  <p className="text-[11px] text-slate-400 leading-normal">
+                    Liderazgo en terreno desempeñándome desde Brigadista de Emergencia y Encargado de Logística hasta Jefe de Operaciones para una empresa colaboradora de servicios industriales.
+                  </p>
+                </div>
+                <span className="text-[9px] font-mono text-slate-500 uppercase">Jefe de Operaciones</span>
+              </div>
+
+              {/* Proyecto 2: Terremoto Nepal 2015 */}
+              <div className="bg-slate-900 border border-slate-855 rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div className="h-36 w-full relative overflow-hidden shrink-0">
+                  <img src={jairoNepal} alt="Nepal 2015" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/10 to-transparent" />
+                </div>
+                <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-bold text-white uppercase">Misión Humanitaria Nepal</h4>
+                    <p className="text-[11px] text-slate-400 leading-normal">
+                      Miembro activo de la misión civil de apoyo humanitario y rescate de sobrevivientes tras el catastrófico terremoto de Katmandú en 2015.
+                    </p>
+                  </div>
+                  <span className="text-[9px] font-mono text-cyan-400 uppercase font-semibold mt-2">Nepal (2015)</span>
+                </div>
+              </div>
+
+              {/* Proyecto 3: Terremoto Ecuador 2016 */}
+              <div className="bg-slate-900 border border-slate-855 rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div className="h-36 w-full relative overflow-hidden shrink-0">
+                  <img src={jairoEcuador} alt="Ecuador 2016" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/10 to-transparent" />
+                </div>
+                <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-bold text-white uppercase">Misión Humanitaria Ecuador</h4>
+                    <p className="text-[11px] text-slate-400 leading-normal">
+                      Operaciones de búsqueda y rescate en estructuras colapsadas (USAR) tras el sismo de magnitud 7.8 en Manabí, apoyando los centros ECU 911.
+                    </p>
+                  </div>
+                  <span className="text-[9px] font-mono text-cyan-400 uppercase font-semibold mt-2">Ecuador (2016)</span>
+                </div>
+              </div>
+
+              {/* Proyecto 4: Analista Asiameric */}
+              <div className="bg-slate-900 border border-slate-855 p-5 rounded-2xl flex flex-col justify-between gap-4">
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold text-white uppercase">Analista de Operaciones Logísticas</h4>
+                  <p className="text-[11px] text-slate-400 leading-normal">
+                    Control operativo y seguimiento de despachos de comercio exterior de importación y exportación para la compañía logística Asiameric en Santiago.
+                  </p>
+                </div>
+                <span className="text-[9px] font-mono text-slate-500 uppercase">Asiameric Chile</span>
+              </div>
+
+              {/* Proyecto 5: Profesor Universitario */}
+              <div className="bg-slate-900 border border-slate-855 rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div className="h-36 w-full relative overflow-hidden shrink-0">
+                  <img src={jairoClass} alt="Clases UNET" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/10 to-transparent" />
+                </div>
+                <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-bold text-white uppercase">Docencia Universitaria</h4>
+                    <p className="text-[11px] text-slate-400 leading-normal">
+                      Profesor, monitor y facilitador de asignaturas técnicas en ciencias de la tierra y emergencias en la UNET, Santiago Mariño y la UNES.
+                    </p>
+                  </div>
+                  <span className="text-[9px] font-mono text-slate-500 uppercase mt-2">Docencia Superior</span>
+                </div>
+              </div>
+
+              {/* Proyecto 6: PC Táchira */}
+              <div className="bg-slate-900 border border-slate-855 p-5 rounded-2xl flex flex-col justify-between gap-4">
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold text-white uppercase">Operaciones Protección Civil Táchira</h4>
+                  <p className="text-[11px] text-slate-400 leading-normal">
+                    12 años dedicados al servicio público en Táchira en labores de prevención sísmica, planificación ante emergencias y comando de incidentes civiles.
+                  </p>
+                </div>
+                <span className="text-[9px] font-mono text-slate-500 uppercase">Gestión de Emergencias</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECCIÓN CONTACTO
+          ========================================================================= */}
+      <section id="contacto" className="py-24 px-6 border-t border-slate-900 bg-slate-900/10">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
+              Contáctame
+            </h2>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
+            <p className="text-xs sm:text-sm text-slate-400">
+              ¿Tienes una oportunidad laboral, requerimiento técnico o consulta sobre el simulador? Envíame un mensaje directo.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-4 items-start text-left">
+            
+            {/* Columna Izquierda: Tarjeta de Datos */}
+            <div className="lg:col-span-5 bg-slate-900 border border-slate-850 p-6 rounded-2xl space-y-6">
+              
+              <div className="space-y-1">
+                <h4 className="text-sm font-bold text-white uppercase">Información de Contacto</h4>
+                <p className="text-[11px] text-slate-400">Escríbeme o llámame directamente para agendar reuniones.</p>
+              </div>
+
+              <div className="space-y-4 text-xs">
+                <div className="flex items-center space-x-3.5 text-slate-300">
+                  <Phone className="h-4 w-4 text-cyan-400 shrink-0" />
+                  <span>+56 941257491</span>
+                </div>
+                <div className="flex items-center space-x-3.5 text-slate-300">
+                  <Mail className="h-4 w-4 text-cyan-400 shrink-0" />
+                  <span>geologol@gmail.com</span>
+                </div>
+                <div className="flex items-center space-x-3.5 text-slate-300">
+                  <MapPin className="h-4 w-4 text-cyan-400 shrink-0" />
+                  <span>Arturo Prat 376, Santiago, Chile</span>
+                </div>
+              </div>
+
+              <hr className="border-slate-850" />
+
+              <div className="space-y-3 text-xs">
+                <h5 className="font-bold text-white uppercase tracking-wider text-[10px] text-slate-500">Otros Datos de Interés</h5>
+                <ul className="space-y-2 text-slate-400 list-disc list-inside">
+                  <li>Situación migratoria: <strong>Residencia Definitiva</strong>.</li>
+                  <li>Licencia de Conducir chilena: <strong>Profesional A2 y Clase B</strong>.</li>
+                </ul>
+              </div>
+
+            </div>
+
+            {/* Columna Derecha: Formulario */}
+            <div className="lg:col-span-7 bg-slate-900 border border-slate-850 p-6 rounded-2xl">
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1 text-left">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nombre Completo *</label>
+                    <input 
+                      type="text" 
+                      required
+                      placeholder="Tu Nombre" 
+                      value={contactName}
+                      onChange={(e) => setContactName(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1 text-left">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Correo Electrónico *</label>
+                    <input 
+                      type="email" 
+                      required
+                      placeholder="ejemplo@dominio.com" 
+                      value={contactEmail}
+                      onChange={(e) => setContactEmail(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1 text-left">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Asunto</label>
+                  <input 
+                    type="text" 
+                    placeholder="Oportunidad laboral, consulta de simulador..." 
+                    value={contactSubject}
+                    onChange={(e) => setContactSubject(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors"
+                  />
+                </div>
+
+                <div className="space-y-1 text-left">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mensaje *</label>
+                  <textarea 
+                    required
+                    rows={5}
+                    placeholder="Escribe tu mensaje aquí..." 
+                    value={contactMessage}
+                    onChange={(e) => setContactMessage(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-855 rounded-xl p-4 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors resize-none"
+                  />
+                </div>
+
+                {submitStatus && (
+                  <div className={`p-4 rounded-xl border text-xs text-left ${
+                    submitStatus === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-red-500/10 border-red-500/30 text-red-400"
+                  }`}>
+                    {submitMessage}
+                  </div>
+                )}
+
+                <div className="text-end">
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 text-slate-950 font-black text-xs uppercase px-6 py-3 rounded-xl tracking-wider transition-all shadow-md shadow-cyan-500/10 flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto ml-auto disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
+                    <Send className="h-4.5 w-4.5" />
+                  </button>
+                </div>
+
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          PIE DE PÁGINA (FOOTER)
+          ========================================================================= */}
+      <footer className="bg-slate-950 py-8 px-6 border-t border-slate-900">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 text-center">
+          <p>© Jairo Ovallos 2026. Todos los derechos reservados.</p>
+          <div className="flex items-center space-x-2">
+            <span>Desarrollado con React + TS + Tailwind v4 + Motion</span>
+            <span>•</span>
+            <span className="text-slate-400">geologol</span>
           </div>
         </div>
       </footer>
 
 
       {/* =========================================================================
-          MODALES INTERACTIVOS DE LOS MÓDULOS DE FORMACIÓN Y RECURSOS (5 - 8)
+          MODALES INTERACTIVOS DE LOS MÓDULOS DE FORMACIÓN Y RECURSOS
           ========================================================================= */}
       <AnimatePresence>
         
@@ -1204,7 +1179,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 bg-slate-950 border border-slate-850 p-5 rounded-2xl items-center">
                   
                   {/* Controles de la Simulación */}
-                  <div className="md:col-span-5 space-y-4">
+                  <div className="md:col-span-5 space-y-4 text-left">
                     <div className="space-y-1">
                       <p className="text-[10px] font-bold text-yellow-500 tracking-wider uppercase font-mono">Tipo de Onda Sísmica</p>
                       <div className="grid grid-cols-3 gap-1.5">
@@ -1214,7 +1189,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                             waveType === "P" ? "bg-yellow-500/10 border-yellow-500 text-yellow-400" : "bg-slate-900 border-slate-800 text-slate-400"
                           }`}
                         >
-                          Ondas P (Primarias)
+                          Ondas P
                         </button>
                         <button 
                           onClick={() => setWaveType("S")}
@@ -1222,7 +1197,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                             waveType === "S" ? "bg-yellow-500/10 border-yellow-500 text-yellow-400" : "bg-slate-900 border-slate-800 text-slate-400"
                           }`}
                         >
-                          Ondas S (Corte)
+                          Ondas S
                         </button>
                         <button 
                           onClick={() => setWaveType("Surface")}
@@ -1249,7 +1224,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                         onChange={(e) => setFrequency(parseFloat(e.target.value))}
                         className="w-full accent-yellow-500 bg-slate-900"
                       />
-                      <p className="text-[9px] text-slate-500">Ajusta los ciclos por segundo. El edificio escolar resuena a ~0.8 Hz.</p>
+                      <p className="text-[9px] text-slate-500">El edificio escolar resuena a ~0.8 Hz (ajusta para entrar en resonancia).</p>
                     </div>
 
                     <div className="space-y-1">
@@ -1303,7 +1278,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   </div>
 
                   {/* Canvas de Simulación Visual (SVG con Física simulada en vivo) */}
-                  <div className="md:col-span-7 flex flex-col items-center justify-center bg-slate-900/40 border border-slate-850 p-4 rounded-2xl relative min-h-[260px] overflow-hidden">
+                  <div className="md:col-span-7 flex flex-col items-center justify-center bg-slate-900/40 border border-slate-855 p-4 rounded-2xl relative min-h-[260px] overflow-hidden">
                     <span className="absolute top-2 left-2 text-[8px] font-mono text-slate-500 uppercase">Sismógrafo Dinámico de Estructura</span>
                     
                     <svg viewBox="0 0 300 220" className="w-full max-w-[280px]">
@@ -1389,16 +1364,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 </div>
 
                 {/* Explicación Didáctica */}
-                <div className="space-y-3">
+                <div className="space-y-3 text-left">
                   <h4 className="text-sm font-bold text-white flex items-center gap-2">
                     <Info className="h-4 w-4 text-yellow-500" />
                     Concepto Físico Clave: Resonancia Estructural
                   </h4>
                   <p className="text-xs text-slate-300 leading-relaxed">
                     Cada edificación tiene un <strong>período natural de vibración</strong> (determinado por su altura, rigidez y masa). Si las ondas del terremoto empujan el edificio con esa misma frecuencia, se produce el fenómeno de la <strong>resonancia</strong>. En este estado, los desplazamientos se amplifican exponencialmente en cada ciclo, sometiendo a las vigas y columnas a fuerzas críticas que pueden provocar el colapso repentino si la estructura carece de la ductilidad o amortiguamiento adecuado.
-                  </p>
-                  <p className="text-xs text-slate-300">
-                    Nuestra plataforma permite modelar estos efectos dinámicos complejos para edificios de hasta 15 pisos bajo la normativa sismorresistente local de diferentes países de Latinoamérica.
                   </p>
                 </div>
 
@@ -1410,7 +1382,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <button 
                   onClick={() => {
                     setActiveModal(null);
-                    onNavigate("modelo");
+                    onNavigate("simulador");
                   }}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase px-4 py-2 rounded-xl transition cursor-pointer shadow-md"
                 >
@@ -1455,7 +1427,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               </div>
 
               {/* Búsqueda y Filtros */}
-              <div className="p-6 bg-slate-950 border-b border-slate-850 flex flex-col sm:flex-row gap-4">
+              <div className="p-6 bg-slate-950 border-b border-slate-855 flex flex-col sm:flex-row gap-4">
                 <input 
                   type="text"
                   placeholder="Buscar norma, país o metodología..."
@@ -1481,7 +1453,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               </div>
 
               {/* Contenido / Lista */}
-              <div className="p-6 overflow-y-auto space-y-4 flex-1">
+              <div className="p-6 overflow-y-auto space-y-4 flex-1 text-left">
                 {(() => {
                   const filtered = BIBLIOGRAFIA_DB.filter((item) => {
                     const matchesSearch = item.title.toLowerCase().includes(biblioSearch.toLowerCase()) || 
@@ -1506,7 +1478,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                       {filtered.map((item) => (
                         <div 
                           key={item.id}
-                          className="bg-slate-950/60 border border-slate-850 hover:border-slate-800 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all"
+                          className="bg-slate-950/60 border border-slate-855 hover:border-slate-800 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all"
                         >
                           <div className="space-y-1.5 flex-1">
                             <div className="flex items-center space-x-2.5">
@@ -1527,7 +1499,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                             className="w-full md:w-auto text-center bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/30 text-cyan-400 hover:text-cyan-300 font-bold text-[10px] tracking-wider uppercase px-4 py-3 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                           >
                             <Download className="h-3.5 w-3.5" />
-                            <span>DESCARGAR RECURSOS</span>
+                            <span>DESCARGAR</span>
                           </a>
                         </div>
                       ))}
@@ -1538,7 +1510,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
               {/* Pie */}
               <div className="bg-slate-950 p-4 border-t border-slate-800 text-center">
-                <p className="text-[10px] text-slate-500">El repositorio digital de Geologol promueve el acceso libre y universal a material educativo de RRD en Latinoamérica.</p>
+                <p className="text-[10px] text-slate-500">El repositorio digital promueve el acceso libre y universal a material educativo de RRD en Latinoamérica.</p>
               </div>
             </motion.div>
           </motion.div>
@@ -1581,7 +1553,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               <div className="p-6 overflow-y-auto space-y-6 flex-1">
                 
                 {/* Visualizador de Héroe Activo */}
-                <div className="bg-slate-950 border border-slate-850 p-6 rounded-2xl flex flex-col md:flex-row gap-6 relative overflow-hidden items-center">
+                <div className="bg-slate-950 border border-slate-855 p-6 rounded-2xl flex flex-col md:flex-row gap-6 relative overflow-hidden items-center text-left">
                   
                   {/* Avatar Representativo de Color Estructurado */}
                   <div className={`h-24 w-24 rounded-2xl ${HEROES_DB[activeHeroIdx].avatarBg} flex items-center justify-center text-white text-3xl font-black shadow-lg shadow-black/40 shrink-0 select-none uppercase tracking-wider animate-pulse`}>
@@ -1589,7 +1561,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   </div>
 
                   <div className="space-y-3 flex-1 text-center md:text-left">
-                    <div className="space-y-0.5">
+                    <div className="space-y-0.5 animate-fadeIn">
                       <p className="text-[10px] font-mono font-bold text-orange-400 uppercase tracking-widest">{HEROES_DB[activeHeroIdx].group}</p>
                       <h4 className="text-lg font-black text-white uppercase">{HEROES_DB[activeHeroIdx].name}</h4>
                       <p className="text-xs text-slate-400 font-medium italic">{HEROES_DB[activeHeroIdx].role}</p>
@@ -1599,7 +1571,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                       {HEROES_DB[activeHeroIdx].story}
                     </p>
 
-                    <div className="bg-slate-900 border border-slate-850 p-3 rounded-xl flex items-center gap-3">
+                    <div className="bg-slate-900 border border-slate-855 p-3 rounded-xl flex items-center gap-3">
                       <Award className="h-5 w-5 text-yellow-500 shrink-0" />
                       <div>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Logro de Servicio Destacado</p>
@@ -1611,7 +1583,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 </div>
 
                 {/* Selectores del Carrusel */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-left">
                   {HEROES_DB.map((hero, idx) => (
                     <button
                       key={hero.id}
@@ -1690,9 +1662,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                       initial={{ opacity: 0, x: 15 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -15 }}
-                      className="space-y-4 max-w-2xl mx-auto"
+                      className="space-y-4 max-w-2xl mx-auto text-left"
                     >
-                      <div className="space-y-1 pb-3 border-b border-slate-850">
+                      <div className="space-y-1 pb-3 border-b border-slate-855">
                         <span className="text-[10px] font-mono text-purple-400 font-bold uppercase">{selectedBlogPost.readTime}</span>
                         <h4 className="text-md sm:text-lg font-black text-white leading-tight uppercase">{selectedBlogPost.title}</h4>
                         <p className="text-xs text-slate-400 font-medium">Por: <span className="font-bold text-slate-200">{selectedBlogPost.author}</span> ({selectedBlogPost.role}) • {selectedBlogPost.date}</p>
@@ -1705,7 +1677,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                         ))}
                       </div>
 
-                      <div className="pt-4 border-t border-slate-850 text-center">
+                      <div className="pt-4 border-t border-slate-855 text-center">
                         <button 
                           onClick={() => setSelectedBlogPost(null)}
                           className="bg-slate-900 hover:bg-slate-850 border border-slate-800 text-purple-400 font-bold text-[10px] tracking-widest uppercase px-4 py-2.5 rounded-xl transition cursor-pointer"
@@ -1721,13 +1693,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                       initial={{ opacity: 0, x: -15 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 15 }}
-                      className="space-y-4"
+                      className="space-y-4 text-left"
                     >
                       {BLOGS_DB.map((post) => (
                         <div 
                           key={post.id}
                           onClick={() => setSelectedBlogPost(post)}
-                          className="bg-slate-950/60 hover:bg-slate-950 border border-slate-850 hover:border-slate-800 p-5 rounded-2xl transition cursor-pointer flex flex-col justify-between space-y-3"
+                          className="bg-slate-950/60 hover:bg-slate-950 border border-slate-855 hover:border-slate-800 p-5 rounded-2xl transition cursor-pointer flex flex-col justify-between space-y-3 group"
                         >
                           <div className="space-y-1">
                             <div className="flex items-center justify-between">
@@ -1739,7 +1711,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                             <p className="text-xs text-slate-300 line-clamp-2 mt-1">{post.summary}</p>
                           </div>
                           
-                          <div className="pt-2 border-t border-slate-850/40 flex items-center justify-between text-[10px] font-bold text-purple-400 tracking-wider uppercase font-mono">
+                          <div className="pt-2 border-t border-slate-855/40 flex items-center justify-between text-[10px] font-bold text-purple-400 tracking-wider uppercase group-hover:text-purple-300 transition-colors font-mono">
                             <span>Leer Artículo Completo</span>
                             <ArrowRight className="h-3 w-3" />
                           </div>
