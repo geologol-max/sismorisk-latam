@@ -65,6 +65,8 @@ interface SavedProject {
   earthquakeDepth: number;
   epicentralDistance: number;
   earthquakeDuration?: number;
+  baseMass?: number;
+  baseStiffness?: number;
 }
 
 const DEFAULT_PROJECTS: SavedProject[] = [
@@ -81,6 +83,8 @@ const DEFAULT_PROJECTS: SavedProject[] = [
     earthquakeDepth: 35,
     epicentralDistance: 50,
     earthquakeDuration: 30,
+    baseMass: 120,
+    baseStiffness: 380000
   },
   {
     id: "proj-2",
@@ -95,6 +99,8 @@ const DEFAULT_PROJECTS: SavedProject[] = [
     earthquakeDepth: 25,
     epicentralDistance: 70,
     earthquakeDuration: 60,
+    baseMass: 150,
+    baseStiffness: 1330000
   },
   {
     id: "proj-3",
@@ -109,6 +115,8 @@ const DEFAULT_PROJECTS: SavedProject[] = [
     earthquakeDepth: 15,
     epicentralDistance: 15,
     earthquakeDuration: 25,
+    baseMass: 216,
+    baseStiffness: 114000
   }
 ];
 
@@ -129,6 +137,8 @@ export default function App() {
   const [numFloors, setNumFloors] = useState(8);
   const [interstoryHeight, setInterstoryHeight] = useState(3.0);
   const [typologyId, setTypologyId] = useState<TypologyType>("frame");
+  const [baseMass, setBaseMass] = useState(120); // toneladas
+  const [baseStiffness, setBaseStiffness] = useState(380000); // kN/m
   
   // Parámetros de sismo
   const [earthquakeMw, setEarthquakeMw] = useState(8.0);
@@ -149,6 +159,8 @@ export default function App() {
   const [loadingReport, setLoadingReport] = useState(false);
   const [reportResult, setReportResult] = useState<string | null>(null);
   const [reportError, setReportError] = useState<string | null>(null);
+  // Ref para abortar el fetch si el usuario cambia de proyecto antes de recibir respuesta
+  const reportAbortControllerRef = useRef<AbortController | null>(null);
 
   // --- Toasts de UI ---
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -189,6 +201,8 @@ export default function App() {
       setEarthquakeDepth(proj.earthquakeDepth);
       setEpicentralDistance(proj.epicentralDistance);
       setEarthquakeDuration(proj.earthquakeDuration || 30);
+      setBaseMass(proj.baseMass !== undefined ? proj.baseMass : 120);
+      setBaseStiffness(proj.baseStiffness !== undefined ? proj.baseStiffness : 380000);
       setReportResult(null); // Reset report on project load
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,7 +229,9 @@ export default function App() {
         currentProj.earthquakeMw === earthquakeMw &&
         currentProj.earthquakeDepth === earthquakeDepth &&
         currentProj.epicentralDistance === epicentralDistance &&
-        currentProj.earthquakeDuration === earthquakeDuration
+        currentProj.earthquakeDuration === earthquakeDuration &&
+        currentProj.baseMass === baseMass &&
+        currentProj.baseStiffness === baseStiffness
       ) {
         return prev; // Sin cambios, mantener la misma referencia para evitar bucles infinitos
       }
@@ -233,7 +249,9 @@ export default function App() {
               earthquakeMw,
               earthquakeDepth,
               epicentralDistance,
-              earthquakeDuration
+              earthquakeDuration,
+              baseMass,
+              baseStiffness
             }
           : p
       );
@@ -255,7 +273,9 @@ export default function App() {
     earthquakeMw,
     earthquakeDepth,
     epicentralDistance,
-    earthquakeDuration
+    earthquakeDuration,
+    baseMass,
+    baseStiffness
   ]);
 
   // --- Lógica del Motor de Dinámica Estructural ---
@@ -271,10 +291,12 @@ export default function App() {
         soilCode,
         earthquakeMw,
         earthquakeDepth,
-        epicentralDistance
+        epicentralDistance,
+        baseMass,
+        baseStiffness
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [numFloors, interstoryHeight, typologyId, countryCode, zoneCode, soilCode, earthquakeMw, earthquakeDepth, epicentralDistance]
+    [numFloors, interstoryHeight, typologyId, countryCode, zoneCode, soilCode, earthquakeMw, earthquakeDepth, epicentralDistance, baseMass, baseStiffness]
   );
 
   // --- Animación del Sismo ---
@@ -372,6 +394,13 @@ export default function App() {
   };
 
   const handleGenerateAIReport = async () => {
+    // Cancelar cualquier solicitud previa pendiente
+    if (reportAbortControllerRef.current) {
+      reportAbortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    reportAbortControllerRef.current = controller;
+
     setLoadingReport(true);
     setReportResult(null);
     setReportError(null);
@@ -382,6 +411,7 @@ export default function App() {
       const response = await fetch("/api/generate-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           projectName,
           country: currentNorm.name,
@@ -394,7 +424,7 @@ export default function App() {
           earthquakeMw,
           earthquakeDepth,
           earthquakeDuration,
-          pga: results.floorResponses[0].force / (results.floorResponses[0].mass * 9.81 * results.floorResponses.length) || 0.35, // PGA estimado
+          pga: results.realPGA, // PGA real calculado por la GMPE para el sismo configurado
           fundamentalPeriod: results.fundamentalPeriod,
           maxDrift: results.maxDrift,
           maxDriftFloor: results.maxDriftFloor,
@@ -414,10 +444,12 @@ export default function App() {
       setReportResult(data.report);
       showToast("¡Reporte técnico de IA generado exitosamente!");
     } catch (err: any) {
+      if (err.name === "AbortError") return; // Solicitud cancelada intencionalmente
       console.error(err);
       setReportError(err.message || "No se pudo conectar con el servidor de inteligencia artificial.");
     } finally {
       setLoadingReport(false);
+      reportAbortControllerRef.current = null;
     }
   };
 
@@ -800,6 +832,43 @@ export default function App() {
                         </button>
                       );
                     })}
+                  </div>
+                </div>
+
+                {/* Propiedades Avanzadas de Masa y Rigidez */}
+                <div className="space-y-3 pt-3 border-t border-slate-800/80">
+                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider">Propiedades Físicas Base (Personalizadas)</span>
+                  
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-400 font-medium" title="Masa típica de entrepiso antes de aplicar coeficientes por tipología">Masa Base por Piso:</span>
+                      <span className="font-mono text-blue-400 font-bold">{baseMass} t</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="50"
+                      max="300"
+                      step="5"
+                      value={baseMass}
+                      onChange={(e) => setBaseMass(parseInt(e.target.value))}
+                      className="w-full accent-blue-500 bg-slate-700 h-1 rounded-lg appearance-none cursor-pointer"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-400 font-medium" title="Rigidez lateral base de entrepiso antes de aplicar el factor de tipología y de altura">Rigidez Lateral Base:</span>
+                      <span className="font-mono text-blue-400 font-bold">{(baseStiffness / 1000).toLocaleString()} MN/m</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="100000"
+                      max="2000000"
+                      step="50000"
+                      value={baseStiffness}
+                      onChange={(e) => setBaseStiffness(parseInt(e.target.value))}
+                      className="w-full accent-blue-500 bg-slate-700 h-1 rounded-lg appearance-none cursor-pointer"
+                    />
                   </div>
                 </div>
               </div>

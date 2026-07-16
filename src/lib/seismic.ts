@@ -487,6 +487,7 @@ export interface FloorResponse {
 
 export interface BuildingSeismicResults {
   fundamentalPeriod: number;
+  realPGA: number; // PGA real calculado por la GMPE para el sismo configurado (en g)
   modes: {
     period: number;
     participationFactor: number;
@@ -512,16 +513,18 @@ export function analyzeMDOFBuilding(
   soilCode: string,
   earthquakeMw: number,
   earthquakeDepth: number,
-  epicentralDistance: number
+  epicentralDistance: number,
+  customBaseMass: number = 120, // Masa base por piso (en toneladas)
+  customBaseStiffness: number = 380000 // Rigidez lateral base (en kN/m)
 ): BuildingSeismicResults {
   // 1. Obtener la tipología estructural
   const typology = structuralTypologies.find(t => t.id === typologyId) || structuralTypologies[2];
   const norm = countryNorms[normCode] || countryNorms["PE"];
 
   // 2. Parámetros físicos por piso
-  // Masa típica por piso: 120 toneladas (120,000 kg).
+  // Masa típica por piso: customBaseMass toneladas.
   // El Adobe tiene el doble de masa (más pesado). Muros tienen un poco más de masa.
-  const baseMass = 120000; // kg
+  const baseMass = customBaseMass * 1000; // kg
   const massPerFloor = Array.from({ length: numFloors }, (_, i) => {
     let massFactor = 1.0;
     if (typologyId === "adobe") massFactor = 1.8;
@@ -532,9 +535,8 @@ export function analyzeMDOFBuilding(
   });
 
   // Rigidez típica por piso.
-  // Ajustada de modo que un pórtico estándar de 8 pisos tenga T1 ~ 0.8 s.
-  // Rigidez base: 350,000 kN/m = 3.5e8 N/m.
-  const baseStiffness = 3.8e8; // N/m
+  // Rigidez base: customBaseStiffness kN/m.
+  const baseStiffness = customBaseStiffness * 1000; // N/m
   const stiffnessPerFloor = Array.from({ length: numFloors }, () => {
     // Depende directamente de la tipología, el factor de altura de entrepiso (K es proporcional a 1/h^3)
     const heightRatio = Math.pow(3.0 / interstoryHeight, 3);
@@ -610,9 +612,10 @@ export function analyzeMDOFBuilding(
   const seismicScaleFactor = realPGA / designPGA;
 
   // 7. Análisis de Espectro de Respuesta (RSA) por superposición modal (SRSS)
-  const numModesToUse = Math.min(numFloors, 3); // Usualmente los 3 primeros modos concentran >95% de la masa
-  const modalSpectralData = Array.from({ length: numModesToUse }, (_, mIdx) => {
-    const mode = modesData[mIdx];
+  const totalBuildingMass = M_diag.reduce((sum, m) => sum + m, 0);
+
+  // Calcular participación modal para todos los modos disponibles para determinar cuántos usar
+  const allModalData = modesData.map((mode) => {
     const T = mode.period;
     const shape = mode.shapeRaw;
 
@@ -625,6 +628,10 @@ export function analyzeMDOFBuilding(
       denominator += shape[i] * shape[i] * M_diag[i];
     }
     const Gamma = numerator / (denominator || 1e-4);
+    
+    // Masa modal del modo m: M_m = Gamma * (phi^T * M * 1)
+    const modalMass = Gamma * numerator;
+    const ratio = modalMass / totalBuildingMass;
 
     // Aceleración espectral de diseño de la norma para este periodo modal
     const SaDesign = getSpectralAcceleration(T, normCode, zoneCode, soilCode, typology.ductilityR);
@@ -637,9 +644,26 @@ export function analyzeMDOFBuilding(
       gamma: Gamma,
       shape,
       sa: SaReal, // Aceleración espectral de demanda final (g)
-      omega: mode.omega
+      omega: mode.omega,
+      ratio
     };
   });
+
+  // Determinar dinámicamente el número de modos necesarios para alcanzar >= 90% de participación
+  let cumulativeRatio = 0;
+  let numModesToUse = 0;
+  for (let i = 0; i < numFloors; i++) {
+    cumulativeRatio += allModalData[i].ratio;
+    numModesToUse = i + 1;
+    if (cumulativeRatio >= 0.90) {
+      break;
+    }
+  }
+  // Garantizar un mínimo de 3 modos (o el número total de pisos si es menor)
+  numModesToUse = Math.max(numModesToUse, Math.min(numFloors, 3));
+
+  // Filtrar los modos que usaremos en la superposición
+  const modalSpectralData = allModalData.slice(0, numModesToUse);
 
   // Calcular la respuesta combinada por SRSS para desplazamientos y fuerzas
   const g = 9.81; // m/s^2
@@ -810,6 +834,7 @@ export function analyzeMDOFBuilding(
   // Retornar resultados completos estructurados
   return {
     fundamentalPeriod: modesData[0].period,
+    realPGA,
     modes: modalSpectralData.map(m => ({
       period: m.period,
       participationFactor: m.gamma,

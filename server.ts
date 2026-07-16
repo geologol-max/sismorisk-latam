@@ -14,16 +14,33 @@ const PORT = parseInt(process.env.PORT || "3000", 10);
 
 app.use(express.json({ limit: "1mb" }));
 
-// Rate Limiter para endpoints de IA — Protección contra abuso y costos descontrolados de API
-const aiRateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // Ventana de 15 minutos
-  max: 20,                    // Máximo 20 solicitudes por IP por ventana
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    error: "Demasiadas solicitudes de generación de reportes. Por favor espere 15 minutos e intente nuevamente.",
-  },
+// Middleware para cabeceras HTTP de seguridad (Helmet-style)
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  next();
 });
+
+// Rate Limiters independientes por endpoint de IA — evita que el consumo en un módulo
+// agote el cupo disponible para los demás (20 req / 15 min / IP por endpoint)
+const makeAIRateLimiter = (endpoint: string) =>
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+      error: `Demasiadas solicitudes al generador de reportes (${endpoint}). Por favor espere 15 minutos e intente nuevamente.`,
+    },
+  });
+
+const reportRateLimiter       = makeAIRateLimiter("MDOF");
+const funvisisRateLimiter     = makeAIRateLimiter("FUNVISIS");
+const fema154RateLimiter      = makeAIRateLimiter("FEMA P-154");
+const gndtRateLimiter         = makeAIRateLimiter("GNDT");
+const simulationRateLimiter   = makeAIRateLimiter("Simulación");
 
 // Inicialización diferida del cliente Gemini para evitar errores catastróficos en arranque
 let aiClient: GoogleGenAI | null = null;
@@ -46,35 +63,66 @@ function getGeminiClient(): GoogleGenAI {
   return aiClient;
 }
 
+/**
+ * Sanitiza un valor para usarlo de forma segura dentro de un prompt de IA.
+ * - Convierte números a su representación numérica (evita inyección de texto en campos numéricos).
+ * - Trunca strings a un máximo de `maxLength` caracteres.
+ * - Elimina saltos de línea y secuencias que podrían romper la estructura del prompt.
+ */
+function sanitize(value: unknown, type: "string" | "number" | "int", maxLength = 200): string {
+  if (type === "number") {
+    const n = Number(value);
+    if (!isFinite(n)) return "0";
+    return String(n);
+  }
+  if (type === "int") {
+    const n = parseInt(String(value), 10);
+    if (!isFinite(n)) return "0";
+    return String(n);
+  }
+  // string
+  const str = String(value ?? "").replace(/[\r\n]+/g, " ").trim();
+  return str.substring(0, maxLength);
+}
+
 // Endpoint de salud
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
 
 // API Endpoint para generar reporte de Ingeniería Sismorresistente usando Gemini
-app.post("/api/generate-report", aiRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
+app.post("/api/generate-report", reportRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const {
-      projectName,
-      country,
-      normName,
-      zoneName,
-      soilName,
-      numFloors,
-      interstoryHeight,
-      typologyName,
-      earthquakeMw,
-      earthquakeDepth,
-      earthquakeDuration,
-      pga,
-      fundamentalPeriod,
-      maxDrift,
-      maxDriftFloor,
-      baseShear,
-      overallRisk,
-      habitability,
-      driftLimit,
-    } = req.body;
+    const body = req.body;
+
+    // Validar y sanitizar todos los campos del cuerpo antes de usarlos en el prompt
+    const projectName       = sanitize(body.projectName,       "string", 120);
+    const country           = sanitize(body.country,           "string",  80);
+    const normName          = sanitize(body.normName,          "string",  80);
+    const zoneName          = sanitize(body.zoneName,          "string",  80);
+    const soilName          = sanitize(body.soilName,          "string",  80);
+    const typologyName      = sanitize(body.typologyName,      "string",  80);
+    const habitability      = sanitize(body.habitability,      "string",  80);
+    const overallRisk       = sanitize(body.overallRisk,       "string",  20);
+    const numFloors         = Number(sanitize(body.numFloors,         "int"));
+    const interstoryHeight  = Number(sanitize(body.interstoryHeight,  "number"));
+    const earthquakeMw      = Number(sanitize(body.earthquakeMw,      "number"));
+    const earthquakeDepth   = Number(sanitize(body.earthquakeDepth,   "number"));
+    const earthquakeDuration = Number(sanitize(body.earthquakeDuration || 30, "number"));
+    const pga               = Number(sanitize(body.pga,               "number"));
+    const fundamentalPeriod = Number(sanitize(body.fundamentalPeriod, "number"));
+    const maxDrift          = Number(sanitize(body.maxDrift,          "number"));
+    const maxDriftFloor     = Number(sanitize(body.maxDriftFloor,     "int"));
+    const baseShear         = Number(sanitize(body.baseShear,         "number"));
+    const driftLimit        = Number(sanitize(body.driftLimit,        "number"));
+
+    // Validaciones de rango básico
+    if (numFloors < 1 || numFloors > 80) {
+      res.status(400).json({ error: "Número de pisos fuera de rango permitido (1-80)." }); return;
+    }
+    if (pga < 0 || pga > 5) {
+      res.status(400).json({ error: "PGA fuera de rango permitido (0-5g)." }); return;
+    }
 
     const ai = getGeminiClient();
 
@@ -94,7 +142,7 @@ DATOS DEL PROYECTO EVALUADO:
 DATOS DEL SISMO EVALUADO:
 - Magnitud (Mw): ${earthquakeMw}
 - Profundidad Focal: ${earthquakeDepth} km
-- Duración de la Fase Fuerte: ${earthquakeDuration || 30} segundos
+- Duración de la Fase Fuerte: ${earthquakeDuration} segundos
 - PGA Estimado en la base: ${pga.toFixed(3)}g
 
 RESULTADOS DE LA SIMULACIÓN DINÁMICA (MDOF):
@@ -136,28 +184,57 @@ Mantén el tono profesional e ilustrativo. No utilices jerga innecesariamente co
 });
 
 // API Endpoint para generar reporte específico de vulnerabilidad sísmica en Venezuela (Metodología FUNVISIS)
-app.post("/api/generate-vulnerabilidad-ve", aiRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
+app.post("/api/generate-vulnerabilidad-ve", funvisisRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const {
-      buildingName,
-      location,
-      floors,
-      basements,
-      semiBasements,
-      peopleExposed,
-      usageGroup,
-      constructionPeriod,
-      terrainCondition,
-      hasDrainage,
-      structuralType,
-      irregularities,
-      depositDepth,
-      deterioroEstrucCemento,
-      deterioroEstrucAcero,
-      deterioroParedes,
-      mantenimientoGeneral,
-      indices,
-    } = req.body;
+    const body = req.body;
+
+    // Sanitizar campos de texto que van al prompt
+    const buildingName          = sanitize(body.buildingName,       "string", 120);
+    const usageGroup            = sanitize(body.usageGroup,         "string",  10);
+    const structuralTypeId      = sanitize(body.structuralType?.id, "string",  20);
+    const structuralTypeDesc    = sanitize(body.structuralType?.description, "string", 100);
+    const mantenimientoGeneral  = sanitize(body.mantenimientoGeneral, "string", 80);
+    const deterioroEstrucCemento = sanitize(body.deterioroEstrucCemento || "Ninguno", "string", 60);
+    const deterioroEstrucAcero   = sanitize(body.deterioroEstrucAcero  || "Ninguno", "string", 60);
+    const deterioroParedes       = sanitize(body.deterioroParedes       || "Ninguno", "string", 60);
+    const floors        = Number(sanitize(body.floors,        "int"));
+    const basements     = Number(sanitize(body.basements,     "int"));
+    const semiBasements = Number(sanitize(body.semiBasements, "int"));
+    const peopleExposed = Number(sanitize(body.peopleExposed, "int"));
+
+    const location      = body.location || {};
+    const locState      = sanitize(location.state,        "string", 60);
+    const locCity       = sanitize(location.city,         "string", 60);
+    const locMuni       = sanitize(location.municipality, "string", 60);
+    const locParish     = sanitize(location.parish,       "string", 60);
+    const locSector     = sanitize(location.sector,       "string", 60);
+    const locCoordX     = sanitize(location.coordX || "S/N", "string", 20);
+    const locCoordY     = sanitize(location.coordY || "S/N", "string", 20);
+    const locHuso       = sanitize(location.huso   || "S/N", "string", 10);
+
+    const constructionPeriodLabel = sanitize(body.constructionPeriod?.label || "", "string", 80);
+    const terrainConditionLabel   = sanitize(body.terrainCondition?.label   || "", "string", 80);
+    const hasDrainage   = Boolean(body.hasDrainage);
+    const depositDepth  = Boolean(body.depositDepth);
+    const irregularities: string[] = Array.isArray(body.irregularities)
+      ? body.irregularities.map((s: unknown) => sanitize(s, "string", 60)).slice(0, 10)
+      : [];
+
+    const indices = body.indices || {};
+    const Ia  = Number(sanitize(indices.Ia,  "number"));
+    const I1  = Number(sanitize(indices.I1,  "number"));
+    const I2  = Number(sanitize(indices.I2,  "number"));
+    const I3  = Number(sanitize(indices.I3,  "number"));
+    const I4  = Number(sanitize(indices.I4,  "number"));
+    const I5  = Number(sanitize(indices.I5,  "number"));
+    const I6  = Number(sanitize(indices.I6,  "number"));
+    const Iv  = Number(sanitize(indices.Iv,  "number"));
+    const Ii  = Number(sanitize(indices.Ii,  "number"));
+    const Ir  = Number(sanitize(indices.Ir,  "number"));
+    const Ip  = Number(sanitize(indices.Ip,  "number"));
+    const IvLabel    = sanitize(indices.IvLabel,    "string", 40);
+    const IrLabel    = sanitize(indices.IrLabel,    "string", 40);
+    const IpPrioridad = sanitize(indices.IpPrioridad, "string", 10);
 
     const ai = getGeminiClient();
 
@@ -168,49 +245,43 @@ Genera un reporte técnico de evaluación de vulnerabilidad sísmica formal, est
 
 DATOS DE INSPECCIÓN (PLANILLA FUNVISIS G-20007752-2):
 - Nombre/Nº Edificación: ${buildingName || "S/N"}
-- Ubicación: ${location.state}, ${location.city}, Mun. ${location.municipality}, Parroquia ${location.parish}, Sector ${location.sector}
-- Coordenadas UTM: X: ${location.coordX || "S/N"}, Y: ${location.coordY || "S/N"} (Huso: ${location.huso || "S/N"})
+- Ubicación: ${locState}, ${locCity}, Mun. ${locMuni}, Parroquia ${locParish}, Sector ${locSector}
+- Coordenadas UTM: X: ${locCoordX}, Y: ${locCoordY} (Huso: ${locHuso})
 - Geometría: ${floors} pisos, ${basements} sótanos, ${semiBasements} semi-sótanos
 - Capacidad de Ocupación: ${peopleExposed} personas expuestas
 - Grupo de Uso: Grupo ${usageGroup} (Grupo de importancia)
-- Período de Construcción: ${constructionPeriod.label} (Norma aplicable de la época)
-- Condición del Terreno: ${terrainCondition.label} (Drenaje: ${hasDrainage ? "Sí tiene" : "No tiene (descarga al terreno)"})
-- Tipología Estructural: Tipo ${structuralType.id} - ${structuralType.description}
+- Período de Construcción: ${constructionPeriodLabel} (Norma aplicable de la época)
+- Condición del Terreno: ${terrainConditionLabel} (Drenaje: ${hasDrainage ? "Sí tiene" : "No tiene (descarga al terreno)"})
+- Tipología Estructural: Tipo ${structuralTypeId} - ${structuralTypeDesc}
 - Irregularidades Presentes: ${irregularities.length > 0 ? irregularities.join(", ") : "Ninguna detectada"}
 - Profundidad de Depósito de Sedimentos (>120m, Suelo S3): ${depositDepth ? "Sí (Riesgo en edificios altos)" : "No o No aplica"}
 - Grado de Deterioro:
-  * Estructura Concreto: ${deterioroEstrucCemento || "Ninguno"}
-  * Estructura Acero: ${deterioroEstrucAcero || "Ninguno"}
-  * Paredes de Relleno: ${deterioroParedes || "Ninguno"}
+  * Estructura Concreto: ${deterioroEstrucCemento}
+  * Estructura Acero: ${deterioroEstrucAcero}
+  * Paredes de Relleno: ${deterioroParedes}
   * Estado General de Mantenimiento: ${mantenimientoGeneral}
 
 RESULTADOS DEL CÁLCULO DE ÍNDICES FUNVISIS:
-- Índice de Amenaza (Ia): ${indices.Ia.toFixed(3)} (Zona Sísmica de la región)
-- Índice de Antigüedad (I1): ${indices.I1.toFixed(1)}
-- Índice de Tipo Estructural (I2): ${indices.I2.toFixed(1)}
-- Índice de Irregularidad (I3): ${indices.I3.toFixed(1)} (Acotado a 100)
-- Índice de Profundidad de Depósito (I4): ${indices.I4.toFixed(1)}
-- Índice de Topografía y Drenajes (I5): ${indices.I5.toFixed(1)}
-- Índice de Grado de Deterioro (I6): ${indices.I6.toFixed(1)} (Acotado a 100)
-- ÍNDICE DE VULNERABILIDAD GLOBAL (Iv): ${indices.Iv.toFixed(2)} (Rango: 0-100) -> Calificación: ${indices.IvLabel}
-- ÍNDICE DE IMPORTANCIA (Ii): ${indices.Ii.toFixed(2)}
-- ÍNDICE DE RIESGO SÍSMICO (Ir = Ia * Iv): ${indices.Ir.toFixed(2)} (Rango: 0-100) -> Calificación: ${indices.IrLabel}
-- ÍNDICE DE PRIORIZACIÓN DE EDIFICIOS (Ip = Ia * Iv * Ii): ${indices.Ip.toFixed(2)} (Rango: 0-100) -> Calificación: P${indices.IpPrioridad}
+- Índice de Amenaza (Ia): ${Ia.toFixed(3)} (Zona Sísmica de la región)
+- Índice de Antigüedad (I1): ${I1.toFixed(1)}
+- Índice de Tipo Estructural (I2): ${I2.toFixed(1)}
+- Índice de Irregularidad (I3): ${I3.toFixed(1)} (Acotado a 100)
+- Índice de Profundidad de Depósito (I4): ${I4.toFixed(1)}
+- Índice de Topografía y Drenajes (I5): ${I5.toFixed(1)}
+- Índice de Grado de Deterioro (I6): ${I6.toFixed(1)} (Acotado a 100)
+- ÍNDICE DE VULNERABILIDAD GLOBAL (Iv): ${Iv.toFixed(2)} (Rango: 0-100) -> Calificación: ${IvLabel}
+- ÍNDICE DE IMPORTANCIA (Ii): ${Ii.toFixed(2)}
+- ÍNDICE DE RIESGO SÍSMICO (Ir = Ia * Iv): ${Ir.toFixed(2)} (Rango: 0-100) -> Calificación: ${IrLabel}
+- ÍNDICE DE PRIORIZACIÓN DE EDIFICIOS (Ip = Ia * Iv * Ii): ${Ip.toFixed(2)} (Rango: 0-100) -> Calificación: P${IpPrioridad}
 
 INSTRUCCIONES PARA LA REDACCIÓN DEL REPORTE:
 1. Adopta un tono sumamente técnico, riguroso, formal y didáctico para estudiantes, arquitectos, ingenieros civiles u organismos de gestión de riesgo de desastres en Venezuela.
 2. Organiza el reporte con Markdown claro usando la siguiente estructura:
    - ### **1. Diagnóstico de la Amenaza Sísmica Regional**
-     * Analiza el nivel de amenaza en el Estado/Región correspondiente a partir del Índice de Amenaza (Ia). Habla del contexto tectónico de fallas sismogénicas principales en Venezuela (Falla de Boconó, Falla de San Sebastián, o Falla de El Pilar) y si las condiciones de ladera/topográficas o drenajes están amplificando la amenaza.
    - ### **2. Análisis de Vulnerabilidad Estructural (Metodología FUNVISIS)**
-     * Comenta la influencia del tipo estructural (${structuralType.description}) y la antigüedad (I1 = ${indices.I1}). Discute la norma bajo la cual fue diseñada o si es una vivienda popular autoconstruida (explicar que las viviendas de barrio autoconstruidas son típicamente más vulnerables debido a la falta de ingeniería formal).
-     * Detalla la incidencia de las irregularidades detectadas (${irregularities.join(", ")}) en el aumento de la vulnerabilidad (ej. cómo el piso blando o las columnas cortas han causado colapsos históricos como en Cariaco 1997 o Caracas 1967).
    - ### **3. Evaluación del Deterioro y Mantenimiento**
-     * Evalúa las condiciones físicas encontradas (deterioro de concreto/acero, agrietamiento de tabiquería y nivel de mantenimiento general) y cómo el índice I6 influye en el comportamiento sismorresistente.
    - ### **4. Clasificación de Riesgo y Nivel de Priorización (RRD)**
-     * Interpreta los índices globales Iv (${indices.Iv.toFixed(2)}: ${indices.IvLabel}), Ir (${indices.Ir.toFixed(2)}: ${indices.IrLabel}) e Ip (${indices.Ip.toFixed(2)}: P${indices.IpPrioridad}). Explica si la edificación debe ingresar de forma prioritaria a una fase de estudios detallados de ingeniería estructural (como ensayos no destructivos de esclerometría, ultrasonido o modelado de elementos finitos en SAP2000/ETABS).
    - ### **5. Recomendaciones de Mitigación y Reducción del Riesgo de Desastres**
-     * Ofrece al menos 4 recomendaciones específicas para esta edificación (ej. encamisado de columnas de concreto armado con fibra de carbono o camisas de acero, rigidización de muros, corrección de columnas cortas mediante juntas de separación con paredes, mejora de drenajes de laderas, o planes de desalojo escolar/comunitario).
 
 No utilices afirmaciones exageradas, mantén una perspectiva de seguridad y desarrollo óptimo en las sociedades organizadas de Venezuela.
     `.trim();
@@ -218,13 +289,10 @@ No utilices afirmaciones exageradas, mantén una perspectiva de seguridad y desa
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
       contents: prompt,
-      config: {
-        temperature: 0.3,
-      }
+      config: { temperature: 0.3 }
     });
 
     const reportText = response.text || "No se pudo generar el reporte de vulnerabilidad. Intente de nuevo.";
-
     res.json({ report: reportText });
   } catch (error: any) {
     console.error("Error generating FUNVISIS report:", error);
@@ -235,21 +303,24 @@ No utilices afirmaciones exageradas, mantén una perspectiva de seguridad y desa
 });
 
 // API Endpoint para generar reporte de vulnerabilidad FEMA P-154
-app.post("/api/generate-fema154", aiRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
+app.post("/api/generate-fema154", fema154RateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const {
-      buildingName,
-      location,
-      fecha,
-      floors,
-      peopleExposed,
-      hazardLevel,
-      structuralType,
-      baseScore,
-      modifiers,
-      finalScore,
-      pasaEvaluacion
-    } = req.body;
+    const body = req.body;
+
+    const buildingName   = sanitize(body.buildingName,  "string", 120);
+    const location       = sanitize(body.location,      "string", 150);
+    const fecha          = sanitize(body.fecha,         "string",  40);
+    const hazardLevel    = sanitize(body.hazardLevel,   "string",  20);
+    const structuralTypeId   = sanitize(body.structuralType?.id,          "string",  20);
+    const structuralTypeDesc = sanitize(body.structuralType?.description, "string", 100);
+    const floors         = Number(sanitize(body.floors,         "int"));
+    const peopleExposed  = Number(sanitize(body.peopleExposed,  "int"));
+    const baseScore      = Number(sanitize(body.baseScore,      "number"));
+    const finalScore     = Number(sanitize(body.finalScore,     "number"));
+    const pasaEvaluacion = Boolean(body.pasaEvaluacion);
+    const modifiers: string[] = Array.isArray(body.modifiers)
+      ? body.modifiers.map((s: unknown) => sanitize(s, "string", 80)).slice(0, 15)
+      : [];
 
     const ai = getGeminiClient();
 
@@ -265,7 +336,7 @@ DATOS DE INSPECCIÓN SÍSMICA RÁPIDA (FEMA P-154):
 - Número de Niveles/Pisos: ${floors} pisos
 - Capacidad de Ocupación: ${peopleExposed} personas expuestas
 - Nivel de Peligro Sísmico Regional: Peligro ${hazardLevel}
-- Tipología Estructural: Tipo ${structuralType.id} - ${structuralType.description}
+- Tipología Estructural: Tipo ${structuralTypeId} - ${structuralTypeDesc}
 
 RESULTADOS DEL CÁLCULO DE SCORE FÍSICO S:
 - Puntaje Básico de Partida (Base Score): ${baseScore.toFixed(2)}
@@ -278,15 +349,10 @@ INSTRUCCIONES PARA LA REDACCIÓN DEL REPORTE:
 1. Adopta un tono sumamente profesional, técnico, formal y didáctico para ingenieros, estudiantes de ingeniería, inspectores municipales o gestores de riesgo.
 2. Organiza el reporte con Markdown claro usando la siguiente estructura:
    - ### **1. Diagnóstico del Nivel de Peligro Regional**
-     * Analiza el nivel de peligro regional seleccionado (${hazardLevel}) y la justificación de por qué la sismicidad influye en los factores base estructurales.
    - ### **2. Análisis de Tipología Estructural y Score Básico**
-     * Analiza el tipo de sistema estructural identificado (Tipo ${structuralType.id}: ${structuralType.description}) y explica brevemente su comportamiento intrínseco ante movimientos sísmicos alternantes de corte y flexión (ventajas y limitaciones de esta tipología).
    - ### **3. Impacto de los Modificadores de Puntaje Observados**
-     * Explica detalladamente cómo cada uno de los modificadores activos (${modifiers.join(", ")}) reduce el puntaje final y qué significa físicamente (por ejemplo: por qué la irregularidad vertical, el suelo blando, o las construcciones pre-código aumentan sustancialmente el riesgo de daño grave o colapso progresivo).
    - ### **4. Clasificación del Riesgo y Conclusión del Triaje (FEMA P-154)**
-     * Interpreta la puntuación final de Score S (${finalScore.toFixed(2)}). Comenta el significado matemático del score (probabilidad logarítmica de colapso) y concluye claramente si el edificio aprueba o si requiere de forma PRIORITARIA y obligatoria una inspección de Fase 2 (evaluación detallada e instrumentada con esclerómetro, ultrasonido o modelado de elementos finitos).
    - ### **5. Recomendaciones Técnicas de Mitigación y Reforzamiento (RRD)**
-     * Proporciona al menos 4 recomendaciones técnicas de ingeniería o de RRD específicas para esta edificación y tipología (ej. rigidizar el plano de entrepiso, instalar disipadores histeréticos o viscosos, encamisar columnas de concreto o acero, realizar estudios de interacción suelo-estructura, o planes de desalojo escolar/comunitario).
 
 No uses afirmaciones de venta ni lenguaje florido, mantén una perspectiva de seguridad humana y rigor de cálculo de ingeniería sismorresistente.
     `.trim();
@@ -294,13 +360,10 @@ No uses afirmaciones de venta ni lenguaje florido, mantén una perspectiva de se
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
       contents: prompt,
-      config: {
-        temperature: 0.3,
-      }
+      config: { temperature: 0.3 }
     });
 
     const reportText = response.text || "No se pudo generar el reporte FEMA P-154. Intente de nuevo.";
-
     res.json({ report: reportText });
   } catch (error: any) {
     console.error("Error generating FEMA P-154 report:", error);
@@ -311,20 +374,26 @@ No uses afirmaciones de venta ni lenguaje florido, mantén una perspectiva de se
 });
 
 // API Endpoint para generar reporte de vulnerabilidad GNDT (Benedetti-Petrini)
-app.post("/api/generate-gndt", aiRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
+app.post("/api/generate-gndt", gndtRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const {
-      buildingName,
-      location,
-      floors,
-      peopleExposed,
-      pgaEsperado,
-      mmi,
-      indexIv,
-      nivelRiesgo,
-      descripcionesActivas,
-      danioCalculado
-    } = req.body;
+    const body = req.body;
+
+    const buildingName  = sanitize(body.buildingName, "string", 120);
+    const location      = sanitize(body.location,     "string", 150);
+    const nivelRiesgo   = sanitize(body.nivelRiesgo,  "string",  40);
+    const floors        = Number(sanitize(body.floors,         "int"));
+    const peopleExposed = Number(sanitize(body.peopleExposed,  "int"));
+    const pgaEsperado   = Number(sanitize(body.pgaEsperado,   "number"));
+    const mmi           = Number(sanitize(body.mmi,            "int"));
+    const indexIv       = Number(sanitize(body.indexIv,        "number"));
+    const danioCalculado = Number(sanitize(body.danioCalculado, "number"));
+    const descripcionesActivas: string[] = Array.isArray(body.descripcionesActivas)
+      ? body.descripcionesActivas.map((s: unknown) => sanitize(s, "string", 120)).slice(0, 11)
+      : [];
+
+    if (pgaEsperado < 0 || pgaEsperado > 5) {
+      res.status(400).json({ error: "PGA fuera de rango permitido (0-5g)." }); return;
+    }
 
     const ai = getGeminiClient();
 
@@ -353,15 +422,10 @@ INSTRUCCIONES PARA LA REDACCIÓN DEL REPORTE:
 1. Emplea un vocabulario estrictamente técnico de ingeniería civil, sismología y patología de materiales. Evita comentarios comerciales o informales.
 2. Utiliza Markdown claro para estructurar la auditoría de la siguiente forma:
    - ### **1. Introducción y Marco Teórico de GNDT**
-     * Explica brevemente la metodología del Índice de Vulnerabilidad (GNDT de Benedetti y Petrini), justificando por qué es idóneo para evaluar este tipo de edificación y cuál es el significado físico de un Índice de Vulnerabilidad de ${indexIv}/100.
    - ### **2. Análisis Crítico de los 11 Parámetros de Vulnerabilidad**
-     * Revisa y comenta de forma resumida pero profunda los 11 parámetros calificados (enfócate especialmente en aquellos con peor calificación: Clase C o Clase D, explicando cómo inciden en el colapso).
    - ### **3. Cruce de PGA y Pronóstico de Daño Estructural (Curva de Vulnerabilidad)**
-     * Analiza el escenario de sismo planteado (PGA = ${pgaEsperado.toFixed(2)}g, MMI ${mmi}) y el porcentaje de daño esperado del ${danioCalculado}%. Describe qué tipos de daños físicos reales sufrirá la estructura en concreto, vigas, losas, mamposterías y elementos no estructurales si ocurre este nivel de aceleración sísmica.
    - ### **4. Clasificación de Riesgo y Recomendación de Intervención**
-     * Interpreta la severidad del riesgo (${nivelRiesgo}) y concluye de forma concluyente si se requiere evacuación provisional, estudios instrumentados invasivos (ensayos de núcleos de concreto, esclerometría, ultrasonido) o modelado computacional dinámico en software de cálculo.
    - ### **5. Plan de Reforzamiento Estructural y Mitigación (RRD)**
-     * Brinda al menos 5 recomendaciones de ingeniería detalladas para mitigar la vulnerabilidad detectada y mejorar la capacidad sísmica de la edificación (ej. encamisado de columnas, rigidización de diafragmas flexibles, arriostramiento metálico, reducción de masa en pisos altos, inyección de grietas estructurales, etc.).
 
 No uses auto-alabanzas ni afirmaciones exageradas, mantén la máxima objetividad de seguridad humana y rigor científico de ingeniería estructural.
     `.trim();
@@ -369,13 +433,10 @@ No uses auto-alabanzas ni afirmaciones exageradas, mantén la máxima objetivida
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
       contents: prompt,
-      config: {
-        temperature: 0.3,
-      }
+      config: { temperature: 0.3 }
     });
 
     const reportText = response.text || "No se pudo generar el reporte de vulnerabilidad GNDT. Intente de nuevo.";
-
     res.json({ report: reportText });
   } catch (error: any) {
     console.error("Error generating GNDT report:", error);
@@ -386,20 +447,45 @@ No uses auto-alabanzas ni afirmaciones exageradas, mantén la máxima objetivida
 });
 
 // API Endpoint para generar reporte de simulación educativa de sismo en Venezuela
-app.post("/api/generate-simulation-report", aiRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
+app.post("/api/generate-simulation-report", simulationRateLimiter, async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const {
-      magnitude,
-      depth,
-      crustMaterial,
-      waveVelocities,
-      detectedFault,
-      affectedCities,
-    } = req.body;
+    const body = req.body;
+
+    const magnitude      = Number(sanitize(body.magnitude,  "number"));
+    const depth          = Number(sanitize(body.depth,      "number"));
+    const crustMaterial  = sanitize(body.crustMaterial,    "string", 80);
+    const waveVelocities = body.waveVelocities || {};
+    const vp = Number(sanitize(waveVelocities.p, "number"));
+    const vs = Number(sanitize(waveVelocities.s, "number"));
+    const vr = Number(sanitize(waveVelocities.r, "number"));
+    const vl = Number(sanitize(waveVelocities.l, "number"));
+
+    const detectedFault = body.detectedFault
+      ? {
+          name:      sanitize(body.detectedFault.name,      "string", 80),
+          type:      sanitize(body.detectedFault.type,      "string", 60),
+          slipRate:  sanitize(body.detectedFault.slipRate,  "string", 40),
+          extension: sanitize(body.detectedFault.extension, "string", 40),
+          distance:  Number(sanitize(body.detectedFault.distance, "number")),
+        }
+      : null;
+
+    const affectedCities: any[] = Array.isArray(body.affectedCities)
+      ? body.affectedCities.slice(0, 20).map((c: any) => ({
+          name:             sanitize(c.name,             "string", 60),
+          distance:         Number(sanitize(c.distance, "number")),
+          estimatedIntensity: sanitize(c.estimatedIntensity, "string", 20),
+          damageEstimate:   sanitize(c.damageEstimate,  "string", 40),
+          arrivalTimes: {
+            p: Number(sanitize(c.arrivalTimes?.p, "number")),
+            s: Number(sanitize(c.arrivalTimes?.s, "number")),
+          },
+        }))
+      : [];
 
     const ai = getGeminiClient();
 
-    const citiesDescription = affectedCities.map((c: any) => 
+    const citiesDescription = affectedCities.map((c) =>
       `- **${c.name}**: Distancia epicentral: ${c.distance.toFixed(1)} km. Tiempo llegada Onda P: ${c.arrivalTimes.p.toFixed(2)}s, Onda S: ${c.arrivalTimes.s.toFixed(2)}s. Intensidad Estimada (Mercalli): ${c.estimatedIntensity}. Riesgo de Daños: ${c.damageEstimate}`
     ).join("\n");
 
@@ -412,10 +498,10 @@ DATOS DEL SISMO SIMULADO:
 - Profundidad Focal (Hipocentro): ${depth} km (Clasificación: ${depth <= 70 ? 'Superficial (0-70 km)' : depth <= 300 ? 'Intermedio (70-300 km)' : 'Profundo (300-700 km)'})
 - Material de la Corteza Seleccionado: ${crustMaterial}
 - Velocidades de Ondas Estimadas:
-  * Onda P (Primaria): ${waveVelocities.p.toFixed(2)} km/s
-  * Onda S (Secundaria): ${waveVelocities.s.toFixed(2)} km/s
-  * Onda R (Rayleigh): ${waveVelocities.r.toFixed(2)} km/s
-  * Onda L (Love): ${waveVelocities.l.toFixed(2)} km/s
+  * Onda P (Primaria): ${vp.toFixed(2)} km/s
+  * Onda S (Secundaria): ${vs.toFixed(2)} km/s
+  * Onda R (Rayleigh): ${vr.toFixed(2)} km/s
+  * Onda L (Love): ${vl.toFixed(2)} km/s
 
 FALLA SISMOGÉNICA DETECTADA:
 - Nombre: ${detectedFault ? detectedFault.name : 'Ninguna falla principal identificada en la cercanía'}
@@ -431,16 +517,9 @@ INSTRUCCIONES PARA LA REDACCIÓN DEL REPORTE:
 1. Adopta un tono académico, técnico pero sumamente didáctico y preventivo, ideal para estudiantes, docentes y el público general interesado en la sismología en Venezuela (Aula Sísmica).
 2. Organiza el reporte usando Markdown claro con las siguientes secciones obligatorias:
    - ### **1. Diagnóstico del Evento y Contexto Tectónico**
-     * Explica qué tipo de sismo ocurrió de acuerdo a su magnitud y profundidad focal. 
-     * Describe la falla geológica detectada (${detectedFault ? detectedFault.name : 'Ninguna'}), su comportamiento neotectónico habitual en el límite de placas Caribe-Sudamericana, y cómo su ubicación geográfica coincide con el epicentro simulado.
    - ### **2. Física de las Ondas Sísmicas y Tiempos de Viaje**
-     * Explica didácticamente la diferencia entre las ondas corporales (P y S) y las ondas superficiales (Rayleigh y Love), detallando cómo el material de la corteza (${crustMaterial}) influye en sus velocidades.
-     * Analiza el tiempo que tardaron las ondas en llegar a las ciudades más expuestas y explica cómo se siente el arribo de cada tipo de onda (compresión vs sacudida lateral/elíptica).
    - ### **3. Estimación de Daños y Escala de Mercalli**
-     * Explica la diferencia fundamental entre Magnitud (energía liberada en el foco) e Intensidad (percepción y daños en superficie, escala de Mercalli Modificada).
-     * Detalla los niveles de daños esperados en las poblaciones más próximas de acuerdo a su cercanía y la magnitud simulada, enfatizando la vulnerabilidad del tipo de construcción típico (mampostería informal, edificios sismorresistentes, etc.).
    - ### **4. Medidas de Autoprotección y Cultura Preventiva (RRD)**
-     * Proporciona pautas de conducta claras y organizadas sobre qué hacer **ANTES, DURANTE y DESPUÉS** de un sismo de este tipo (enfoque educativo de prevención de FUNVISIS).
 
 Mantén la redacción objetiva pero con un fuerte llamado a la prevención y la educación comunitaria.
     `.trim();
@@ -448,13 +527,10 @@ Mantén la redacción objetiva pero con un fuerte llamado a la prevención y la 
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
       contents: prompt,
-      config: {
-        temperature: 0.3,
-      }
+      config: { temperature: 0.3 }
     });
 
     const reportText = response.text || "No se pudo generar el reporte de simulación. Intente de nuevo.";
-
     res.json({ report: reportText });
   } catch (error: any) {
     console.error("Error generating simulation report:", error);
@@ -487,8 +563,8 @@ function getMailTransporter(): nodemailer.Transporter {
         pass,
       },
       tls: {
-        // Permitir certificados autofirmados si es necesario
-        rejectUnauthorized: false,
+        // Rechazar certificados inválidos en producción para evitar ataques MITM
+        rejectUnauthorized: process.env.NODE_ENV === "production",
       },
     });
   }
