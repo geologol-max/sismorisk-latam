@@ -184,6 +184,7 @@ interface BlogItem {
   readTime: string;
   summary: string;
   content: string;
+  videoUrl?: string;
 }
 
 const BLOGS_DB: BlogItem[] = [
@@ -216,6 +217,17 @@ const BLOGS_DB: BlogItem[] = [
     readTime: "5 min de lectura",
     summary: "Por qué evaluar edificios visualmente es el método más eficiente y de menor costo para que los gobiernos prioricen fondos de reforzamiento estructural.",
     content: "No es económicamente viable realizar análisis matemáticos complejos paso a paso para todas las edificaciones de una gran urbe. Los métodos de cribado rápido visual (como FEMA P-154) permiten clasificar miles de edificaciones en días. Un evaluador capacitado puede identificar factores de riesgo como irregularidad en planta, columna corta, piso débil o amplificación por suelo local en cuestión de 15 minutos, arrojando un puntaje de seguridad objetivo. Esto permite salvar vidas canalizando subsidios de refuerzo de forma quirúrgica."
+  },
+  {
+    id: "blog-4",
+    title: "Sismotectónica de los recientes terremotos en Venezuela Norcentral",
+    author: "Ph.D. Franck Audemard",
+    role: "Sismólogo y Paleosismólogo",
+    date: "16 de Julio, 2026",
+    readTime: "Webinar Completo",
+    summary: "Grabación del seminario web de la SPE Caracas Petroleum Section sobre la sismotectónica norcentral de Venezuela y la dinámica de fallas activas.",
+    content: "En esta conferencia técnica virtual auspiciada por la SPE Caracas, el Dr. Franck Audemard expone las dinámicas sismotectónicas de los últimos eventos telúricos registrados en el norte de Venezuela.\n\nEl análisis describe la tectónica de placas en el límite Caribe-Sudamérica, el papel sismogénico de los sistemas de fallas de San Sebastián y La Victoria, y el fenómeno de dobletes sísmicos. Se discuten las implicaciones para la evaluación de riesgo sísmico y la mitigación de desastres en áreas urbanas densamente pobladas.",
+    videoUrl: "https://www.youtube.com/live/fOw8MurOTLs"
   }
 ];
 
@@ -1952,6 +1964,29 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                           <p key={i}>{para}</p>
                         ))}
                       </div>
+
+                      {selectedBlogPost.videoUrl && (
+                        <div className="mt-6 p-4 bg-slate-950/80 rounded-2xl border border-red-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                          <div className="flex items-center space-x-3 text-left">
+                            <div className="p-3 bg-red-500/10 text-red-500 rounded-xl">
+                              <Play className="h-5 w-5 fill-red-500/20" />
+                            </div>
+                            <div>
+                              <h5 className="text-xs font-bold text-white uppercase tracking-wide">Grabación de la Conferencia</h5>
+                              <p className="text-[10px] text-slate-400">Accede directamente al video completo del seminario en YouTube.</p>
+                            </div>
+                          </div>
+                          <a 
+                            href={selectedBlogPost.videoUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="bg-red-600 hover:bg-red-500 text-white font-black text-[10px] tracking-wider uppercase px-5 py-3 rounded-xl transition flex items-center gap-2 cursor-pointer w-full sm:w-auto justify-center shadow-lg shadow-red-600/10 hover:shadow-red-600/20"
+                          >
+                            Ver en YouTube
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </div>
+                      )}
 
                       <div className="pt-4 border-t border-slate-855 text-center">
                         <button 
