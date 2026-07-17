@@ -725,12 +725,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <img
             src={collapsedBuilding}
             alt="Fondo sección portafolio"
-            className="w-full h-full object-cover opacity-35"
+            className="w-full h-full object-cover opacity-100"
           />
-          {/* Overlay oscuro para asegurar legibilidad de todo el contenido */}
+          {/* Overlay sutil solo en bordes — mismo estilo que la sección Hero */}
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(180deg, rgba(2,6,23,0.90) 0%, rgba(2,6,23,0.72) 30%, rgba(2,6,23,0.72) 70%, rgba(2,6,23,0.92) 100%)' }}
+            style={{ background: 'linear-gradient(to top, rgba(2,6,23,1) 0%, rgba(2,6,23,0.25) 15%, rgba(2,6,23,0.15) 50%, rgba(2,6,23,0.25) 85%, rgba(2,6,23,0.90) 100%)' }}
           />
         </div>
 
