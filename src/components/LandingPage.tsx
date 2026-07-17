@@ -29,7 +29,9 @@ import {
   Phone,
   MapPin,
   Briefcase,
-  GraduationCap
+  GraduationCap,
+  HardHat,
+  Settings
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -46,6 +48,11 @@ import jairoMolinstec from "../assets/jairo_molinstec.jpg";
 import earthquakeHero from "../assets/earthquake_hero.jpg";
 import collapsedBuilding from "../assets/collapsed_building.jpg";
 import earthStructure from "../assets/earth_structure.jpg";
+import jairoNepalRescue1 from "../assets/jairo_nepal_rescue_1.jpg";
+import jairoNepalRescue2 from "../assets/jairo_nepal_rescue_2.jpg";
+import jairoRescueSearch from "../assets/jairo_rescue_search.jpg";
+import jairoNepalClose from "../assets/jairo_nepal_close.jpg";
+import jairoEcuadorCollapse from "../assets/jairo_ecuador_collapse.jpg";
 
 interface LandingPageProps {
   onNavigate: (tab: "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
@@ -336,6 +343,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
           
           <div className="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <a href="#fundador" className="hover:text-cyan-400 transition-colors">El Fundador</a>
             <a href="#sobre-mi" className="hover:text-cyan-400 transition-colors">Sobre Mí</a>
             <a href="#educacion" className="hover:text-cyan-400 transition-colors">Educación</a>
             <a href="#experiencia" className="hover:text-cyan-400 transition-colors">Experiencia</a>
@@ -420,6 +428,273 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
         </div>
       </header>
+
+      {/* =========================================================================
+          SECCIÓN EL EQUIPO / EL FUNDADOR (DETRÁS DE GRDESASTRES)
+          ========================================================================= */}
+      <section id="fundador" className="py-24 px-6 border-t border-slate-900 bg-slate-950 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+          
+          {/* Encabezado */}
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded uppercase tracking-wider">
+              El Equipo / El Fundador
+            </span>
+            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
+              Detrás de GRDesastres: Rigor Técnico, Trayectoria Científica y Respuesta en Terreno
+            </h2>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
+          </div>
+
+          {/* Frase Destacada */}
+          <div className="max-w-4xl mx-auto bg-slate-900/50 border border-slate-800 p-6 md:p-8 rounded-3xl relative overflow-hidden text-center shadow-xl shadow-black/30">
+            <div className="absolute -top-6 -left-6 text-slate-800/20 font-serif text-9xl pointer-events-none select-none">“</div>
+            <p className="text-sm sm:text-base md:text-lg italic text-slate-200 leading-relaxed font-medium relative z-10">
+              "La reducción del riesgo de desastres no se aprende solo en los libros; se forja analizando el terreno, planificando la prevención y actuando en los escenarios de mayor exigencia y vulnerabilidad real."
+            </p>
+            <div className="absolute -bottom-16 -right-6 text-slate-800/20 font-serif text-9xl pointer-events-none select-none">”</div>
+          </div>
+
+          {/* Grid de Contenido (Dos Columnas: Texto y Timeline a la izquierda, Fotos en Terreno a la derecha) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            {/* Columna Izquierda: Contenido y Timeline */}
+            <div className="lg:col-span-7 space-y-10 text-left">
+              
+              {/* Bloque 1: El Puente entre la Geociencia... */}
+              <div className="space-y-4">
+                <h3 className="font-display font-bold text-xl md:text-2xl text-white border-l-4 border-cyan-500 pl-4 uppercase">
+                  El Puente entre la Geociencia, la Ingeniería y la Resiliencia
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Soy <strong>Jairo Ovallos</strong>, TSU en Geología y Minas, Ingeniero Civil e Ingeniero en Geociencias. Mi carrera ha estado guiada por una profunda vocación: entender los procesos físicos y geológicos de la Tierra para diseñar infraestructuras seguras y proteger a las comunidades que las habitan.
+                </p>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  A lo largo de mi trayectoria, he integrado el rigor de las ciencias de la Tierra con la ejecución práctica de planes de prevención y respuesta frente a emergencias bajo estrictas normativas técnicas y operativas.
+                </p>
+
+                {/* Bloque de Badges (Etiquetas Rápidas) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                  <div className="flex items-center space-x-3 bg-slate-900 border border-slate-850 px-4 py-3 rounded-xl hover:border-cyan-500/30 transition-colors">
+                    <HardHat className="h-5 w-5 text-cyan-400 shrink-0" />
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-200">Ing. Civil e Ing. en Geociencias</span>
+                  </div>
+                  <div className="flex items-center space-x-3 bg-slate-900 border border-slate-850 px-4 py-3 rounded-xl hover:border-cyan-500/30 transition-colors">
+                    <Globe className="h-5 w-5 text-cyan-400 shrink-0" />
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-200">Especialista USAR Internacional</span>
+                  </div>
+                  <div className="flex items-center space-x-3 bg-slate-900 border border-slate-850 px-4 py-3 rounded-xl hover:border-cyan-500/30 transition-colors">
+                    <Shield className="h-5 w-5 text-cyan-400 shrink-0" />
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-200">Ex-Jefe Planificación PC Táchira</span>
+                  </div>
+                  <div className="flex items-center space-x-3 bg-slate-900 border border-slate-850 px-4 py-3 rounded-xl hover:border-cyan-500/30 transition-colors">
+                    <Settings className="h-5 w-5 text-cyan-400 shrink-0" />
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-200">Gestión de Emergencias ISO 22320</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bloque 2: 12 Años de Liderazgo Operativo */}
+              <div className="space-y-4">
+                <h3 className="font-display font-bold text-xl md:text-2xl text-white border-l-4 border-emerald-500 pl-4 uppercase">
+                  12 Años de Liderazgo Operativo y Respuesta en Primera Línea
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Durante más de una década en Protección Civil y Administración de Desastres del Estado Táchira (Venezuela), lideré el análisis, la planificación y la coordinación operativa ante eventos adversos complejos en una de las regiones con mayor dinamismo sismológico y geológico de Sudamérica:
+                </p>
+                
+                <div className="space-y-3 pl-4 border-l border-slate-800">
+                  <div>
+                    <h4 className="text-xs font-bold text-white uppercase">Jefe de Operaciones y Comunicaciones (2011 - 2017)</h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Coordinación en tiempo real y despliegue estratégico frente a emergencias de gran escala.</p>
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white uppercase">Jefe de Planificación y Gestión del Riesgo (2009 - 2011)</h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Diseño de metodologías preventivas, estudios de vulnerabilidad física y ordenamiento territorial.</p>
+                  </div>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Esta vocación técnica de servicio me llevó a formar parte de misiones internacionales de ayuda humanitaria como especialista en misiones de Búsqueda y Rescate Urbano (USAR) frente a grandes catástrofes sísmicas de la última década:
+                </p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="bg-slate-900/40 border border-slate-850 p-4 rounded-xl">
+                    <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest block mb-1">Nepal 2015</span>
+                    <p className="text-xs text-slate-300">Despliegue en terreno y operaciones de rescate técnico tras el devastador sismo de magnitud 7.8.</p>
+                  </div>
+                  <div className="bg-slate-900/40 border border-slate-850 p-4 rounded-xl">
+                    <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-1">Ecuador 2016</span>
+                    <p className="text-xs text-slate-300">Evaluación estructural de edificaciones colapsadas, soporte técnico y primera respuesta humanitaria tras el terremoto de magnitud 7.8.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Línea de Tiempo Operativa */}
+              <div className="space-y-6">
+                <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+                  Línea de Tiempo Operativa (Timeline)
+                </h4>
+                <div className="relative pl-6 border-l-2 border-slate-800 space-y-8">
+                  {/* Item 1 */}
+                  <div className="relative">
+                    <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-cyan-500 border-4 border-slate-950" />
+                    <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
+                      2005 - 2017
+                    </span>
+                    <h5 className="text-xs font-bold text-white uppercase mt-2">Protección Civil Táchira (Venezuela)</h5>
+                    <p className="text-[11px] text-slate-400 mt-1">Planificación técnica, mitigación de riesgos e intervenciones operativas.</p>
+                  </div>
+                  
+                  {/* Item 2 */}
+                  <div className="relative">
+                    <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-cyan-500 border-4 border-slate-950" />
+                    <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
+                      2015
+                    </span>
+                    <h5 className="text-xs font-bold text-white uppercase mt-2">Misión Humanitaria - Sismo de Nepal</h5>
+                    <p className="text-[11px] text-slate-400 mt-1">Búsqueda y rescate en Katmandú como especialista USAR del equipo nacional.</p>
+                  </div>
+                  
+                  {/* Item 3 */}
+                  <div className="relative">
+                    <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-cyan-500 border-4 border-slate-950" />
+                    <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
+                      2016
+                    </span>
+                    <h5 className="text-xs font-bold text-white uppercase mt-2">Misión Humanitaria - Sismo de Ecuador</h5>
+                    <p className="text-[11px] text-slate-400 mt-1">Evaluación de daños estructurales y rescate técnico en zonas de catástrofe.</p>
+                  </div>
+                  
+                  {/* Item 4 */}
+                  <div className="relative">
+                    <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-emerald-500 border-4 border-slate-950" />
+                    <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+                      2020 - Presente
+                    </span>
+                    <h5 className="text-xs font-bold text-white uppercase mt-2">Gestión en Minería y Contratos (Chile)</h5>
+                    <p className="text-[11px] text-slate-400 mt-1">Administración de contratos de alta exigencia, seguridad industrial y planes de continuidad operacional.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bloque 3: Sinergia con la Gran Minería */}
+              <div className="space-y-4">
+                <h3 className="font-display font-bold text-xl md:text-2xl text-white border-l-4 border-yellow-500 pl-4 uppercase">
+                  Sinergia con la Gran Minería y Estándares de Clase Mundial
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  En Chile, he trasladado este riguroso entrenamiento en respuesta rápida, gestión documental y mitigación de amenazas al sector industrial de mayor exigencia: la gran minería y la infraestructura. Desempeñándome como Administrador de Contratos y Jefe de Operaciones en faenas de alta complejidad (como SQM y Compañía Minera Los Pelambres), he liderado:
+                </p>
+                <ul className="text-xs sm:text-sm text-slate-400 space-y-2 list-disc list-inside">
+                  <li>El diseño e implementación de protocolos de seguridad y planes de contingencia para brigadas de emergencia industriales.</li>
+                  <li>La gestión de riesgos y la continuidad operacional aplicando normativas internacionales críticas de seguridad y emergencias (<strong className="text-white">ISO 22320</strong> para gestión de emergencias, <strong className="text-white">ISO 39001</strong> para seguridad vial e <strong className="text-white">ISO 9001</strong> para control de calidad).</li>
+                  <li>La optimización de procesos mediante el análisis de datos avanzados (<strong className="text-white">Data Science en Python</strong>) y el control estricto de KPIs operacionales.</li>
+                </ul>
+              </div>
+
+              {/* Bloque 4: ¿Por qué nace grdesastres.com? */}
+              <div className="space-y-4">
+                <h3 className="font-display font-bold text-xl md:text-2xl text-white border-l-4 border-purple-500 pl-4 uppercase">
+                  ¿Por qué nace grdesastres.com?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Este portal es el puente entre la ciencia aplicada, la experiencia operativa internacional y la acción de autoprotección ciudadana. Nuestro propósito es democratizar el conocimiento técnico para dotar a ingenieros, arquitectos, servidores públicos, tomadores de decisiones y comunidades de herramientas reales, metodologías de reducción de riesgos y normativas que salvan vidas.
+                </p>
+                <p className="text-xs sm:text-sm text-cyan-400 font-bold tracking-wide italic">
+                  "Porque una sociedad consciente de sus riesgos es una sociedad capaz de resistir y recuperarse."
+                </p>
+              </div>
+
+            </div>
+
+            {/* Columna Derecha: Fotos en Terreno */}
+            <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+              <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest text-center lg:text-left">
+                Fotografías en Terreno (Misiones Internacionales)
+              </h4>
+              
+              {/* Galería de Fotos - Grayscale con Hover de color */}
+              <div className="space-y-4">
+                
+                {/* Foto Destacada (Nepal 1 - Jairo con casco Venezuela mirando colapso) */}
+                <div className="relative group overflow-hidden rounded-2xl border border-slate-800 shadow-lg">
+                  <img 
+                    src={jairoNepalRescue1} 
+                    alt="Terremoto de Nepal (2015) - Operación en terreno" 
+                    className="w-full h-auto object-cover filter grayscale contrast-110 brightness-90 hover:grayscale-0 hover:contrast-100 hover:brightness-100 transition-all duration-700 ease-in-out"
+                  />
+                  <div className="absolute bottom-0 inset-x-0 bg-slate-950/80 backdrop-blur-xs p-3 text-center border-t border-slate-850">
+                    <p className="text-[10px] font-bold text-white uppercase tracking-wider">Terremoto de Nepal (2015)</p>
+                    <p className="text-[8px] text-slate-400 mt-0.5">Evaluación de estructuras colapsadas e inspección técnica en terreno</p>
+                  </div>
+                </div>
+
+                {/* Sub-grid de las otras 4 fotos */}
+                <div className="grid grid-cols-2 gap-4">
+                  
+                  {/* Foto 2: Nepal Rescue 2 */}
+                  <div className="relative group overflow-hidden rounded-xl border border-slate-800 shadow-md">
+                    <img 
+                      src={jairoNepalRescue2} 
+                      alt="Nepal - Inspección en terreno" 
+                      className="w-full h-40 object-cover filter grayscale contrast-110 brightness-90 hover:grayscale-0 hover:contrast-100 hover:brightness-100 transition-all duration-700 ease-in-out"
+                    />
+                    <div className="absolute bottom-0 inset-x-0 bg-slate-950/80 backdrop-blur-xs p-2 text-center border-t border-slate-850">
+                      <p className="text-[8px] font-bold text-white uppercase">Katmandú</p>
+                      <p className="text-[7px] text-slate-400">Inspección técnica</p>
+                    </div>
+                  </div>
+
+                  {/* Foto 3: Jairo Rescue Search */}
+                  <div className="relative group overflow-hidden rounded-xl border border-slate-800 shadow-md">
+                    <img 
+                      src={jairoRescueSearch} 
+                      alt="Búsqueda y rescate en estructuras colapsadas" 
+                      className="w-full h-40 object-cover filter grayscale contrast-110 brightness-90 hover:grayscale-0 hover:contrast-100 hover:brightness-100 transition-all duration-700 ease-in-out"
+                    />
+                    <div className="absolute bottom-0 inset-x-0 bg-slate-950/80 backdrop-blur-xs p-2 text-center border-t border-slate-850">
+                      <p className="text-[8px] font-bold text-white uppercase">Búsqueda Técnica</p>
+                      <p className="text-[7px] text-slate-400">Escenarios reales USAR</p>
+                    </div>
+                  </div>
+
+                  {/* Foto 4: Jairo Nepal Close */}
+                  <div className="relative group overflow-hidden rounded-xl border border-slate-800 shadow-md">
+                    <img 
+                      src={jairoNepalClose} 
+                      alt="Jairo Ovallos en Nepal" 
+                      className="w-full h-40 object-cover filter grayscale contrast-110 brightness-90 hover:grayscale-0 hover:contrast-100 hover:brightness-100 transition-all duration-700 ease-in-out"
+                    />
+                    <div className="absolute bottom-0 inset-x-0 bg-slate-950/80 backdrop-blur-xs p-2 text-center border-t border-slate-850">
+                      <p className="text-[8px] font-bold text-white uppercase">Especialista USAR</p>
+                      <p className="text-[7px] text-slate-400">Misión humanitaria</p>
+                    </div>
+                  </div>
+
+                  {/* Foto 5: Jairo Ecuador Collapse */}
+                  <div className="relative group overflow-hidden rounded-xl border border-slate-800 shadow-md">
+                    <img 
+                      src={jairoEcuadorCollapse} 
+                      alt="Terremoto de Ecuador (2016)" 
+                      className="w-full h-40 object-cover filter grayscale contrast-110 brightness-90 hover:grayscale-0 hover:contrast-100 hover:brightness-100 transition-all duration-700 ease-in-out"
+                    />
+                    <div className="absolute bottom-0 inset-x-0 bg-slate-950/80 backdrop-blur-xs p-2 text-center border-t border-slate-850">
+                      <p className="text-[8px] font-bold text-white uppercase">Ecuador (2016)</p>
+                      <p className="text-[7px] text-slate-400">Evaluación estructural</p>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
 
       {/* =========================================================================
           SECCIÓN SOBRE MÍ (APTITUDES Y CAPACIDADES)
