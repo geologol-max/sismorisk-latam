@@ -1190,6 +1190,65 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               </div>
             </div>
 
+            {/* Fuentes Sismológicas Oficiales */}
+            <div className="relative z-10 space-y-4 pt-4 border-t border-slate-850">
+              <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+                Fuentes Sismológicas Oficiales
+              </h4>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                
+                {/* USGS */}
+                <div className="bg-slate-950 border border-slate-850 p-4 rounded-xl flex items-center justify-between gap-4">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-bold text-white uppercase">USGS</p>
+                    <p className="text-[8px] text-slate-500">Monitoreo sísmico global</p>
+                  </div>
+                  <a 
+                    href="https://earthquake.usgs.gov/earthquakes/map/?currentFeatureId=us7000t1hd&extent=-37.16032,-189.66797&extent=73.67726,91.58203"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 text-[9px] font-bold uppercase px-3 py-1.5 rounded-lg border border-sky-500/20 transition cursor-pointer shrink-0 text-center"
+                  >
+                    Ver Mapa
+                  </a>
+                </div>
+
+                {/* CSN Chile */}
+                <div className="bg-slate-950 border border-slate-850 p-4 rounded-xl flex items-center justify-between gap-4">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-bold text-white uppercase">CSN Chile</p>
+                    <p className="text-[8px] text-slate-500">Centro Sismológico Nacional</p>
+                  </div>
+                  <a 
+                    href="https://www.csn.uchile.cl/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-[9px] font-bold uppercase px-3 py-1.5 rounded-lg border border-amber-500/20 transition cursor-pointer shrink-0 text-center"
+                  >
+                    Visitar Web
+                  </a>
+                </div>
+
+                {/* SGC Colombia */}
+                <div className="bg-slate-950 border border-slate-850 p-4 rounded-xl flex items-center justify-between gap-4">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-bold text-white uppercase">SGC Colombia</p>
+                    <p className="text-[8px] text-slate-500">Servicio Geológico Colombiano</p>
+                  </div>
+                  <a 
+                    href="https://www.sgc.gov.co/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[9px] font-bold uppercase px-3 py-1.5 rounded-lg border border-rose-500/20 transition cursor-pointer shrink-0 text-center"
+                  >
+                    Visitar Web
+                  </a>
+                </div>
+
+              </div>
+            </div>
+
           </div>
 
           {/* 2. OTROS TRABAJOS ANTERIORES Y EXPERIENCIA HUMANITARIA */}
