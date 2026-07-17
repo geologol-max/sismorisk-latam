@@ -44,6 +44,7 @@ import jairoNera from "../assets/jairo_nera.jpg";
 import jairoPc from "../assets/jairo_pc.jpg";
 import jairoMolinstec from "../assets/jairo_molinstec.jpg";
 import earthquakeHero from "../assets/earthquake_hero.jpg";
+import collapsedBuilding from "../assets/collapsed_building.jpg";
 import earthStructure from "../assets/earth_structure.jpg";
 
 interface LandingPageProps {
@@ -364,11 +365,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             alt="Colapso Sísmico" 
             className="w-full h-full object-cover opacity-100"
           />
-          {/* Degradados perimetrales ultra precisos: 0-12% y 88-100%, dejando el 76% central de la foto totalmente limpio */}
+          {/* Degradado sutil solo en bordes superior e inferior para integrar la foto */}
           <div 
             className="absolute inset-0"
             style={{ 
-              backgroundImage: 'linear-gradient(to top, rgba(2, 6, 23, 1) 0%, rgba(2, 6, 23, 0) 12%, rgba(2, 6, 23, 0) 88%, rgba(2, 6, 23, 0.2) 100%)' 
+              backgroundImage: 'linear-gradient(to top, rgba(2,6,23,1) 0%, rgba(2,6,23,0.25) 15%, rgba(2,6,23,0.15) 50%, rgba(2,6,23,0.25) 85%, rgba(2,6,23,0.85) 100%)'
             }}
           />
         </div>
@@ -380,27 +381,27 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="relative z-10 space-y-6 flex flex-col items-center max-w-3xl">
           <div className="inline-flex items-center space-x-2 bg-slate-900/90 border border-slate-855 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-cyan-400 tracking-wider uppercase backdrop-blur-sm">
             <Sparkles className="h-3 w-3" />
-            <span>Ingeniero de Proyectos & Desarrollador</span>
+            <span>Ingeniero con experiencia en la gestión integral de riesgos socionaturales y tecnológicos</span>
           </div>
 
-          <div className="space-y-2">
-            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-white leading-none drop-shadow-md">
+          <div className="space-y-2 bg-slate-950/60 backdrop-blur-sm px-6 py-5 rounded-2xl border border-slate-800/50 shadow-2xl shadow-black/40">
+            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-white leading-none drop-shadow-lg">
               Jairo Alonso <br />
               <span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 bg-clip-text text-transparent">
                 Ovallos Cañas
               </span>
             </h1>
-            <p className="font-display text-lg md:text-xl font-bold text-slate-200 drop-shadow-sm">
+            <p className="font-display text-lg md:text-xl font-bold text-slate-100 drop-shadow-sm">
               Ingeniero Civil Construcción e Ingeniero en Geociencias
             </p>
-          </div>
 
-          <p className="text-sm md:text-base text-slate-300 leading-relaxed max-w-xl text-center drop-shadow">
-            Comprometido, responsable, entusiasta y creativo. Cuento con una sólida experiencia en la 
-            <strong> Gestión y Administración de Contratos</strong> en minería y obras civiles, combinada con 
-            habilidades de programación aplicadas al <strong>Análisis de Datos con Python</strong> y la 
-            visualización interactiva de información técnica.
-          </p>
+            <p className="text-sm md:text-base text-slate-300 leading-relaxed max-w-xl text-center drop-shadow pt-2">
+              Comprometido, responsable, entusiasta y creativo. Cuento con una sólida experiencia en la 
+              <strong className="text-white"> Gestión y Administración de Contratos</strong> en minería y obras civiles, combinada con 
+              habilidades de programación aplicadas al <strong className="text-white">Análisis de Datos con Python</strong> y la 
+              visualización interactiva de información técnica.
+            </p>
+          </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
             <a 
@@ -718,8 +719,22 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       {/* =========================================================================
           SECCIÓN PORTAFOLIO: PLATAFORMA SÍSMICA Y TRABAJOS
           ========================================================================= */}
-      <section id="portafolio" className="py-24 px-6 border-t border-slate-900 bg-slate-950">
-        <div className="max-w-7xl mx-auto space-y-16">
+      <section id="portafolio" className="relative py-24 px-6 border-t border-slate-900 overflow-hidden">
+        {/* Imagen de fondo para toda la sección de portafolio */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img
+            src={collapsedBuilding}
+            alt="Fondo sección portafolio"
+            className="w-full h-full object-cover opacity-35"
+          />
+          {/* Overlay oscuro para asegurar legibilidad de todo el contenido */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(180deg, rgba(2,6,23,0.90) 0%, rgba(2,6,23,0.72) 30%, rgba(2,6,23,0.72) 70%, rgba(2,6,23,0.92) 100%)' }}
+          />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto space-y-16">
           
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
@@ -732,11 +747,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
 
           {/* 1. PROYECTO INSIGNIA: PLATAFORMA DE MODELADO SÍSMICO LATAM */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-8 relative overflow-hidden text-left">
-            {/* Glow decorativo */}
-            <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl -z-10 pointer-events-none" />
+          <div className="border border-slate-700/80 bg-slate-900/40 backdrop-blur-sm rounded-3xl p-6 md:p-8 space-y-8 relative overflow-hidden text-left">
+            {/* Glow decorativo cian en esquina superior derecha */}
+            <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-cyan-500/15 blur-3xl pointer-events-none" />
             
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-slate-800 pb-6">
+            <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-slate-700/50 pb-6">
               <div className="space-y-2">
                 <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded uppercase tracking-wider">
                   Proyecto Insignia
@@ -744,14 +759,14 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <h3 className="font-display font-black text-2xl md:text-3xl text-white uppercase leading-none">
                   Plataforma de Riesgo Sísmico LATAM
                 </h3>
-                <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
                   Software integral para el análisis estructural y el cribado de vulnerabilidad sismorresistente. Permite simular edificaciones bajo códigos oficiales (E.030 Perú, NCh433 Chile, NSR-10 Colombia, COVENIN 1756 Venezuela) con emisión de reportes técnicos de IA.
                 </p>
               </div>
             </div>
 
             {/* Submódulos Técnicos (Quick Launch) */}
-            <div className="space-y-4">
+            <div className="relative z-10 space-y-4">
               <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
                 Acceso Rápido a Herramientas de Cálculo
               </h4>
@@ -822,7 +837,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             </div>
 
             {/* Módulos de Divulgación y Aula Interactiva */}
-            <div className="space-y-4 pt-4 border-t border-slate-850">
+            <div className="relative z-10 space-y-4 pt-4 border-t border-slate-850">
               <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
                 Módulos de Capacitación y Divulgación Sísmica
               </h4>
@@ -1002,7 +1017,6 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
             </div>
           </div>
-
         </div>
       </section>
 
@@ -1010,7 +1024,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           SECCIÓN CONTACTO
           ========================================================================= */}
       <section id="contacto" className="py-24 px-6 border-t border-slate-900 bg-slate-900/10">
-        <div className="max-w-7xl mx-auto space-y-12">
+        <div className="max-w-3xl mx-auto space-y-12">
           
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
@@ -1022,117 +1036,78 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-4 items-start text-left">
-            
-            {/* Columna Izquierda: Tarjeta de Datos */}
-            <div className="lg:col-span-5 bg-slate-900 border border-slate-850 p-6 rounded-2xl space-y-6">
+          {/* Formulario de contacto — ancho completo */}
+          <div className="bg-slate-900 border border-slate-850 p-6 md:p-8 rounded-2xl text-left">
+            <form onSubmit={handleContactSubmit} className="space-y-5">
               
-              <div className="space-y-1">
-                <h4 className="text-sm font-bold text-white uppercase">Información de Contacto</h4>
-                <p className="text-[11px] text-slate-400">Escríbeme o llámame directamente para agendar reuniones.</p>
-              </div>
-
-              <div className="space-y-4 text-xs">
-                <div className="flex items-center space-x-3.5 text-slate-300">
-                  <Phone className="h-4 w-4 text-cyan-400 shrink-0" />
-                  <span>+56 941257491</span>
-                </div>
-                <div className="flex items-center space-x-3.5 text-slate-300">
-                  <Mail className="h-4 w-4 text-cyan-400 shrink-0" />
-                  <span>geologol@gmail.com</span>
-                </div>
-                <div className="flex items-center space-x-3.5 text-slate-300">
-                  <MapPin className="h-4 w-4 text-cyan-400 shrink-0" />
-                  <span>Arturo Prat 376, Santiago, Chile</span>
-                </div>
-              </div>
-
-              <hr className="border-slate-850" />
-
-              <div className="space-y-3 text-xs">
-                <h5 className="font-bold text-white uppercase tracking-wider text-[10px] text-slate-500">Otros Datos de Interés</h5>
-                <ul className="space-y-2 text-slate-400 list-disc list-inside">
-                  <li>Situación migratoria: <strong>Residencia Definitiva</strong>.</li>
-                  <li>Licencia de Conducir chilena: <strong>Profesional A2 y Clase B</strong>.</li>
-                </ul>
-              </div>
-
-            </div>
-
-            {/* Columna Derecha: Formulario */}
-            <div className="lg:col-span-7 bg-slate-900 border border-slate-850 p-6 rounded-2xl">
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1 text-left">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nombre Completo *</label>
-                    <input 
-                      type="text" 
-                      required
-                      placeholder="Tu Nombre" 
-                      value={contactName}
-                      onChange={(e) => setContactName(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1 text-left">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Correo Electrónico *</label>
-                    <input 
-                      type="email" 
-                      required
-                      placeholder="ejemplo@dominio.com" 
-                      value={contactEmail}
-                      onChange={(e) => setContactEmail(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1 text-left">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Asunto</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nombre Completo *</label>
                   <input 
                     type="text" 
-                    placeholder="Oportunidad laboral, consulta de simulador..." 
-                    value={contactSubject}
-                    onChange={(e) => setContactSubject(e.target.value)}
+                    required
+                    placeholder="Tu Nombre" 
+                    value={contactName}
+                    onChange={(e) => setContactName(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors"
                   />
                 </div>
-
-                <div className="space-y-1 text-left">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mensaje *</label>
-                  <textarea 
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Correo Electrónico *</label>
+                  <input 
+                    type="email" 
                     required
-                    rows={5}
-                    placeholder="Escribe tu mensaje aquí..." 
-                    value={contactMessage}
-                    onChange={(e) => setContactMessage(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-855 rounded-xl p-4 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors resize-none"
+                    placeholder="ejemplo@dominio.com" 
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors"
                   />
                 </div>
+              </div>
 
-                {submitStatus && (
-                  <div className={`p-4 rounded-xl border text-xs text-left ${
-                    submitStatus === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-red-500/10 border-red-500/30 text-red-400"
-                  }`}>
-                    {submitMessage}
-                  </div>
-                )}
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Asunto</label>
+                <input 
+                  type="text" 
+                  placeholder="Oportunidad laboral, consulta de simulador..." 
+                  value={contactSubject}
+                  onChange={(e) => setContactSubject(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors"
+                />
+              </div>
 
-                <div className="text-end">
-                  <button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 text-slate-950 font-black text-xs uppercase px-6 py-3 rounded-xl tracking-wider transition-all shadow-md shadow-cyan-500/10 flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto ml-auto disabled:opacity-50"
-                  >
-                    {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
-                    <Send className="h-4.5 w-4.5" />
-                  </button>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mensaje *</label>
+                <textarea 
+                  required
+                  rows={5}
+                  placeholder="Escribe tu mensaje aquí..." 
+                  value={contactMessage}
+                  onChange={(e) => setContactMessage(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-855 rounded-xl p-4 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none transition-colors resize-none"
+                />
+              </div>
+
+              {submitStatus && (
+                <div className={`p-4 rounded-xl border text-xs ${
+                  submitStatus === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-red-500/10 border-red-500/30 text-red-400"
+                }`}>
+                  {submitMessage}
                 </div>
+              )}
 
-              </form>
-            </div>
+              <div className="text-end">
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 text-slate-950 font-black text-xs uppercase px-6 py-3 rounded-xl tracking-wider transition-all shadow-md shadow-cyan-500/10 flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto ml-auto disabled:opacity-50"
+                >
+                  {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
+                  <Send className="h-4.5 w-4.5" />
+                </button>
+              </div>
 
+            </form>
           </div>
 
         </div>
