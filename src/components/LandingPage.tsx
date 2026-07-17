@@ -1031,9 +1031,16 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               Contáctame
             </h2>
             <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
-            <p className="text-xs sm:text-sm text-slate-400">
-              ¿Tienes una oportunidad laboral, requerimiento técnico o consulta sobre el simulador? Envíame un mensaje directo.
-            </p>
+            <div className="text-xs sm:text-sm text-slate-400 space-y-2 leading-relaxed max-w-xl mx-auto">
+              <p>¿Tienes una consulta sobre las Herramientas Complementarias RRD, Módulos de Formación y Divulgación?</p>
+              <p>¿Consulta por asesorías y capacitaciones para ti, tu familia o tu empresa?</p>
+              <p>Envíame un mensaje directo y nos contactaremos contigo.</p>
+              <div className="pt-2 text-slate-500 text-center">
+                <p>Atentamente,</p>
+                <p className="font-bold text-slate-300">El equipo de GRDesastres.com</p>
+                <p className="text-cyan-400 font-bold mt-1">Preparamos personas, protegemos organizaciones.</p>
+              </div>
+            </div>
           </div>
 
           {/* Formulario de contacto — ancho completo */}
