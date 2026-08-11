@@ -351,18 +351,16 @@ export default function LandingPage({
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 to-emerald-500 flex items-center justify-center font-black text-slate-950 tracking-wider">
-              JO
+              GR
             </div>
             <span className="font-display font-extrabold text-sm tracking-wider uppercase bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-              Jairo Ovallos
+              GRDesastres
             </span>
           </div>
           
           <div className="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <a href="#inicio" className="hover:text-cyan-400 transition-colors">Inicio</a>
             <a href="#fundador" className="hover:text-cyan-400 transition-colors">El Fundador</a>
-            <a href="#sobre-mi" className="hover:text-cyan-400 transition-colors">Sobre Mí</a>
-            <a href="#educacion" className="hover:text-cyan-400 transition-colors">Educación</a>
-            <a href="#experiencia" className="hover:text-cyan-400 transition-colors">Experiencia</a>
             <a href="#portafolio" className="hover:text-cyan-400 transition-colors">Portafolio</a>
             <a href="#contacto" className="hover:text-cyan-400 transition-colors">Contacto</a>
           </div>
@@ -379,9 +377,9 @@ export default function LandingPage({
       </nav>
 
       {/* =========================================================================
-          SECCIÓN HERO (CABECERA)
+          SECCIÓN HERO / INICIO (CABECERA)
           ========================================================================= */}
-      <header className="relative w-full pt-32 pb-24 px-6 md:px-12 flex flex-col items-center justify-center text-center min-h-[85vh] overflow-hidden">
+      <header id="inicio" className="relative w-full pt-32 pb-24 px-6 md:px-12 flex flex-col items-start justify-center min-h-[85vh] overflow-hidden">
         {/* Video de fondo a lo ancho de la página (reproducción automática, en bucle y sin overlay) */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <video 
@@ -395,35 +393,29 @@ export default function LandingPage({
         </div>
 
         {/* Luces y efectos de fondo */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl -z-10 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl -z-10 pointer-events-none" />
 
-        {/* Textos Informativos */}
-        <div className="relative z-10 space-y-6 flex flex-col items-center max-w-3xl">
-          <div className="inline-flex items-center space-x-2 bg-slate-900/90 border border-slate-855 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-cyan-400 tracking-wider uppercase backdrop-blur-sm">
+        {/* Textos Informativos del Propósito de GRDesastres (Alineados a la Izquierda) */}
+        <div className="relative z-10 space-y-6 flex flex-col items-start text-left max-w-2xl ml-0 md:ml-6 lg:ml-12">
+          <div className="inline-flex items-center space-x-2 bg-slate-900/90 border border-slate-800 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-cyan-400 tracking-wider uppercase backdrop-blur-sm">
             <Sparkles className="h-3 w-3" />
-            <span>Ingeniero con experiencia en la gestión integral de riesgos socionaturales y tecnológicos</span>
+            <span>Plataforma de Gestión Integral de Riesgos Socionaturales y Tecnológicos</span>
           </div>
 
-          <div className="space-y-2 bg-slate-950/60 backdrop-blur-sm px-6 py-5 rounded-2xl border border-slate-800/50 shadow-2xl shadow-black/40">
+          <div className="space-y-3 bg-slate-950/75 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-800/80 shadow-2xl shadow-black/60 text-left">
             <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-white leading-none drop-shadow-lg">
-              Jairo Alonso <br />
-              <span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 bg-clip-text text-transparent">
-                Ovallos Cañas
-              </span>
+              GR<span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 bg-clip-text text-transparent">Desastres</span>
             </h1>
-            <p className="font-display text-lg md:text-xl font-bold text-slate-100 drop-shadow-sm">
-              Ingeniero Civil Construcción e Ingeniero en Geociencias
+            <p className="font-display text-base md:text-lg font-bold text-slate-100 drop-shadow-sm">
+              Gestión y Reducción del Riesgo de Desastres en América Latina
             </p>
 
-            <p className="text-sm md:text-base text-slate-300 leading-relaxed max-w-xl text-center drop-shadow pt-2">
-              Comprometido, responsable, entusiasta y creativo. Cuento con una sólida experiencia en la 
-              <strong className="text-white"> Gestión y Administración de Contratos</strong> en minería y obras civiles, combinada con 
-              habilidades de programación aplicadas al <strong className="text-white">Análisis de Datos con Python</strong> y la 
-              visualización interactiva de información técnica.
+            <p className="text-sm md:text-base text-slate-300 leading-relaxed drop-shadow pt-2">
+              GRDesastres es una plataforma técnica y educativa integral enfocada en la evaluación de vulnerabilidad estructural, modelado dinámico de edificaciones ante sismos y capacitación en mitigación de riesgos. Unimos la ingeniería aplicada, el análisis de datos y las normativas internacionales para fortalecer la resiliencia ciudadana e institucional ante eventos extremos.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center justify-start gap-4 pt-2">
             <a 
               href="#portafolio" 
               className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold text-xs uppercase px-6 py-3 rounded-xl transition shadow-lg shadow-cyan-500/20 cursor-pointer flex items-center space-x-2"
@@ -432,10 +424,10 @@ export default function LandingPage({
               <ArrowRight className="h-4 w-4" />
             </a>
             <a 
-              href="#experiencia" 
+              href="#fundador" 
               className="bg-slate-900/90 hover:bg-slate-855 border border-slate-800 hover:border-slate-700 text-slate-300 font-bold text-xs uppercase px-6 py-3 rounded-xl transition cursor-pointer backdrop-blur-sm"
             >
-              Ver Experiencia Laboral
+              Conocer al Fundador
             </a>
           </div>
         </div>
@@ -708,300 +700,7 @@ export default function LandingPage({
         </div>
       </section>
 
-      {/* =========================================================================
-          SECCIÓN SOBRE MÍ (APTITUDES Y CAPACIDADES)
-          ========================================================================= */}
-      <section id="sobre-mi" className="py-24 px-6 border-t border-slate-900 bg-slate-900/10">
-        <div className="max-w-7xl mx-auto space-y-12">
-          
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
-              Aptitudes y Capacidades
-            </h2>
-            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
-            <p className="text-xs sm:text-sm text-slate-400">
-              Mi perfil combina de manera única los fundamentos técnicos de la ingeniería con sólidas habilidades de gestión comercial, análisis de datos avanzado y control de sistemas normativos.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
-            
-            {/* Aptitud 1 */}
-            <div className="bg-slate-900/60 border border-slate-850 hover:border-slate-800 p-6 rounded-2xl space-y-4 transition-all hover:translate-y-[-4px] text-left">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-                <FileText className="h-6 w-6" />
-              </div>
-              <h3 className="font-display font-bold text-lg text-white">
-                Gestión de Contratos
-              </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Especialista en la administración contractual en proyectos mineros, desarrollo e interpretación de KPIs y niveles de servicio (SLAs), negociación y resolución de conflictos operacionales.
-              </p>
-            </div>
-
-            {/* Aptitud 2 */}
-            <div className="bg-slate-900/60 border border-slate-850 hover:border-slate-800 p-6 rounded-2xl space-y-4 transition-all hover:translate-y-[-4px] text-left">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                <Activity className="h-6 w-6" />
-              </div>
-              <h3 className="font-display font-bold text-lg text-white">
-                Análisis de Datos
-              </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Programación para ciencia de datos con Python (Pandas, NumPy, Matplotlib) y visualización ejecutiva en herramientas de BI como Tableau, Google Looker Studio y PowerBI.
-              </p>
-            </div>
-
-            {/* Aptitud 3 */}
-            <div className="bg-slate-900/60 border border-slate-850 hover:border-slate-800 p-6 rounded-2xl space-y-4 transition-all hover:translate-y-[-4px] text-left">
-              <div className="w-12 h-12 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center">
-                <Shield className="h-6 w-6" />
-              </div>
-              <h3 className="font-display font-bold text-lg text-white">
-                Sistemas de Gestión
-              </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Conocimiento práctico e implementación de Sistemas de Gestión Integrados bajo normas internacionales ISO 9001 (Calidad), ISO 39001 (Seguridad Vial) e ISO 22320 (Gestión de Emergencias).
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECCIÓN EDUCACIÓN (DATOS ACADÉMICOS)
-          ========================================================================= */}
-      <section id="educacion" className="py-24 px-6 border-t border-slate-900 bg-slate-950">
-        <div className="max-w-7xl mx-auto space-y-12">
-          
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
-              Datos Académicos
-            </h2>
-            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
-            <p className="text-xs sm:text-sm text-slate-400">
-              Trayectoria de formación académica superior en ingeniería y diplomados de especialización.
-            </p>
-          </div>
-
-          <div className="max-w-3xl mx-auto space-y-6 pt-4 text-left">
-            
-            {/* Timeline Item 1 */}
-            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
-              <div className="flex items-start space-x-4">
-                <div className="p-2.5 bg-cyan-500/10 rounded-xl text-cyan-400 shrink-0 mt-0.5">
-                  <GraduationCap className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white uppercase">
-                    Diplomado en Administración de Contratos para la Minería
-                  </h4>
-                  <p className="text-[11px] text-slate-400">
-                    Especialización en Gestión Legal y Comercial Minera, Chile
-                  </p>
-                </div>
-              </div>
-              <span className="font-mono text-[10px] font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
-                2025
-              </span>
-            </div>
-
-            {/* Timeline Item 2 */}
-            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
-              <div className="flex items-start space-x-4">
-                <div className="p-2.5 bg-cyan-500/10 rounded-xl text-cyan-400 shrink-0 mt-0.5">
-                  <GraduationCap className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white uppercase">
-                    Diplomado en Data Science and Data Analytics
-                  </h4>
-                  <p className="text-[11px] text-slate-400">
-                    Programación para ciencia de datos y visualización con Python
-                  </p>
-                </div>
-              </div>
-              <span className="font-mono text-[10px] font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
-                2025
-              </span>
-            </div>
-
-            {/* Timeline Item 3 */}
-            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
-              <div className="flex items-start space-x-4">
-                <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-400 shrink-0 mt-0.5">
-                  <GraduationCap className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white uppercase">
-                    Ingeniero en Geociencias
-                  </h4>
-                  <p className="text-[11px] text-slate-400">
-                    Estudio de materiales terrestres, tectónica y geofísica aplicada
-                  </p>
-                </div>
-              </div>
-              <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">
-                2014
-              </span>
-            </div>
-
-            {/* Timeline Item 4 */}
-            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
-              <div className="flex items-start space-x-4">
-                <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-400 shrink-0 mt-0.5">
-                  <GraduationCap className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white uppercase">
-                    Ingeniero Civil Construcción
-                  </h4>
-                  <p className="text-[11px] text-slate-400">
-                    Cálculo estructural, procesos constructivos y materiales
-                  </p>
-                </div>
-              </div>
-              <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">
-                2011
-              </span>
-            </div>
-
-            {/* Timeline Item 5 */}
-            <div className="bg-slate-900/40 border border-slate-850 p-5 rounded-2xl flex justify-between items-start gap-4 hover:border-slate-800 transition-colors">
-              <div className="flex items-start space-x-4">
-                <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-400 shrink-0 mt-0.5">
-                  <GraduationCap className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white uppercase">
-                    Técnico Superior Universitario en Geología y Minas
-                  </h4>
-                  <p className="text-[11px] text-slate-400">
-                    Mapeo geológico, prospección mineral y muestreo de suelos
-                  </p>
-                </div>
-              </div>
-              <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">
-                2004
-              </span>
-            </div>
-
-            <div className="p-4 bg-slate-900/30 border border-slate-850/60 rounded-xl text-center">
-              <p className="text-xs text-slate-500">
-                ⚠️ Mi educación superior fue desarrollada en Venezuela y mis títulos se encuentran debidamente apostillados.
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECCIÓN EXPERIENCIA LABORAL
-          ========================================================================= */}
-      <section id="experiencia" className="py-24 px-6 border-t border-slate-900 bg-slate-900/10">
-        <div className="max-w-7xl mx-auto space-y-12">
-          
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
-              Experiencia Laboral en Chile
-            </h2>
-            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
-            <p className="text-xs sm:text-sm text-slate-400">
-              Desempeño profesional destacado en empresas colaboradoras de minería, pesaje industrial y servicios logísticos.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
-            
-            {/* Empleo 1 */}
-            <div className="bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group">
-              <div className="relative h-48 w-full overflow-hidden shrink-0">
-                <img 
-                  src={jairoNera} 
-                  alt="Nera Chile Spa" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                <span className="absolute bottom-3 left-4 text-[9px] font-mono font-bold text-cyan-400 bg-cyan-950/80 border border-cyan-850 px-2 py-0.5 rounded uppercase">
-                  Logística y Contratos
-                </span>
-              </div>
-              
-              <div className="p-5 flex-1 space-y-3 text-left">
-                <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-white uppercase leading-tight">Nera Chile Spa</h4>
-                  <p className="text-[10px] font-semibold text-slate-500">2025 - Actualmente</p>
-                </div>
-                <ul className="text-[11px] text-slate-400 space-y-2 list-disc list-inside">
-                  <li><strong>Analista de Contratos</strong> (Agosto - Act.)</li>
-                  <li><strong>Operador Central de Despacho</strong> (Abril - Agosto 2025)</li>
-                  <li>Elaboración y monitoreo de métricas de servicio (KPIs y SLAs).</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Empleo 2 */}
-            <div className="bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group">
-              <div className="relative h-48 w-full overflow-hidden shrink-0">
-                <img 
-                  src={jairoMolinstec} 
-                  alt="Molinstec" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                <span className="absolute bottom-3 left-4 text-[9px] font-mono font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-850 px-2 py-0.5 rounded uppercase">
-                  Ventas Técnicas
-                </span>
-              </div>
-              
-              <div className="p-5 flex-1 space-y-3 text-left">
-                <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-white uppercase leading-tight">Molinstec Spa</h4>
-                  <p className="text-[10px] font-semibold text-slate-500">Junio 2024 - Marzo 2025</p>
-                </div>
-                <ul className="text-[11px] text-slate-400 space-y-2 list-disc list-inside">
-                  <li><strong>Ingeniero de Ventas</strong></li>
-                  <li>Asesoramiento técnico en sistemas de pesaje, balanzas industriales e ingeniería de medición de flujo.</li>
-                  <li>Desarrollo de propuestas comerciales complejas.</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Empleo 3 */}
-            <div className="bg-slate-900 border border-slate-850 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group">
-              <div className="relative h-48 w-full overflow-hidden shrink-0">
-                <img 
-                  src={jairoSnow} 
-                  alt="Explor-K Safety" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                <span className="absolute bottom-3 left-4 text-[9px] font-mono font-bold text-yellow-400 bg-yellow-950/80 border border-yellow-850 px-2 py-0.5 rounded uppercase">
-                  Operaciones Mineras
-                </span>
-              </div>
-              
-              <div className="p-5 flex-1 space-y-3 text-left">
-                <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-white uppercase leading-tight">Explor-K Safety & Driving</h4>
-                  <p className="text-[10px] font-semibold text-slate-500">Diciembre 2020 - Diciembre 2023</p>
-                </div>
-                <ul className="text-[11px] text-slate-400 space-y-2 list-disc list-inside">
-                  <li><strong>Administrador de Contrato SQM</strong> (Ago 2022 - Dic 2023)</li>
-                  <li><strong>Jefe de Operación</strong> (Feb 2022 - Dic 2023)</li>
-                  <li>Liderazgo en terreno, control de personal, seguridad vial en faena y cumplimiento de planes preventivos.</li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
 
       {/* =========================================================================
           SECCIÓN PORTAFOLIO: PLATAFORMA SÍSMICA Y TRABAJOS
