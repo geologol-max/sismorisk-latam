@@ -625,6 +625,20 @@ export default function LandingPage({
             playsInline 
             className="w-full h-full object-cover opacity-100"
           />
+          {/* Insignia Oficial GRDesastres sobre la marca de agua del video en la esquina inferior derecha */}
+          <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-20 pointer-events-auto flex items-center space-x-2.5 bg-slate-950/90 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-cyan-500/40 shadow-2xl shadow-black/80">
+            <div className="p-1 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center shrink-0">
+              <img 
+                src={grdesastresLogo} 
+                alt="Watermark GRDesastres" 
+                className="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.5)]"
+              />
+            </div>
+            <div className="text-left font-mono">
+              <span className="text-[10px] sm:text-xs font-black text-white uppercase tracking-wider block leading-none">GRDesastres</span>
+              <span className="text-[8px] sm:text-[9px] text-cyan-400 font-semibold tracking-widest uppercase block pt-0.5">Plataforma Oficial</span>
+            </div>
+          </div>
         </div>
 
         {/* Luces y efectos de fondo */}
@@ -1095,6 +1109,20 @@ export default function LandingPage({
             playsInline
             className="w-full h-full object-cover opacity-100"
           />
+          {/* Insignia Oficial GRDesastres sobre la marca de agua del video en la esquina inferior derecha */}
+          <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-20 pointer-events-auto flex items-center space-x-2.5 bg-slate-950/90 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-cyan-500/40 shadow-2xl shadow-black/80">
+            <div className="p-1 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center shrink-0">
+              <img 
+                src={grdesastresLogo} 
+                alt="Watermark GRDesastres" 
+                className="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.5)]"
+              />
+            </div>
+            <div className="text-left font-mono">
+              <span className="text-[10px] sm:text-xs font-black text-white uppercase tracking-wider block leading-none">GRDesastres</span>
+              <span className="text-[8px] sm:text-[9px] text-cyan-400 font-semibold tracking-widest uppercase block pt-0.5">Plataforma Oficial</span>
+            </div>
+          </div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto space-y-16">
