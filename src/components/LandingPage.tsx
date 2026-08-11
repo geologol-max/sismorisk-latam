@@ -1109,8 +1109,8 @@ export default function LandingPage({
             playsInline
             className="w-full h-full object-cover opacity-100"
           />
-          {/* Insignia Oficial GRDesastres ajustada para cubrir exactamente la marca de agua del video */}
-          <div className="absolute bottom-2 right-4 sm:bottom-3 sm:right-8 z-20 pointer-events-auto flex items-center space-x-3.5 bg-slate-950/95 backdrop-blur-xl px-4 sm:px-5 py-3 sm:py-3.5 rounded-3xl border border-cyan-500/50 shadow-2xl shadow-black/90 min-w-[210px] sm:min-w-[230px]">
+          {/* Insignia Oficial GRDesastres ajustada para cubrir exactamente la marca de agua del video en el Portafolio */}
+          <div className="absolute bottom-24 right-4 sm:bottom-28 sm:right-8 z-20 pointer-events-auto flex items-center space-x-3.5 bg-slate-950/95 backdrop-blur-xl px-4 sm:px-5 py-3.5 sm:py-4 rounded-3xl border border-cyan-500/50 shadow-2xl shadow-black/90 min-w-[210px] sm:min-w-[230px]">
             <div className="p-2 rounded-2xl bg-slate-900 border border-cyan-500/40 flex items-center justify-center shrink-0 shadow-inner">
               <img 
                 src={grdesastresLogo} 
