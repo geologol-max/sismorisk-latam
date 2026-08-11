@@ -410,52 +410,109 @@ const AULA_TOPICS_DATA: Record<"terremotos" | "incendios" | "inundaciones" | "ki
   kit: {
     id: "kit",
     title: "Mochila de Emergencia de 72 Horas",
-    category: "Autonomía & Sobrevivencia",
+    category: "Autonomía & Sobrevivencia Familiar",
     color: "emerald",
     slides: [
       {
-        title: "01. Concepto y Autonomía de 72 Horas",
-        subtitle: "Sostener a la familia mientras llega la ayuda humanitaria",
-        badge: "Preparación Básica",
+        title: "01. Módulo 04: La Mochila de 72 Horas",
+        subtitle: "Configuración general de insumos esenciales de supervivencia",
+        badge: "Visión General",
         points: [
-          { title: "Periodo Crítico de 72h", desc: "En desastres mayores, los servicios de agua, luz y rescate pueden tardar hasta 3 días en desplegarse." },
-          { title: "Criterio de Portabilidad", desc: "El kit debe ser una mochila impermeable, fácil de cargar en la espalda por un solo adulto (máx 10-12 kg)." },
-          { title: "Ubicación Estratégica", desc: "Debe estar guardada cerca de la vía de salida principal del inmueble, lista para tomar y evacuar." }
+          { title: "Agua Potable - 1L", desc: "Cantidad mínima portátil inmediata para consumo directo durante la evacuación inicial." },
+          { title: "Kit de Primeros Auxilios (Trauma)", desc: "Estuche compacto de control de hemorragias, desinfección y curación rápida de heridas." },
+          { title: "Documentación Esencial", desc: "Bolsa impermeable estanca con escrituras, identificaciones y respaldos legales." },
+          { title: "Nutrición & Operaciones", desc: "Barras de proteína de alta energía, linterna táctica (1000 lumens) y radio AM/FM/NOAA." }
         ],
-        tip: "Prepara una mochila por cada adulto del hogar e incluye insumos específicos para niños o adultos mayores."
+        tip: "Conserva el kit en un lugar visible de fácil acceso cercano a la ruta principal de salida de tu vivienda."
       },
       {
-        title: "02. Raciones de Agua y Alimentación Imperecedera",
-        subtitle: "Nutrición e hidratación de supervivencia",
-        badge: "Insumos Vitales",
+        title: "02. La Ventana Crítica de 72 Horas",
+        subtitle: "Zona de Autoprotección Ciudadana entre el evento y la asistencia",
+        badge: "Respuesta USAR & Estadística",
         points: [
-          { title: "Hidratación Necesaria", desc: "Almacena mínimo 3 litros de agua potable por persona por día (para beber e higiene básica)." },
-          { title: "Alimentos Compactos", desc: "Selecciona latas con abre fácil (atún, granos), barras energéticas, chocolates, frutos secos y galletas." },
-          { title: "Purificación de Agua", desc: "Incluye pastillas purificadoras de agua o un gotero con cloro doméstico (2 gotas por litro de agua)." }
+          { title: "Respuesta Internacional USAR", desc: "Basado en las misiones de Búsqueda y Rescate Urbano del Ing. Jairo Ovallos (Terremoto de Nepal 2015, Ecuador 2016)." },
+          { title: "Ventana de Autonomía (0h a 72h)", desc: "Periodo crítico en el cual la familia debe auto-sostenerse activamente antes de recibir apoyo externo." },
+          { title: "Restablecimiento de Servicios", desc: "72 horas es el tiempo promedio estadístico que tardan en restablecerse los servicios básicos o llegar la asistencia gubernamental." }
         ],
-        tip: "Verifica y rota los alimentos del kit cada 6 meses coincidiendo con el cambio de hora o temporada."
+        tip: "En desastres de gran magnitud, la ayuda humanitaria externa no es instantánea. La preparación inicial salva vidas."
       },
       {
-        title: "03. Botiquín de Primeros Auxilios y Fármacos",
-        subtitle: "Atención de heridas leves y medicamentos crónicos",
-        badge: "Salud & Auxilio",
+        title: "03. Arquitectura del Kit: 5 Sistemas Críticos",
+        subtitle: "Distribución táctica organizada para la supervivencia",
+        badge: "Diseño Estructural",
         points: [
-          { title: "Material de Curación", desc: "Gasas estériles, vendas elásticas, apósitos, cinta adhesiva médica, suero fisiológico y alcohol al 70%." },
-          { title: "Medicamentos de Uso Diario", desc: "Reserva una provisión para al menos 7 días de fármacos para hipertensión, diabetes u otras patologías." },
-          { title: "Instrumental Básico", desc: "Tijeras de trauma, pinzas, termómetro, guantes de nitrilo desechables y mascarillas N95." }
+          { title: "1. Hidratación & 2. Nutrición Táctica", desc: "Agua potable calculada e insumos calóricos sin necesidad de cocción." },
+          { title: "3. Soporte Médico & 4. Operaciones", desc: "Control de traumatismos, linternas frontales, energía de respaldo y multiherramientas de rescate." },
+          { title: "5. Resguardo de Identidad", desc: "Documentación física y digital protegida ante agua, fuego y escombros." }
         ],
-        tip: "Guarda una libreta con los nombres de medicamentos, alergias y tipo de sangre de cada familiar."
+        tip: "Organiza cada sistema en compartimentos o bolsas impermeables independientes dentro de la mochila."
       },
       {
-        title: "04. Herramientas, Comunicación y Documentación",
-        subtitle: "Equipamiento para señalización y resguardo legal",
-        badge: "Equipamiento Técnico",
+        title: "04. Sistema 1: La Fórmula de Hidratación",
+        subtitle: "El insumo más crítico para la supervivencia humana",
+        badge: "Sistema 1 - Hidratación",
         points: [
-          { title: "Iluminación y Radio", desc: "Linterna LED con pilas de repuesto y radio AM/FM portátil para escuchar comunicados de autoridades." },
-          { title: "Señalamiento y Rescate", desc: "Silbato de emergencia (para hacerse escuchar bajo escombros) y manta térmica de aluminio." },
-          { title: "Copia de Documentos", desc: "Bolsa estanca con duplicado de documentos de identidad, títulos de propiedad, dinero en efectivo y llaves de repuesto." }
+          { title: "Fórmula de Cálculo Vital", desc: "1 Persona × 3 Días × 3 Litros/Día = 9 Litros Totales necesarios por persona." },
+          { title: "Consumo Vital Directo (2 Litros)", desc: "2 litros diarios destinados exclusivamente a la hidratación biológica del cuerpo." },
+          { title: "Higiene y Primeros Auxilios (1 Litro)", desc: "1 litro diario para limpieza de heridas, higiene básica y preparación de sueros." }
         ],
-        tip: "Mantén cargador portátil (powerbank) con el cable adecuado para tu teléfono móvil."
+        tip: "Distribuye los 9 litros en envases rígidos de 1L a 3L para facilitar su transporte entre los miembros del hogar."
+      },
+      {
+        title: "05. Sistema 2: Matriz de Nutrición Táctica",
+        subtitle: "Raciones calóricas de alto rendimiento y cero preparación",
+        badge: "Sistema 2 - Nutrición",
+        points: [
+          { title: "Regla de Oro Nutricional", desc: "Evitar alimentos que requieran cocción o gasten la reserva de agua potable. Incluir siempre un abrelatas manual." },
+          { title: "Energía Inmediata", desc: "Barras proteicas de alta densidad, chocolate amargo y frutos secos ricos en grasas saludables." },
+          { title: "Larga Duración", desc: "Enlatados (atún, sardinas, legumbres) con sistema abre-fácil incorporado." },
+          { title: "Cero Preparación", desc: "Alimentos deshidratados de consumo directo y galletas de agua." }
+        ],
+        tip: "Revisa las fechas de vencimiento de latas y barras cada 6 meses al ajustar la mochila."
+      },
+      {
+        title: "06. Sistema 3: Anatomía del Soporte Médico",
+        subtitle: "Control de traumatismos y mantenimiento de tratamientos crónicos",
+        badge: "Sistema 3 - Salud & Auxilio",
+        points: [
+          { title: "Módulo A: Material de Curación (45°)", desc: "Control de sangrado y heridas: gasas estériles, vendas elásticas, suero, apósitos y antisépticos." },
+          { title: "Módulo B: Medicación Base (45°)", desc: "Respuesta general: analgésicos, antialérgicos, antidiarreicos y antitérmicos de venta libre." },
+          { title: "Módulo C: Condición Crónica (45°)", desc: "Reserva vital: recetas específicas y tratamientos continuos de la familia para al menos 7 días." }
+        ],
+        tip: "Guarda una tarjeta impermeable con el tipo de sangre, alergias y dosis de cada familiar en el estuche médico."
+      },
+      {
+        title: "07. Sistema 4: Operaciones en Escenario de 'Corte Total'",
+        subtitle: "Herramientas de iluminación, energía de respaldo y comunicación",
+        badge: "Sistema 4 - Operaciones",
+        points: [
+          { title: "Linterna Frontal LED", desc: "Permite mantener las manos libres para evacuar, cargar niños o realizar asistencias tácticas." },
+          { title: "Radio AM/FM/NOAA", desc: "A pilas o dinamo manual para recibir instrucciones de emergencia y alertas meteorológicas oficiales." },
+          { title: "Energía de Respaldo & Utilidades", desc: "Pilas adicionales en bolsas herméticas, navaja multiusos y silbato de rescate para señalización acústica." }
+        ],
+        tip: "El silbato emite un sonido de alta frecuencia que requiere mucho menos esfuerzo físico que gritar si quedas atrapado."
+      },
+      {
+        title: "08. Sistema 5: La Cápsula Hermética de Identidad",
+        subtitle: "Protección documental, resguardo digital y efectivo",
+        badge: "Sistema 5 - Identidad",
+        points: [
+          { title: "Documentos Físicos en Bolsa Estanca", desc: "Copias de DNI/Pasaportes, escrituras de propiedad, pólizas de seguro e historial médico." },
+          { title: "Efectivo en Billetes Pequeños", desc: "Efectivo táctico (los puntos de pago electrónicos y cajeros automáticos colapsarán)." },
+          { title: "Respaldo Digital USB", desc: "Copias digitales escaneadas encriptadas almacenadas en una memoria pendrive USB impermeable." }
+        ],
+        tip: "Protege la memoria USB con contraseña o encriptación para resguardar la privacidad de tus datos familiares."
+      },
+      {
+        title: "09. El Ciclo de Mantenimiento: Siempre Listos",
+        subtitle: "Protocolo continuo de actualización (El Reloj de la Preparación)",
+        badge: "Mantenimiento & Continuidad",
+        points: [
+          { title: "1. Armar & 2. Auditar", desc: "Conformación inicial de los 5 sistemas y revisión técnica cada 6 meses (alineado con solsticios/cambios de hora)." },
+          { title: "3. Rotar", desc: "Consumir y reemplazar alimentos y medicamentos próximos a caducar para mantener vigencia." },
+          { title: "4. Ajustar", desc: "Modificar ropa, calzado y dosis médicas según el cambio de estación o crecimiento de los niños." }
+        ],
+        tip: '"Porque una sociedad consciente de sus riesgos es una sociedad capaz de resistir y recuperarse." — GRDesastres'
       }
     ]
   }
@@ -1110,7 +1167,7 @@ export default function LandingPage({
             className="w-full h-full object-cover opacity-100"
           />
           {/* Insignia Oficial GRDesastres ajustada para cubrir exactamente la marca de agua del video en el Portafolio */}
-          <div className="absolute bottom-24 right-4 sm:bottom-28 sm:right-8 z-20 pointer-events-auto flex items-center space-x-3.5 bg-slate-950/95 backdrop-blur-xl px-4 sm:px-5 py-3.5 sm:py-4 rounded-3xl border border-cyan-500/50 shadow-2xl shadow-black/90 min-w-[210px] sm:min-w-[230px]">
+          <div className="absolute bottom-10 right-4 sm:bottom-12 sm:right-8 z-20 pointer-events-auto flex items-center space-x-3.5 bg-slate-950/95 backdrop-blur-xl px-4 sm:px-5 py-3.5 sm:py-4 rounded-3xl border border-cyan-500/50 shadow-2xl shadow-black/90 min-w-[210px] sm:min-w-[230px]">
             <div className="p-2 rounded-2xl bg-slate-900 border border-cyan-500/40 flex items-center justify-center shrink-0 shadow-inner">
               <img 
                 src={grdesastresLogo} 
