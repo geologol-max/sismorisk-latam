@@ -28,6 +28,7 @@ import {
   Layers
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import grdesastresLogo from "./assets/grdesastres_logo.png";
 import {
   countryNorms,
   structuralTypologies,
@@ -475,20 +476,20 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans print:bg-white print:text-black">
       
-      {/* 1. TOPBAR CORPORATIVA SUPERIOR (Estandariza SpA / CCRPE Standard) */}
+      {/* 1. TOPBAR CORPORATIVA SUPERIOR (GRDesastres Standard) */}
       <div className="bg-[#06101E] text-slate-300 text-xs py-1.5 px-6 border-b border-cyan-900/40 flex flex-wrap items-center justify-between gap-2 print:hidden z-50">
         <div className="flex items-center space-x-4">
           <span className="inline-flex items-center gap-1.5 text-cyan-400 font-semibold text-[11px] uppercase tracking-wider">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Plataforma de Modelado Sísmico LATAM — CCRPE v2.5
+            Plataforma de Modelado Sísmico LATAM — GRDesastres v2.5
           </span>
           <span className="hidden md:inline text-slate-500">|</span>
           <span className="hidden md:inline text-slate-400">Normativas: E.030 (PE), NCh433 (CL), NSR-10 (CO), COVENIN 1756 (VE)</span>
         </div>
         <div className="flex items-center space-x-4 text-[11px] text-slate-400">
-          <span className="hover:text-cyan-300 transition cursor-pointer">Soporte Técnico: info@estandarizaspa.cl</span>
-          <span className="hidden sm:inline">|</span>
-          <span className="hidden sm:inline text-amber-400 font-semibold">Certificación ISO 31000 / RRD</span>
+          <a href="mailto:contacto@grdesastres.com" className="hover:text-cyan-300 transition cursor-pointer font-medium">
+            Contacto: contacto@grdesastres.com
+          </a>
         </div>
       </div>
 
@@ -497,15 +498,19 @@ export default function App() {
         
         {/* LOGO E IDENTIDAD CORPORATIVA */}
         <div className="flex items-center space-x-3 cursor-pointer group" onClick={() => setActiveTab("inicio")} title="Volver al Portal / Inicio">
-          <div className="bg-gradient-to-br from-cyan-500 via-teal-600 to-emerald-600 text-white p-2.5 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-all duration-300 print:border print:border-black">
-            <Activity className="h-6 w-6 text-white" id="app-logo-icon" />
+          <div className="p-1 rounded-xl bg-slate-900/90 border border-cyan-500/30 shadow-md shadow-cyan-500/10 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+            <img 
+              src={grdesastresLogo} 
+              alt="Logo GRDesastres" 
+              className="w-9 h-9 object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.4)]"
+            />
           </div>
           <div>
             <h1 className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-cyan-300 transition duration-200 print:text-black flex flex-wrap items-center gap-2 uppercase leading-none">
               Plataforma de Riesgo Sísmico <span className="text-cyan-300 font-bold text-[10px] bg-cyan-950/80 px-2.5 py-0.5 rounded-full border border-cyan-500/40 print:hidden uppercase tracking-wider">LATAM v2.5</span>
             </h1>
             <p className="text-xs text-slate-400 font-medium print:hidden mt-0.5">
-              Desarrollada por <span className="font-bold text-cyan-400">Geologol</span> — Estándar Estandariza SpA
+              Desarrollada por <span className="font-bold text-cyan-400">Geologol</span> — Plataforma GRDesastres
             </p>
           </div>
         </div>

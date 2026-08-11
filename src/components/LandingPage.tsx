@@ -885,7 +885,7 @@ export default function LandingPage({
                   </div>
                   <div className="flex items-center space-x-3 bg-slate-900 border border-slate-850 px-4 py-3 rounded-xl hover:border-cyan-500/30 transition-colors">
                     <Settings className="h-5 w-5 text-cyan-400 shrink-0" />
-                    <span className="text-[10px] sm:text-xs font-semibold text-slate-200">Gestión de Emergencias ISO 22320</span>
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-200">Gestión Operativa de Emergencias & RRD</span>
                   </div>
                 </div>
               </div>
