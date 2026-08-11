@@ -53,7 +53,7 @@ import jairoNepalRescue2 from "../assets/jairo_nepal_rescue_2.jpg";
 import jairoRescueSearch from "../assets/jairo_rescue_search.jpg";
 import jairoNepalClose from "../assets/jairo_nepal_close.jpg";
 import jairoEcuadorCollapse from "../assets/jairo_ecuador_collapse.jpg";
-import grdesastresLogo from "../assets/grdesastres_logo.jpg";
+import grdesastresLogo from "../assets/grdesastres_logo.png";
 
 interface LandingPageProps {
   onNavigate: (tab: "inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
@@ -578,15 +578,17 @@ export default function LandingPage({
       {/* =========================================================================
           BARRA DE NAVEGACIÓN (NAVBAR)
           ========================================================================= */}
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900">
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-slate-950/85 backdrop-blur-md border-b border-slate-900">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <img 
-              src={grdesastresLogo} 
-              alt="Logo GRDesastres" 
-              className="w-9 h-9 object-contain rounded-xl shadow-md border border-cyan-500/20"
-            />
-            <span className="font-display font-extrabold text-sm tracking-wider uppercase bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+            <div className="p-1 rounded-xl bg-slate-900/90 border border-cyan-500/30 shadow-md shadow-cyan-500/10 flex items-center justify-center">
+              <img 
+                src={grdesastresLogo} 
+                alt="Logo GRDesastres" 
+                className="w-8 h-8 object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.4)]"
+              />
+            </div>
+            <span className="font-display font-extrabold text-sm tracking-wider uppercase bg-gradient-to-r from-white via-cyan-100 to-slate-300 bg-clip-text text-transparent">
               GRDesastres
             </span>
           </div>
@@ -635,18 +637,23 @@ export default function LandingPage({
             <span>Plataforma de Gestión Integral de Riesgos Socionaturales y Tecnológicos</span>
           </div>
 
-          <div className="space-y-4 bg-slate-950/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-800/80 shadow-2xl shadow-black/60 text-left">
-            <div className="flex items-center space-x-4">
-              <img 
-                src={grdesastresLogo} 
-                alt="Emblema GRDesastres" 
-                className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-2xl shadow-xl border border-cyan-500/30 shrink-0"
-              />
+          <div className="space-y-4 bg-slate-950/85 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-800/80 shadow-2xl shadow-black/70 text-left">
+            <div className="flex items-center space-x-4 sm:space-x-5">
+              <div className="relative group shrink-0">
+                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-cyan-500 to-emerald-500 opacity-40 blur-md group-hover:opacity-75 transition duration-500" />
+                <div className="relative p-2.5 rounded-2xl bg-slate-900/95 border border-cyan-500/40 shadow-2xl flex items-center justify-center">
+                  <img 
+                    src={grdesastresLogo} 
+                    alt="Emblema GRDesastres" 
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-[0_4px_12px_rgba(6,182,212,0.5)]"
+                  />
+                </div>
+              </div>
               <div className="space-y-1">
                 <h1 className="font-display font-black text-3xl sm:text-4xl md:text-5xl text-white leading-none drop-shadow-lg">
                   GR<span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 bg-clip-text text-transparent">Desastres</span>
                 </h1>
-                <p className="font-display text-xs sm:text-sm font-bold text-slate-300 drop-shadow-sm">
+                <p className="font-display text-xs sm:text-sm font-bold text-cyan-300/90 drop-shadow-sm">
                   Gestión y Reducción del Riesgo de Desastres en América Latina
                 </p>
               </div>
@@ -1435,12 +1442,14 @@ export default function LandingPage({
             
             {/* Columna 1: Marca e Identidad */}
             <div className="space-y-4 md:col-span-1">
-              <div className="flex items-center space-x-3">
-                <img 
-                  src={grdesastresLogo} 
-                  alt="Emblema GRDesastres" 
-                  className="w-12 h-12 object-contain rounded-xl shadow-lg border border-cyan-500/20"
-                />
+              <div className="flex items-center space-x-3.5">
+                <div className="p-1.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 shadow-lg shadow-cyan-500/10 flex items-center justify-center">
+                  <img 
+                    src={grdesastresLogo} 
+                    alt="Emblema GRDesastres" 
+                    className="w-10 h-10 object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.3)]"
+                  />
+                </div>
                 <span className="font-extrabold text-white text-base tracking-wider uppercase">
                   GRDesastres
                 </span>
