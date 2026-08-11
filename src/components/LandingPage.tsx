@@ -53,6 +53,7 @@ import jairoNepalRescue2 from "../assets/jairo_nepal_rescue_2.jpg";
 import jairoRescueSearch from "../assets/jairo_rescue_search.jpg";
 import jairoNepalClose from "../assets/jairo_nepal_close.jpg";
 import jairoEcuadorCollapse from "../assets/jairo_ecuador_collapse.jpg";
+import grdesastresLogo from "../assets/grdesastres_logo.jpg";
 
 interface LandingPageProps {
   onNavigate: (tab: "inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
@@ -579,11 +580,13 @@ export default function LandingPage({
           ========================================================================= */}
       <nav className="fixed top-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 to-emerald-500 flex items-center justify-center font-black text-slate-950 tracking-wider">
-              GR
-            </div>
-            <span className="font-display font-extrabold text-sm tracking-wider uppercase bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+          <div className="flex items-center space-x-3">
+            <img 
+              src={grdesastresLogo} 
+              alt="Logo GRDesastres" 
+              className="w-9 h-9 object-contain rounded-xl shadow-md border border-cyan-500/20"
+            />
+            <span className="font-display font-extrabold text-sm tracking-wider uppercase bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
               GRDesastres
             </span>
           </div>
@@ -632,15 +635,24 @@ export default function LandingPage({
             <span>Plataforma de Gestión Integral de Riesgos Socionaturales y Tecnológicos</span>
           </div>
 
-          <div className="space-y-3 bg-slate-950/75 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-800/80 shadow-2xl shadow-black/60 text-left">
-            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-white leading-none drop-shadow-lg">
-              GR<span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 bg-clip-text text-transparent">Desastres</span>
-            </h1>
-            <p className="font-display text-base md:text-lg font-bold text-slate-100 drop-shadow-sm">
-              Gestión y Reducción del Riesgo de Desastres en América Latina
-            </p>
+          <div className="space-y-4 bg-slate-950/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-800/80 shadow-2xl shadow-black/60 text-left">
+            <div className="flex items-center space-x-4">
+              <img 
+                src={grdesastresLogo} 
+                alt="Emblema GRDesastres" 
+                className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-2xl shadow-xl border border-cyan-500/30 shrink-0"
+              />
+              <div className="space-y-1">
+                <h1 className="font-display font-black text-3xl sm:text-4xl md:text-5xl text-white leading-none drop-shadow-lg">
+                  GR<span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 bg-clip-text text-transparent">Desastres</span>
+                </h1>
+                <p className="font-display text-xs sm:text-sm font-bold text-slate-300 drop-shadow-sm">
+                  Gestión y Reducción del Riesgo de Desastres en América Latina
+                </p>
+              </div>
+            </div>
 
-            <p className="text-sm md:text-base text-slate-300 leading-relaxed drop-shadow pt-2">
+            <p className="text-sm md:text-base text-slate-300 leading-relaxed drop-shadow pt-1 border-t border-slate-800/70">
               GRDesastres es una plataforma técnica y educativa integral enfocada en la evaluación de vulnerabilidad estructural, modelado dinámico de edificaciones ante sismos y capacitación en mitigación de riesgos. Unimos la ingeniería aplicada, el análisis de datos y las normativas internacionales para fortalecer la resiliencia ciudadana e institucional ante eventos extremos.
             </p>
           </div>
@@ -1423,11 +1435,13 @@ export default function LandingPage({
             
             {/* Columna 1: Marca e Identidad */}
             <div className="space-y-4 md:col-span-1">
-              <div className="flex items-center space-x-2.5">
-                <div className="bg-gradient-to-tr from-cyan-500 to-emerald-500 p-2 rounded-xl text-slate-950 font-black">
-                  <Activity className="h-5 w-5" />
-                </div>
-                <span className="font-extrabold text-white text-sm tracking-wider uppercase">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src={grdesastresLogo} 
+                  alt="Emblema GRDesastres" 
+                  className="w-12 h-12 object-contain rounded-xl shadow-lg border border-cyan-500/20"
+                />
+                <span className="font-extrabold text-white text-base tracking-wider uppercase">
                   GRDesastres
                 </span>
               </div>
