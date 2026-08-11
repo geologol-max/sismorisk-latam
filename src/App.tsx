@@ -475,51 +475,71 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans print:bg-white print:text-black">
       
-      {/* HEADER DE LA APLICACIÓN */}
-      <header className="bg-white border-b border-slate-200 py-3.5 px-6 flex flex-wrap items-center justify-between shadow-sm sticky top-0 z-50 print:relative print:border-b-2 print:border-black print:bg-white">
+      {/* 1. TOPBAR CORPORATIVA SUPERIOR (Estandariza SpA / CCRPE Standard) */}
+      <div className="bg-[#06101E] text-slate-300 text-xs py-1.5 px-6 border-b border-cyan-900/40 flex flex-wrap items-center justify-between gap-2 print:hidden z-50">
+        <div className="flex items-center space-x-4">
+          <span className="inline-flex items-center gap-1.5 text-cyan-400 font-semibold text-[11px] uppercase tracking-wider">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Plataforma de Modelado Sísmico LATAM — CCRPE v2.5
+          </span>
+          <span className="hidden md:inline text-slate-500">|</span>
+          <span className="hidden md:inline text-slate-400">Normativas: E.030 (PE), NCh433 (CL), NSR-10 (CO), COVENIN 1756 (VE)</span>
+        </div>
+        <div className="flex items-center space-x-4 text-[11px] text-slate-400">
+          <span className="hover:text-cyan-300 transition cursor-pointer">Soporte Técnico: info@estandarizaspa.cl</span>
+          <span className="hidden sm:inline">|</span>
+          <span className="hidden sm:inline text-amber-400 font-semibold">Certificación ISO 31000 / RRD</span>
+        </div>
+      </div>
+
+      {/* 2. HEADER Y NAVBAR PRINCIPAL EN CRISTAL OCEAN NAVY */}
+      <header className="bg-[#0A192F]/95 backdrop-blur-md border-b border-cyan-900/50 py-3 px-6 flex flex-wrap items-center justify-between shadow-xl sticky top-0 z-50 print:relative print:bg-white print:text-black print:border-b-2 print:border-black">
+        
+        {/* LOGO E IDENTIDAD CORPORATIVA */}
         <div className="flex items-center space-x-3 cursor-pointer group" onClick={() => setActiveTab("inicio")} title="Volver al Portal / Inicio">
-          <div className="bg-blue-600 text-white p-2 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/10 group-hover:bg-blue-700 transition duration-200 print:border print:border-black">
-            <Activity className="h-6 w-6" id="app-logo-icon" />
+          <div className="bg-gradient-to-br from-cyan-500 via-teal-600 to-emerald-600 text-white p-2.5 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-all duration-300 print:border print:border-black">
+            <Activity className="h-6 w-6 text-white" id="app-logo-icon" />
           </div>
           <div>
-            <h1 className="text-base sm:text-lg font-black tracking-tight text-slate-900 group-hover:text-blue-600 transition duration-200 print:text-black flex flex-wrap items-center gap-1.5 font-display uppercase leading-none">
-              Plataforma de Modelado de Riesgo Sísmico <span className="text-blue-600 font-bold text-[10px] bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 print:hidden uppercase tracking-wider">LATAM v1.0</span>
+            <h1 className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-cyan-300 transition duration-200 print:text-black flex flex-wrap items-center gap-2 uppercase leading-none">
+              Plataforma de Riesgo Sísmico <span className="text-cyan-300 font-bold text-[10px] bg-cyan-950/80 px-2.5 py-0.5 rounded-full border border-cyan-500/40 print:hidden uppercase tracking-wider">LATAM v2.5</span>
             </h1>
-            <p className="text-xs text-slate-500 font-medium print:hidden mt-0.5">
-              Desarrollada por <span className="font-bold text-blue-600">Geologol</span> para la Mejora Continua en la Ingeniería Civil y RRD
+            <p className="text-xs text-slate-400 font-medium print:hidden mt-0.5">
+              Desarrollada por <span className="font-bold text-cyan-400">Geologol</span> — Estándar Estandariza SpA
             </p>
           </div>
         </div>
 
-        {/* Gestor de Proyectos */}
-        <div className="flex items-center space-x-3 mt-3 sm:mt-0 print:hidden">
-          <div className="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-1">
-            <span className="text-xs font-mono text-slate-500 px-2">Proyecto:</span>
+        {/* GESTOR DE PROYECTOS CORPORATIVO */}
+        <div className="flex flex-wrap items-center gap-2.5 mt-3 lg:mt-0 print:hidden">
+          
+          <div className="flex items-center bg-[#08182B] border border-cyan-800/60 rounded-lg p-1">
+            <span className="text-[11px] font-mono text-cyan-400 px-2 uppercase font-bold">Eval:</span>
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="bg-transparent text-sm font-semibold text-slate-800 border-none focus:ring-0 outline-none pr-8 py-1 cursor-pointer"
+              className="bg-transparent text-xs font-semibold text-slate-200 border-none focus:ring-0 outline-none pr-8 py-1 cursor-pointer"
               id="project-selector"
             >
               {projects.map((p) => (
-                <option key={p.id} value={p.id} className="bg-white text-slate-800">
+                <option key={p.id} value={p.id} className="bg-[#08182B] text-slate-200">
                   {p.name.substring(0, 32)}{p.name.length > 32 ? "..." : ""}
                 </option>
               ))}
             </select>
           </div>
 
-          <div className="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-1">
+          <div className="flex items-center bg-[#08182B] border border-cyan-800/60 rounded-lg p-1">
             <input
               type="text"
               placeholder="Nueva evaluación..."
               value={newProjectName}
               onChange={(e) => setNewProjectName(e.target.value)}
-              className="bg-transparent border-none text-xs text-slate-700 placeholder-slate-400 focus:outline-none px-2 py-1 w-32 focus:w-44 transition-all"
+              className="bg-transparent border-none text-xs text-slate-200 placeholder-slate-500 focus:outline-none px-2 py-1 w-28 sm:w-36 focus:w-44 transition-all"
             />
             <button
               onClick={handleCreateProject}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-1.5 rounded-md transition duration-200"
+              className="bg-cyan-600 hover:bg-cyan-500 text-white p-1.5 rounded-md transition duration-200 shadow-sm"
               title="Crear Nuevo Proyecto"
             >
               <Plus className="h-4 w-4" />
@@ -529,7 +549,7 @@ export default function App() {
           {projects.length > 1 && (
             <button
               onClick={(e) => handleDeleteProject(selectedProjectId, e)}
-              className="bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 p-2 rounded-lg transition"
+              className="bg-rose-950/60 hover:bg-rose-900 border border-rose-800/60 text-rose-300 p-2 rounded-lg transition"
               title="Eliminar Proyecto Actual"
             >
               <Trash2 className="h-4 w-4" />
@@ -538,86 +558,92 @@ export default function App() {
 
           <button
             onClick={handleExportPDF}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-3.5 rounded-lg flex items-center space-x-2 transition shadow-md shadow-blue-500/10"
+            className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white text-xs font-bold py-2 px-3.5 rounded-lg flex items-center space-x-2 transition shadow-lg shadow-cyan-900/30 cursor-pointer"
           >
             <Download className="h-4 w-4" />
-            <span>Exportar Reporte</span>
+            <span className="hidden sm:inline">Exportar Reporte</span>
           </button>
         </div>
       </header>
 
-      {/* Barra de Navegación Principal de la Aplicación */}
-      <div className="bg-white border-b border-slate-200/80 px-6 py-2.5 flex items-center justify-between shadow-sm print:hidden">
-        <div className="flex items-center space-x-2">
-          <Layers className="text-blue-600 h-4 w-4" />
-          <span className="text-xs font-black uppercase text-slate-800 tracking-wider font-display">Módulos de Análisis:</span>
+      {/* BARRA DE NAVEGACIÓN POR MÓDULOS DE ANÁLISIS (TABS CORPORATIVAS) */}
+      <div className="bg-[#08182B] border-b border-cyan-900/40 px-6 py-2 flex items-center justify-between shadow-md overflow-x-auto print:hidden">
+        <div className="flex items-center space-x-2 shrink-0 pr-4">
+          <Layers className="text-cyan-400 h-4 w-4" />
+          <span className="text-[11px] font-black uppercase text-cyan-300 tracking-wider hidden sm:inline">Módulos SPA:</span>
         </div>
-        <div className="flex items-center bg-slate-100 rounded-xl p-1">
+        
+        <div className="flex items-center bg-[#06101E] border border-cyan-900/50 rounded-xl p-1 space-x-1 shrink-0">
           <button
             onClick={() => setActiveTab("inicio")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
               activeTab === "inicio"
-                ? "bg-white text-blue-600 shadow-sm border border-slate-200/50"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md"
+                : "text-slate-400 hover:text-cyan-200 hover:bg-cyan-950/50"
             }`}
           >
             <Globe className="h-3.5 w-3.5" />
             <span>Inicio / Portal</span>
           </button>
+          
           <button
             onClick={() => setActiveTab("modelo")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
               activeTab === "modelo" || activeTab === "espectro"
-                ? "bg-white text-blue-600 shadow-sm border border-slate-200/50"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md"
+                : "text-slate-400 hover:text-cyan-200 hover:bg-cyan-950/50"
             }`}
           >
             <Activity className="h-3.5 w-3.5" />
             <span>Simulador Dinámico MDOF</span>
           </button>
+
           <button
             onClick={() => setActiveTab("vulnerabilidad")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
               activeTab === "vulnerabilidad"
-                ? "bg-white text-blue-600 shadow-sm border border-slate-200/50"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md"
+                : "text-slate-400 hover:text-cyan-200 hover:bg-cyan-950/50"
             }`}
           >
             <ClipboardList className="h-3.5 w-3.5" />
-            <span>Evaluación FUNVISIS (Venezuela)</span>
+            <span>FUNVISIS (Venezuela)</span>
           </button>
+
           <button
             onClick={() => setActiveTab("fema")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
               activeTab === "fema"
-                ? "bg-white text-blue-600 shadow-sm border border-slate-200/50"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md"
+                : "text-slate-400 hover:text-cyan-200 hover:bg-cyan-950/50"
             }`}
           >
             <FileText className="h-3.5 w-3.5" />
-            <span>Evaluación FEMA P-154 (RVS)</span>
+            <span>FEMA P-154 (RVS)</span>
           </button>
+
           <button
             onClick={() => setActiveTab("gndt")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
               activeTab === "gndt"
-                ? "bg-white text-blue-600 shadow-sm border border-slate-200/50"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md"
+                : "text-slate-400 hover:text-cyan-200 hover:bg-cyan-950/50"
             }`}
           >
             <Activity className="h-3.5 w-3.5" />
-            <span>Índice de Vulnerabilidad (GNDT)</span>
+            <span>Índice GNDT</span>
           </button>
+
           <button
             onClick={() => setActiveTab("simulador")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
               activeTab === "simulador"
-                ? "bg-white text-blue-600 shadow-sm border border-slate-200/50"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md"
+                : "text-slate-400 hover:text-cyan-200 hover:bg-cyan-950/50"
             }`}
           >
-            <Sparkles className="h-3.5 w-3.5 text-blue-500" />
-            <span>Simulador Sismológico</span>
+            <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+            <span>Sismológico 3D</span>
           </button>
         </div>
       </div>

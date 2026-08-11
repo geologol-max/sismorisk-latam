@@ -55,7 +55,8 @@ import jairoNepalClose from "../assets/jairo_nepal_close.jpg";
 import jairoEcuadorCollapse from "../assets/jairo_ecuador_collapse.jpg";
 
 interface LandingPageProps {
-  onNavigate: (tab: "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
+  onNavigate: (tab: "inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
+  heroVideoUrl?: string;
 }
 
 // ----------------------------------------------------
@@ -231,7 +232,10 @@ const BLOGS_DB: BlogItem[] = [
   }
 ];
 
-export default function LandingPage({ onNavigate }: LandingPageProps) {
+export default function LandingPage({ 
+  onNavigate, 
+  heroVideoUrl = "https://res.cloudinary.com/rtzau8g7/video/upload/v1786408885/quiero_un_video_relacionado_a_k6mfem.mp4" 
+}: LandingPageProps) {
   // --- Estados para Modales Interactivos ---
   const [activeModal, setActiveModal] = useState<"aula" | "biblioteca" | "heroes" | "blogs" | null>(null);
 
@@ -378,19 +382,15 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           SECCIÓN HERO (CABECERA)
           ========================================================================= */}
       <header className="relative w-full pt-32 pb-24 px-6 md:px-12 flex flex-col items-center justify-center text-center min-h-[85vh] overflow-hidden">
-        {/* Imagen de fondo de colapso sísmico a lo ancho de la página */}
+        {/* Video de fondo a lo ancho de la página (reproducción automática, en bucle y sin overlay) */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          <img 
-            src={earthquakeHero} 
-            alt="Colapso Sísmico" 
+          <video 
+            src={heroVideoUrl} 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
             className="w-full h-full object-cover opacity-100"
-          />
-          {/* Degradado sutil solo en bordes superior e inferior para integrar la foto */}
-          <div 
-            className="absolute inset-0"
-            style={{ 
-              backgroundImage: 'linear-gradient(to top, rgba(2,6,23,1) 0%, rgba(2,6,23,0.25) 15%, rgba(2,6,23,0.15) 50%, rgba(2,6,23,0.25) 85%, rgba(2,6,23,0.85) 100%)'
-            }}
           />
         </div>
 
@@ -1467,16 +1467,78 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* =========================================================================
-          PIE DE PÁGINA (FOOTER)
+          PIE DE PÁGINA CORPORATIVO (ESTÁNDAR ESTANDARIZA SPA / CCRPE)
           ========================================================================= */}
-      <footer className="bg-slate-950 py-8 px-6 border-t border-slate-900">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 text-center">
-          <p>© Jairo Ovallos 2026. Todos los derechos reservados.</p>
-          <div className="flex items-center space-x-2">
-            <span>Desarrollado con React + TS + Tailwind v4 + Motion</span>
-            <span>•</span>
-            <span className="text-slate-400">geologol</span>
+      <footer className="bg-[#06101E] text-slate-300 py-12 px-6 border-t border-cyan-900/50">
+        <div className="max-w-7xl mx-auto space-y-8">
+          
+          {/* Fila Principal de Navegación y Marca */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            
+            {/* Columna 1: Marca e Identidad */}
+            <div className="space-y-4 md:col-span-1">
+              <div className="flex items-center space-x-2.5">
+                <div className="bg-gradient-to-tr from-cyan-500 to-emerald-500 p-2 rounded-xl text-slate-950 font-black">
+                  <Activity className="h-5 w-5" />
+                </div>
+                <span className="font-extrabold text-white text-sm tracking-wider uppercase">
+                  ESTANDARIZA SpA
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Plataforma corporativa de modelado de riesgo sísmico y evaluación de vulnerabilidad estructural para edificaciones en Latinoamérica.
+              </p>
+              <div className="flex items-center space-x-2">
+                <span className="badge-corporate-cyan">
+                  <Shield className="h-3 w-3" /> ISO 31000 / RRD
+                </span>
+              </div>
+            </div>
+
+            {/* Columna 2: Módulos de Cálculo */}
+            <div className="space-y-3">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider text-cyan-400">Módulos de Análisis</h4>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li><button onClick={() => onNavigate("modelo")} className="hover:text-cyan-300 transition cursor-pointer">Simulador Dinámico MDOF</button></li>
+                <li><button onClick={() => onNavigate("vulnerabilidad")} className="hover:text-cyan-300 transition cursor-pointer">Cribado FUNVISIS (Venezuela)</button></li>
+                <li><button onClick={() => onNavigate("fema")} className="hover:text-cyan-300 transition cursor-pointer">Evaluación FEMA P-154 (RVS)</button></li>
+                <li><button onClick={() => onNavigate("gndt")} className="hover:text-cyan-300 transition cursor-pointer">Índice Vulnerabilidad GNDT</button></li>
+                <li><button onClick={() => onNavigate("simulador")} className="hover:text-cyan-300 transition cursor-pointer">Simulador Sismológico 3D</button></li>
+              </ul>
+            </div>
+
+            {/* Columna 3: Normativas Compatibles */}
+            <div className="space-y-3">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider text-teal-400">Normativas LATAM</h4>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li>Perú: Norma E.030 Sismorresistente</li>
+                <li>Chile: Norma NCh433 & NCh2745</li>
+                <li>Colombia: Reglamento NSR-10</li>
+                <li>Venezuela: COVENIN 1756-1:2019</li>
+                <li>Ecuador: NEC-SE-DS 2015</li>
+              </ul>
+            </div>
+
+            {/* Columna 4: Confidencialidad y NDA */}
+            <div className="space-y-3">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider text-amber-400">Aviso NDA & Seguridad</h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed bg-[#08182B] p-3 rounded-xl border border-cyan-900/40">
+                Los datos de proyectos e inspecciones ingresados se procesan en el entorno local del usuario cumpliendo protocolos de confidencialidad NDA e ISO/IEC 27001.
+              </p>
+            </div>
+
           </div>
+
+          {/* Fila Inferior de Copyright y Créditos */}
+          <div className="pt-6 border-t border-cyan-900/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
+            <p>© 2026 Estandariza SpA & Geologol — Plataforma de Riesgo Sísmico LATAM. Todos los derechos reservados.</p>
+            <div className="flex items-center space-x-3 text-slate-400">
+              <span className="text-cyan-400 font-mono">IBM Plex Sans • Tailwind v4</span>
+              <span>•</span>
+              <span className="hover:text-white transition cursor-pointer" onClick={() => onNavigate("inicio")}>Portal CCRPE</span>
+            </div>
+          </div>
+
         </div>
       </footer>
 
