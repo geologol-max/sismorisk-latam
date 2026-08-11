@@ -582,20 +582,7 @@ export default function LandingPage({
                 </div>
               </div>
 
-              {/* Bloque 3: Sinergia con la Gran Minería */}
-              <div className="space-y-4">
-                <h3 className="font-display font-bold text-xl md:text-2xl text-white border-l-4 border-yellow-500 pl-4 uppercase">
-                  Sinergia con la Gran Minería y Estándares de Clase Mundial
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  En Chile, he trasladado este riguroso entrenamiento en respuesta rápida, gestión documental y mitigación de amenazas al sector industrial de mayor exigencia: la gran minería y la infraestructura. Desempeñándome como Administrador de Contratos y Jefe de Operaciones en faenas de alta complejidad (como SQM y Compañía Minera Los Pelambres), he liderado:
-                </p>
-                <ul className="text-xs sm:text-sm text-slate-400 space-y-2 list-disc list-inside">
-                  <li>El diseño e implementación de protocolos de seguridad y planes de contingencia para brigadas de emergencia industriales.</li>
-                  <li>La gestión de riesgos y la continuidad operacional aplicando normativas internacionales críticas de seguridad y emergencias (<strong className="text-white">ISO 22320</strong> para gestión de emergencias, <strong className="text-white">ISO 39001</strong> para seguridad vial e <strong className="text-white">ISO 9001</strong> para control de calidad).</li>
-                  <li>La optimización de procesos mediante el análisis de datos avanzados (<strong className="text-white">Data Science en Python</strong>) y el control estricto de KPIs operacionales.</li>
-                </ul>
-              </div>
+
 
               {/* Bloque 4: ¿Por qué nace grdesastres.com? */}
               <div className="space-y-4">
