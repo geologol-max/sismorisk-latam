@@ -232,12 +232,242 @@ const BLOGS_DB: BlogItem[] = [
   }
 ];
 
+// --- DATOS DEL AULA VIRTUAL: MODULOS DE FORMACION Y CAPACITACION ---
+interface AulaSlide {
+  title: string;
+  subtitle: string;
+  badge: string;
+  points: { title: string; desc: string }[];
+  tip?: string;
+}
+
+interface AulaTopicData {
+  id: "terremotos" | "incendios" | "inundaciones" | "kit";
+  title: string;
+  category: string;
+  color: "cyan" | "orange" | "blue" | "emerald";
+  slides: AulaSlide[];
+}
+
+const AULA_TOPICS_DATA: Record<"terremotos" | "incendios" | "inundaciones" | "kit", AulaTopicData> = {
+  terremotos: {
+    id: "terremotos",
+    title: "Prevención y Autoprotección Sísmica",
+    category: "Geodinámica & Riesgo Estructural",
+    color: "cyan",
+    slides: [
+      {
+        title: "01. Fenómeno Sísmico y Diagnóstico de Riesgo",
+        subtitle: "Comprender la amenaza sísmica en la edificación",
+        badge: "Fundamentos Técnicos",
+        points: [
+          { title: "Liberación de Energía", desc: "Los sismos se originan por el rompimiento repentino de fallas geológicas o interacción de placas tectónicas." },
+          { title: "Ondas P y S", desc: "Las ondas P (compresión) llegan primero; las ondas S (corte) causan los mayores desplazamientos laterales en edificios." },
+          { title: "Resonancia Estructural", desc: "Si el periodo del suelo coincide con el de la edificación, las oscilaciones se amplifican drásticamente." }
+        ],
+        tip: "Conocer la zona sísmica y el tipo de suelo de tu comuna permite tomar medidas de refuerzo oportunas."
+      },
+      {
+        title: "02. Antes del Sismo: Prevención y Preparación",
+        subtitle: "Medidas anticipadas en hogares, escuelas y oficinas",
+        badge: "Acción Preventiva",
+        points: [
+          { title: "Fijación de Enseres", desc: "Asegura estantes altos, libreros, calentadores de agua y televisores a elementos estructurales rígidos." },
+          { title: "Identificación de Zonas Seguras", desc: "Ubica mesas resistentes, dinteles de puertas y columnas de hormigón armado como puntos de cobertura." },
+          { title: "Plan de Emergencia Familiar", desc: "Acuerda puntos de encuentro exterior y asigna roles claros para la desconexión de suministros." }
+        ],
+        tip: "Efectúa simulacros de evacuación al menos dos veces al año con tu familia o equipo de trabajo."
+      },
+      {
+        title: "03. Durante el Sismo: Protocolo de Respuesta",
+        subtitle: "Conducta segura mientras el suelo se encuentra vibrando",
+        badge: "Respuesta Inmediata",
+        points: [
+          { title: "Agáchate, Cúbrete y Aférrate", desc: "Protégete de rodillas bajo una mesa firme, cubre tu cabeza con los brazos y aférrate a la estructura." },
+          { title: "Puntos Peligrosos", desc: "Mantente alejado de ventanas de vidrio, fachadas exteriores, lámparas suspendidas y libreros desprotegidos." },
+          { title: "No Usar Ascensores", desc: "Jamás utilices ascensores durante o inmediatamente después de un temblor por riesgo de atrapamiento." }
+        ],
+        tip: "Si estás al aire libre, aléjate de cables de alta tensión, postes, cornisas y edificios con ventanales."
+      },
+      {
+        title: "04. Después del Sismo: Evaluación y Evacuación",
+        subtitle: "Acciones posteriores al cese del movimiento telúrico",
+        badge: "Recuperación & Seguridad",
+        points: [
+          { title: "Inspección Visual de Daños", desc: "Verifica si existen grietas en diagonal (en X) en muros de carga o columnas antes de continuar habitando." },
+          { title: "Corte de Suministros", desc: "Cierra las llaves de paso de gas y el interruptor general de luz si sospechas fugas o fallas." },
+          { title: "Evacuación Calmada", desc: "Evacúa por las escaleras hacia la zona de seguridad portando la mochila de emergencia de 72 horas." }
+        ],
+        tip: "Infórmate a través de emisoras de radio a batería y canales de emergencia oficiales."
+      }
+    ]
+  },
+  incendios: {
+    id: "incendios",
+    title: "Prevención y Control de Incendios Estructurales",
+    category: "Seguridad Contra Incendios",
+    color: "orange",
+    slides: [
+      {
+        title: "01. Dinámica del Fuego y Riesgos Principales",
+        subtitle: "Comportamiento del fuego en espacios cerrados",
+        badge: "Física del Fuego",
+        points: [
+          { title: "Triángulo del Fuego", desc: "El fuego requiere Combustible, Comburente (Oxígeno) y Fuente de Calor para iniciar la combustión." },
+          { title: "Clases de Fuego", desc: "Clase A (sólidos), Clase B (líquidos inflamables), Clase C (equipos eléctricos energizados)." },
+          { title: "Gases Tóxicos", desc: "La causa N°1 de fatalidades no es el calor, sino la inhalación de monóxido de carbono y humos opacos." }
+        ],
+        tip: "Un conato de incendio puede propagarse a toda una habitación en menos de 3 minutos (Flashover)."
+      },
+      {
+        title: "02. Prevención e Instalaciones Seguras",
+        subtitle: "Eliminar las causas de origen eléctrico y térmico",
+        badge: "Medidas Preventivas",
+        points: [
+          { title: "Control de Redes Eléctricas", desc: "Evita sobrecargar zócalos o adaptadores múltiples; revisa cables desgastados o empalmes defectuosos." },
+          { title: "Detectores de Humo", desc: "Instala detectores fotoeléctricos en pasillos de acceso a dormitorios y prueba sus baterías mensualmente." },
+          { title: "Almacenamiento de Inflamables", desc: "Guarda pintura, solventes y combustibles en recipientes normados lejos de fuentes de ignición." }
+        ],
+        tip: "Mantén despejadas las vías de evacuación y no bloquees puertas con cajas o muebles."
+      },
+      {
+        title: "03. Uso del Extintor y Protocolo de Escape",
+        subtitle: "Acciones de combate inicial de conatos",
+        badge: "Técnica de Combate",
+        points: [
+          { title: "Método PASS", desc: "1. Tira del seguro. 2. Apunta a la base del fuego. 3. Presiona la manilla. 4. Barre de lado a lado." },
+          { title: "Desplazamiento Bajo Humo", desc: "Gatea al ras del suelo si hay presencia de humo denso; el aire más limpio y frío se mantiene abajo." },
+          { title: "Verificación de Puertas", desc: "Toca las puertas con el dorso de la mano antes de abrir: si está caliente, el fuego está al otro lado." }
+        ],
+        tip: "Si tu ropa se enciende: Detente, Tírate al suelo y Rueda tapándote el rostro con las manos."
+      },
+      {
+        title: "04. Alerta y Evacuación de Emergencia",
+        subtitle: "Procedimiento de salida y llamada a servicios de socorro",
+        badge: "Evacuación & Rescate",
+        points: [
+          { title: "Activación de Alarma", desc: "Alerta a todos los ocupantes del recinto a viva voz o mediante los pulsadores de alarma." },
+          { title: "Llamada a Bomberos", desc: "Comunícate de inmediato con el número de emergencias informando dirección exacta y presencia de personas." },
+          { title: "No Regresar jamás", desc: "Una vez que hayas salido del edificio hacia un punto seguro, bajo ninguna circunstancia ingreses de nuevo." }
+        ],
+        tip: "Consensua un punto de encuentro seguro en el exterior para verificar que todos los miembros hayan evacuado."
+      }
+    ]
+  },
+  inundaciones: {
+    id: "inundaciones",
+    title: "Mitigación de Riesgos por Inundaciones y Crecidas",
+    category: "Hidrometeorología & Cuencas",
+    color: "blue",
+    slides: [
+      {
+        title: "01. Amenaza Hidrometeorológica y Dinámica de Aguas",
+        subtitle: "Comprendiendo las crecidas repentinas y desbordes",
+        badge: "Diagnóstico Hidrológico",
+        points: [
+          { title: "Crecidas Repentinas (Flash Floods)", desc: "Ocurren en pocas horas tras precipitaciones intensas en cuencas de alta pendiente." },
+          { title: "Fuerza del Agua", desc: "Apenas 15 cm de agua en movimiento rápido pueden hacer perder el equilibrio a una persona adulta." },
+          { title: "Socavación y Deslizamientos", desc: "El flujo de agua socava los cimientos de muros, puentes y desestabiliza laderas empinadas." }
+        ],
+        tip: "Infórmate si tu vivienda se ubica en el lecho inundable o en la cota de desborde histórico de ríos."
+      },
+      {
+        title: "02. Preparación y Reducción del Riesgo",
+        subtitle: "Acciones comunitarias e individuales previas al invierno",
+        badge: "Acción Preventiva",
+        points: [
+          { title: "Mantenimiento de Drenajes", desc: "Limpia canaletas, tejados, bajantes de agua y sumideros comunitarios para evitar anegamientos." },
+          { title: "Protección de Documentos", desc: "Almacena escrituras, identificación y pólizas en bolsas de plástico con cierre hermético (Ziploc)." },
+          { title: "Elevación de Equipos", desc: "Ubica electrodomésticos, enchufes y bienes de valor en niveles superiores si vives en zona inundable." }
+        ],
+        tip: "Prepara barreras de contención (sacos de arena) si existe riesgo de escorrentía hacia el inmueble."
+      },
+      {
+        title: "03. Actuación Durante la Emergencia",
+        subtitle: "Protocolo de autoprotección ante el avance del agua",
+        badge: "Respuesta en Crisis",
+        points: [
+          { title: "Corte Eléctrico Preventivo", desc: "Desconecta el interruptor general de luz antes de que el agua entre en contacto con tableros o enchufes." },
+          { title: "Evacuación a Zonas Altas", desc: "Abandona las zonas bajas dirigiéndote a los puntos de evacuación o cumbres previamente señalizadas." },
+          { title: "No Cruzar Corrientes", desc: "Nunca intentes cruzar ríos, zanjas o calles inundadas a pie ni a bordo de vehículos." }
+        ],
+        tip: "Un automóvil puede ser arrastrado o flotar con tan solo 30 a 50 cm de corriente de agua."
+      },
+      {
+        title: "04. Recuperación Sanitaria y Retorno Seguro",
+        subtitle: "Medidas de desinfección e higiene post-inundación",
+        badge: "Sanidad & Retorno",
+        points: [
+          { title: "Desinfección de Ámbitos", desc: "Lava y desinfecta con cloro todas las paredes, pisos y utensilios que hayan tenido contacto con aguas servidas." },
+          { title: "Consumo de Agua Segura", desc: "Bebe únicamente agua embotellada o hiérvela durante 3 a 5 minutos antes de su consumo." },
+          { title: "Alimentos Contaminados", desc: "Desecha cualquier alimento fresco o empaquetado que haya estado en contacto con el agua de la crecida." }
+        ],
+        tip: "Inspecciona la integridad estructural de la vivienda antes de volver a habitarla tras la bajada del agua."
+      }
+    ]
+  },
+  kit: {
+    id: "kit",
+    title: "Mochila de Emergencia de 72 Horas",
+    category: "Autonomía & Sobrevivencia",
+    color: "emerald",
+    slides: [
+      {
+        title: "01. Concepto y Autonomía de 72 Horas",
+        subtitle: "Sostener a la familia mientras llega la ayuda humanitaria",
+        badge: "Preparación Básica",
+        points: [
+          { title: "Periodo Crítico de 72h", desc: "En desastres mayores, los servicios de agua, luz y rescate pueden tardar hasta 3 días en desplegarse." },
+          { title: "Criterio de Portabilidad", desc: "El kit debe ser una mochila impermeable, fácil de cargar en la espalda por un solo adulto (máx 10-12 kg)." },
+          { title: "Ubicación Estratégica", desc: "Debe estar guardada cerca de la vía de salida principal del inmueble, lista para tomar y evacuar." }
+        ],
+        tip: "Prepara una mochila por cada adulto del hogar e incluye insumos específicos para niños o adultos mayores."
+      },
+      {
+        title: "02. Raciones de Agua y Alimentación Imperecedera",
+        subtitle: "Nutrición e hidratación de supervivencia",
+        badge: "Insumos Vitales",
+        points: [
+          { title: "Hidratación Necesaria", desc: "Almacena mínimo 3 litros de agua potable por persona por día (para beber e higiene básica)." },
+          { title: "Alimentos Compactos", desc: "Selecciona latas con abre fácil (atún, granos), barras energéticas, chocolates, frutos secos y galletas." },
+          { title: "Purificación de Agua", desc: "Incluye pastillas purificadoras de agua o un gotero con cloro doméstico (2 gotas por litro de agua)." }
+        ],
+        tip: "Verifica y rota los alimentos del kit cada 6 meses coincidiendo con el cambio de hora o temporada."
+      },
+      {
+        title: "03. Botiquín de Primeros Auxilios y Fármacos",
+        subtitle: "Atención de heridas leves y medicamentos crónicos",
+        badge: "Salud & Auxilio",
+        points: [
+          { title: "Material de Curación", desc: "Gasas estériles, vendas elásticas, apósitos, cinta adhesiva médica, suero fisiológico y alcohol al 70%." },
+          { title: "Medicamentos de Uso Diario", desc: "Reserva una provisión para al menos 7 días de fármacos para hipertensión, diabetes u otras patologías." },
+          { title: "Instrumental Básico", desc: "Tijeras de trauma, pinzas, termómetro, guantes de nitrilo desechables y mascarillas N95." }
+        ],
+        tip: "Guarda una libreta con los nombres de medicamentos, alergias y tipo de sangre de cada familiar."
+      },
+      {
+        title: "04. Herramientas, Comunicación y Documentación",
+        subtitle: "Equipamiento para señalización y resguardo legal",
+        badge: "Equipamiento Técnico",
+        points: [
+          { title: "Iluminación y Radio", desc: "Linterna LED con pilas de repuesto y radio AM/FM portátil para escuchar comunicados de autoridades." },
+          { title: "Señalamiento y Rescate", desc: "Silbato de emergencia (para hacerse escuchar bajo escombros) y manta térmica de aluminio." },
+          { title: "Copia de Documentos", desc: "Bolsa estanca con duplicado de documentos de identidad, títulos de propiedad, dinero en efectivo y llaves de repuesto." }
+        ],
+        tip: "Mantén cargador portátil (powerbank) con el cable adecuado para tu teléfono móvil."
+      }
+    ]
+  }
+};
+
 export default function LandingPage({ 
   onNavigate, 
   heroVideoUrl = "https://res.cloudinary.com/rtzau8g7/video/upload/v1786408885/quiero_un_video_relacionado_a_k6mfem.mp4" 
 }: LandingPageProps) {
   // --- Estados para Modales Interactivos ---
   const [activeModal, setActiveModal] = useState<"aula" | "biblioteca" | "heroes" | "blogs" | null>(null);
+  const [selectedAulaTopic, setSelectedAulaTopic] = useState<"terremotos" | "incendios" | "inundaciones" | "kit" | null>(null);
+  const [aulaSlideIdx, setAulaSlideIdx] = useState<number>(0);
 
   // --- Aula Interactiva: Estado de la Simulación ---
   const [waveType, setWaveType] = useState<"P" | "S" | "Surface">("S");
@@ -360,7 +590,7 @@ export default function LandingPage({
           
           <div className="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-400">
             <a href="#inicio" className="hover:text-cyan-400 transition-colors">Inicio</a>
-            <a href="#fundador" className="hover:text-cyan-400 transition-colors">El Fundador</a>
+            <a href="#aula-virtual" className="hover:text-cyan-400 transition-colors">Aula Virtual</a>
             <a href="#portafolio" className="hover:text-cyan-400 transition-colors">Portafolio</a>
             <a href="#contacto" className="hover:text-cyan-400 transition-colors">Contacto</a>
           </div>
@@ -424,14 +654,157 @@ export default function LandingPage({
               <ArrowRight className="h-4 w-4" />
             </a>
             <a 
-              href="#fundador" 
+              href="#aula-virtual" 
               className="bg-slate-900/90 hover:bg-slate-855 border border-slate-800 hover:border-slate-700 text-slate-300 font-bold text-xs uppercase px-6 py-3 rounded-xl transition cursor-pointer backdrop-blur-sm"
             >
-              Conocer al Fundador
+              Explorar Aula Virtual
             </a>
           </div>
         </div>
       </header>
+
+      {/* =========================================================================
+          SECCIÓN AULA VIRTUAL (PREPARACIÓN Y PREVENCIÓN DE DESASTRES)
+          ========================================================================= */}
+      <section id="aula-virtual" className="py-24 px-6 border-t border-slate-900 bg-slate-950 relative overflow-hidden">
+        {/* Glow decorativo de fondo */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-cyan-500/5 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-7xl mx-auto space-y-12">
+          
+          {/* Encabezado de la Sección */}
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-full uppercase tracking-wider">
+              Formación & Capacitación Comunitaria
+            </span>
+            <h2 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-wider">
+              Aula Virtual de Preparación y Prevención
+            </h2>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto rounded-full" />
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-2xl mx-auto">
+              Módulos interactivos de autoaprendizaje para el fortalecimiento de capacidades, autoprotección y respuesta efectiva ante amenazas socionaturales y tecnológicas. Haz clic en cada tarjeta para acceder a la presentación guiada.
+            </p>
+          </div>
+
+          {/* Las 04 Tarjetas del Aula Virtual */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
+            
+            {/* Tarjeta 1: Terremotos */}
+            <div 
+              onClick={() => {
+                setSelectedAulaTopic("terremotos");
+                setAulaSlideIdx(0);
+              }}
+              className="bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/50 p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer space-y-4 flex flex-col justify-between group shadow-xl"
+            >
+              <div className="space-y-4">
+                <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Activity className="h-7 w-7" />
+                </div>
+                <div className="space-y-1.5 text-left">
+                  <span className="text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-widest">Módulo 01</span>
+                  <h3 className="font-display font-black text-xl text-white uppercase group-hover:text-cyan-400 transition-colors">
+                    Terremotos
+                  </h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Guía de preparación ante sismos de gran magnitud: ondas P y S, fijación estructural de muebles, zonas de cobertura y protocolos de evacuación segura.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono">
+                <span>Abrir Presentación</span>
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* Tarjeta 2: Incendios */}
+            <div 
+              onClick={() => {
+                setSelectedAulaTopic("incendios");
+                setAulaSlideIdx(0);
+              }}
+              className="bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-orange-500/50 p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer space-y-4 flex flex-col justify-between group shadow-xl"
+            >
+              <div className="space-y-4">
+                <div className="w-14 h-14 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-orange-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Flame className="h-7 w-7" />
+                </div>
+                <div className="space-y-1.5 text-left">
+                  <span className="text-[9px] font-mono font-bold text-orange-400 uppercase tracking-widest">Módulo 02</span>
+                  <h3 className="font-display font-black text-xl text-white uppercase group-hover:text-orange-400 transition-colors">
+                    Incendios
+                  </h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Prevención de fuego estructural e interfase forestal: triángulo del fuego, manejo de extintores (PQS/CO2), corte de suministros y desplazamiento bajo humo tóxico.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-bold text-orange-400 uppercase tracking-wider font-mono">
+                <span>Abrir Presentación</span>
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* Tarjeta 3: Inundaciones */}
+            <div 
+              onClick={() => {
+                setSelectedAulaTopic("inundaciones");
+                setAulaSlideIdx(0);
+              }}
+              className="bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-blue-500/50 p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer space-y-4 flex flex-col justify-between group shadow-xl"
+            >
+              <div className="space-y-4">
+                <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Globe className="h-7 w-7" />
+                </div>
+                <div className="space-y-1.5 text-left">
+                  <span className="text-[9px] font-mono font-bold text-blue-400 uppercase tracking-widest">Módulo 03</span>
+                  <h3 className="font-display font-black text-xl text-white uppercase group-hover:text-blue-400 transition-colors">
+                    Inundaciones
+                  </h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Mitigación de riesgos por lluvias intensas y crecidas repentinas: alertas meteorológicas, evacuación hacia zonas altas y prevención de contaminación de agua potable.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-bold text-blue-400 uppercase tracking-wider font-mono">
+                <span>Abrir Presentación</span>
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* Tarjeta 4: Kit de Emergencias */}
+            <div 
+              onClick={() => {
+                setSelectedAulaTopic("kit");
+                setAulaSlideIdx(0);
+              }}
+              className="bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/50 p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer space-y-4 flex flex-col justify-between group shadow-xl"
+            >
+              <div className="space-y-4">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Shield className="h-7 w-7" />
+                </div>
+                <div className="space-y-1.5 text-left">
+                  <span className="text-[9px] font-mono font-bold text-emerald-400 uppercase tracking-widest">Módulo 04</span>
+                  <h3 className="font-display font-black text-xl text-white uppercase group-hover:text-emerald-400 transition-colors">
+                    Kit de Emergencias
+                  </h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Mochila de 72 horas para supervivencia familiar: insumos de primeros auxilios, agua (3L/persona/día), alimentos imperecederos, linternas y documentos resguardados.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-bold text-emerald-400 uppercase tracking-wider font-mono">
+                <span>Abrir Presentación</span>
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
 
       {/* =========================================================================
           SECCIÓN EL EQUIPO / EL FUNDADOR (DETRÁS DE GRDESASTRES)
@@ -693,17 +1066,15 @@ export default function LandingPage({
           SECCIÓN PORTAFOLIO: PLATAFORMA SÍSMICA Y TRABAJOS
           ========================================================================= */}
       <section id="portafolio" className="relative py-24 px-6 border-t border-slate-900 overflow-hidden">
-        {/* Imagen de fondo para toda la sección de portafolio */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <img
-            src={collapsedBuilding}
-            alt="Fondo sección portafolio"
+        {/* Video de fondo para toda la sección de portafolio (reproducción automática, en bucle y sin overlay) */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <video
+            src="https://res.cloudinary.com/rtzau8g7/video/upload/v1786410279/quiero_un_video_donde_se_muest_upxuqj.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
             className="w-full h-full object-cover opacity-100"
-          />
-          {/* Overlay sutil solo en bordes — mismo estilo que la sección Hero */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, rgba(2,6,23,1) 0%, rgba(2,6,23,0.25) 15%, rgba(2,6,23,0.15) 50%, rgba(2,6,23,0.25) 85%, rgba(2,6,23,0.90) 100%)' }}
           />
         </div>
 
@@ -1153,7 +1524,7 @@ export default function LandingPage({
       </section>
 
       {/* =========================================================================
-          PIE DE PÁGINA CORPORATIVO (ESTÁNDAR ESTANDARIZA SPA / CCRPE)
+          PIE DE PÁGINA CORPORATIVO (GRDESASTRES)
           ========================================================================= */}
       <footer className="bg-[#06101E] text-slate-300 py-12 px-6 border-t border-cyan-900/50">
         <div className="max-w-7xl mx-auto space-y-8">
@@ -1168,15 +1539,15 @@ export default function LandingPage({
                   <Activity className="h-5 w-5" />
                 </div>
                 <span className="font-extrabold text-white text-sm tracking-wider uppercase">
-                  ESTANDARIZA SpA
+                  GRDesastres
                 </span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Plataforma corporativa de modelado de riesgo sísmico y evaluación de vulnerabilidad estructural para edificaciones en Latinoamérica.
+                Plataforma integral de modelado de riesgo sísmico, capacitación y evaluación de vulnerabilidad estructural para edificaciones en Latinoamérica.
               </p>
               <div className="flex items-center space-x-2">
                 <span className="badge-corporate-cyan">
-                  <Shield className="h-3 w-3" /> ISO 31000 / RRD
+                  <Shield className="h-3 w-3" /> Resiliencia & Riesgo Sísmico
                 </span>
               </div>
             </div>
@@ -1209,7 +1580,7 @@ export default function LandingPage({
             <div className="space-y-3">
               <h4 className="text-xs font-bold text-white uppercase tracking-wider text-amber-400">Aviso NDA & Seguridad</h4>
               <p className="text-[11px] text-slate-400 leading-relaxed bg-[#08182B] p-3 rounded-xl border border-cyan-900/40">
-                Los datos de proyectos e inspecciones ingresados se procesan en el entorno local del usuario cumpliendo protocolos de confidencialidad NDA e ISO/IEC 27001.
+                Los datos de proyectos e inspecciones ingresados se procesan localmente en el navegador garantizando estricta privacidad.
               </p>
             </div>
 
@@ -1217,11 +1588,11 @@ export default function LandingPage({
 
           {/* Fila Inferior de Copyright y Créditos */}
           <div className="pt-6 border-t border-cyan-900/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
-            <p>© 2026 Estandariza SpA & Geologol — Plataforma de Riesgo Sísmico LATAM. Todos los derechos reservados.</p>
+            <p>© 2026 GRDesastres — Plataforma de Riesgo Sísmico LATAM. Todos los derechos reservados.</p>
             <div className="flex items-center space-x-3 text-slate-400">
-              <span className="text-cyan-400 font-mono">IBM Plex Sans • Tailwind v4</span>
+              <span className="text-cyan-400 font-mono">GRDesastres • React 19 • Tailwind</span>
               <span>•</span>
-              <span className="hover:text-white transition cursor-pointer" onClick={() => onNavigate("inicio")}>Portal CCRPE</span>
+              <span className="hover:text-white transition cursor-pointer" onClick={() => onNavigate("inicio")}>Portal GRDesastres</span>
             </div>
           </div>
 
@@ -1844,6 +2215,148 @@ export default function LandingPage({
               {/* Pie */}
               <div className="bg-slate-950 p-4 border-t border-slate-800 text-center">
                 <p className="text-[10px] text-slate-500">Módulo Científico Informativo • Las opiniones expresadas son de exclusiva responsabilidad de sus autores.</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* MODAL DEL AULA VIRTUAL: PRESENTACIONES GUIADAS DE CAPACITACIÓN */}
+        {selectedAulaTopic && AULA_TOPICS_DATA[selectedAulaTopic] && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/90 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+            >
+              {/* Header Modal */}
+              <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
+                    {selectedAulaTopic === "terremotos" && <Activity className="h-5 w-5 text-cyan-400" />}
+                    {selectedAulaTopic === "incendios" && <Flame className="h-5 w-5 text-orange-400" />}
+                    {selectedAulaTopic === "inundaciones" && <Globe className="h-5 w-5 text-blue-400" />}
+                    {selectedAulaTopic === "kit" && <Shield className="h-5 w-5 text-emerald-400" />}
+                  </div>
+                  <div className="text-left">
+                    <span className="text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-wider">
+                      {AULA_TOPICS_DATA[selectedAulaTopic].category}
+                    </span>
+                    <h3 className="font-display font-black text-lg text-white uppercase leading-none">
+                      {AULA_TOPICS_DATA[selectedAulaTopic].title}
+                    </h3>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setSelectedAulaTopic(null);
+                    setAulaSlideIdx(0);
+                  }}
+                  className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer font-bold text-sm"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Progress Stepper */}
+              <div className="bg-slate-950/40 px-6 py-3 border-b border-slate-800/80 flex items-center justify-between gap-2 overflow-x-auto">
+                {AULA_TOPICS_DATA[selectedAulaTopic].slides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setAulaSlideIdx(idx)}
+                    className={`flex-1 min-w-[100px] py-1.5 px-3 rounded-lg text-[10px] font-bold font-mono transition text-center cursor-pointer border ${
+                      aulaSlideIdx === idx
+                        ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-300"
+                        : "bg-slate-900/60 border-slate-800 text-slate-500 hover:text-slate-300"
+                    }`}
+                  >
+                    Diapositiva {idx + 1}
+                  </button>
+                ))}
+              </div>
+
+              {/* Slide Content Body */}
+              <div className="p-6 md:p-8 space-y-6 overflow-y-auto flex-1 text-left">
+                {(() => {
+                  const currentSlide = AULA_TOPICS_DATA[selectedAulaTopic].slides[aulaSlideIdx];
+                  return (
+                    <div className="space-y-6">
+                      <div className="space-y-2 border-b border-slate-800/80 pb-4">
+                        <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded uppercase">
+                          {currentSlide.badge}
+                        </span>
+                        <h4 className="font-display font-black text-xl md:text-2xl text-white uppercase pt-1">
+                          {currentSlide.title}
+                        </h4>
+                        <p className="text-xs text-slate-400 font-medium">{currentSlide.subtitle}</p>
+                      </div>
+
+                      {/* Points List */}
+                      <div className="grid grid-cols-1 gap-4">
+                        {currentSlide.points.map((pt, i) => (
+                          <div key={i} className="bg-slate-950/60 border border-slate-850 p-4 rounded-2xl space-y-1 hover:border-slate-800 transition">
+                            <div className="flex items-center space-x-2">
+                              <div className="w-2 h-2 rounded-full bg-cyan-400" />
+                              <h5 className="text-xs font-bold text-white uppercase">{pt.title}</h5>
+                            </div>
+                            <p className="text-xs text-slate-300 leading-relaxed pl-4">{pt.desc}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Expert Tip Box */}
+                      {currentSlide.tip && (
+                        <div className="bg-cyan-950/30 border border-cyan-500/30 p-4 rounded-2xl flex items-start space-x-3">
+                          <Sparkles className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest block">Recomendación Experta</span>
+                            <p className="text-xs text-cyan-100 font-medium mt-0.5">{currentSlide.tip}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Modal Footer Controls */}
+              <div className="p-4 md:p-6 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between gap-4">
+                <button
+                  disabled={aulaSlideIdx === 0}
+                  onClick={() => setAulaSlideIdx((prev) => Math.max(0, prev - 1))}
+                  className="bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 text-white font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition cursor-pointer"
+                >
+                  Anterior
+                </button>
+
+                <span className="text-xs font-mono font-bold text-slate-400">
+                  {aulaSlideIdx + 1} de {AULA_TOPICS_DATA[selectedAulaTopic].slides.length}
+                </span>
+
+                {aulaSlideIdx < AULA_TOPICS_DATA[selectedAulaTopic].slides.length - 1 ? (
+                  <button
+                    onClick={() => setAulaSlideIdx((prev) => prev + 1)}
+                    className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition shadow-lg shadow-cyan-500/20 cursor-pointer flex items-center space-x-2"
+                  >
+                    <span>Siguiente</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setSelectedAulaTopic(null);
+                      setAulaSlideIdx(0);
+                    }}
+                    className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20 cursor-pointer"
+                  >
+                    Finalizar Presentación
+                  </button>
+                )}
               </div>
             </motion.div>
           </motion.div>
