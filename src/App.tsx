@@ -487,8 +487,25 @@ export default function App() {
           <span className="hidden md:inline text-slate-400">Normativas: E.030 (PE), NCh433 (CL), NSR-10 (CO), COVENIN 1756 (VE)</span>
         </div>
         <div className="flex items-center space-x-4 text-[11px] text-slate-400">
-          <a href="mailto:contacto@grdesastres.com" className="hover:text-cyan-300 transition cursor-pointer font-medium">
-            Contacto: contacto@grdesastres.com
+          <a 
+            href="#contacto"
+            onClick={(e) => {
+              e.preventDefault();
+              if (activeTab !== "inicio") {
+                setActiveTab("inicio");
+              }
+              setTimeout(() => {
+                const el = document.getElementById("contacto");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  window.location.hash = "#contacto";
+                }
+              }, 100);
+            }}
+            className="hover:text-cyan-300 transition cursor-pointer font-medium flex items-center space-x-1"
+          >
+            <span>Contacto: contacto@grdesastres.com</span>
           </a>
         </div>
       </div>
