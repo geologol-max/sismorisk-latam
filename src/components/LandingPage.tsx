@@ -31,7 +31,13 @@ import {
   Briefcase,
   GraduationCap,
   HardHat,
-  Settings
+  Settings,
+  CheckCircle,
+  XCircle,
+  RotateCcw,
+  Check,
+  Video,
+  Eye
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -233,7 +239,143 @@ const BLOGS_DB: BlogItem[] = [
   }
 ];
 
-// --- DATOS DEL AULA VIRTUAL: MODULOS DE FORMACION Y CAPACITACION ---
+// --- DATOS DEL AULA VIRTUAL & BANCO DE PREGUNTAS DEL TEST SISMO ---
+interface QuizQuestion {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+}
+
+const EARTHQUAKE_QUIZ_BANK: QuizQuestion[] = [
+  {
+    id: 1,
+    question: "¿Cuál es el protocolo de autoprotección recomendado MIENTRAS ocurre el movimiento sísmico?",
+    options: [
+      "Salir corriendo hacia la calle inmediatamente",
+      "Agacharse, cubrirse debajo de una mesa firme y aferrarse",
+      "Subir en el ascensor hacia la azotea",
+      "Pararse junto a grandes ventanas de vidrio"
+    ],
+    correctAnswer: 1,
+    explanation: "Agacharse, cubrirse y aferrarse es la maniobra estándar internacional para evitar caídas y proteger la cabeza de desprendimientos."
+  },
+  {
+    id: 2,
+    question: "¿Por qué está estrictamente prohibido usar ascensores durante o inmediatamente después de un sismo?",
+    options: [
+      "Porque se desplazan demasiado lento",
+      "Por riesgo inminente de atrapamiento e interrupción del servicio eléctrico",
+      "Porque están reservados exclusivamente para el personal de rescate",
+      "No hay ninguna contraindicación para usarlos"
+    ],
+    correctAnswer: 1,
+    explanation: "Los movimientos telúricos pueden causar desalineación de los rieles de ascensores y cortes eléctricos instantáneos."
+  },
+  {
+    id: 3,
+    question: "Antes de que ocurra un sismo, ¿cuál es una medida preventiva clave en hogares y oficinas?",
+    options: [
+      "Fijar estantes altos, libreros y calentadores a elementos estructurales rígidos",
+      "Dejar los muebles pesados sueltos cerca de las vías de salida",
+      "Colocar frascos de cristal en repisas altas sin sujeción",
+      "Cerrar con doble llave todas las puertas internas"
+    ],
+    correctAnswer: 0,
+    explanation: "El volcamiento de mobiliario alto u objetos pesados es una de las causas principales de lesiones en interiores."
+  },
+  {
+    id: 4,
+    question: "¿Cuáles son consideradas zonas de cobertura o resguardo seguro dentro de una edificación?",
+    options: [
+      "Al lado de ventanales y fachadas de vidrio",
+      "Debajo de mesas resistentes, dinteles o junto a columnas de hormigón armado",
+      "Debajo de lámparas pesadas y techos falsos no fijados",
+      "En la cocina al lado de las tuberías de gas"
+    ],
+    correctAnswer: 1,
+    explanation: "Las mesas sólidas y elementos estructurales rígidos protegen contra la caída de mampostería, losas y cielo raso."
+  },
+  {
+    id: 5,
+    question: "¿Qué tipo de ondas sísmicas son las más rápidas y llegan primero a la estructura?",
+    options: [
+      "Ondas P (Primarias / Compresionales)",
+      "Ondas S (Secundarias / Corte)",
+      "Ondas de Rayleigh",
+      "Ondas Love"
+    ],
+    correctAnswer: 0,
+    explanation: "Las ondas P se desplazan a mayor velocidad en la corteza terrestre, seguidas poco después por las ondas S cortantes."
+  },
+  {
+    id: 6,
+    question: "Inmediatamente después de que cese el movimiento sísmico, ¿qué acción de seguridad es prioritaria?",
+    options: [
+      "Encender fósforos o velas para iluminar la vivienda",
+      "Verificar grietas estructurales en X y cerrar llaves de paso de gas y electricidad",
+      "Conectar todos los artefactos eléctricos de inmediato",
+      "Evacuar corriendo sin mirar los alrededores"
+    ],
+    correctAnswer: 1,
+    explanation: "Cerrar llaves de gas y luz evita incendios y explosiones ante posibles fugas causadas por el sismo."
+  },
+  {
+    id: 7,
+    question: "¿Por qué vía debe realizarse la evacuación segura de un edificio tras un evento sísmico?",
+    options: [
+      "Exclusivamente por las escaleras de emergencia hacia la zona de seguridad",
+      "Por los ascensores de carga",
+      "Por los ductos de basura o ventilación",
+      "Saltando por las ventanas"
+    ],
+    correctAnswer: 0,
+    explanation: "Las escaleras constituyen la única vía segura de escape vertical en caso de fallas de energía o emergencias."
+  },
+  {
+    id: 8,
+    question: "¿Para cuántas horas de autonomía mínima debe estar preparada la Mochila de Emergencia familiar?",
+    options: [
+      "12 horas",
+      "24 horas",
+      "72 horas",
+      "1 mes"
+    ],
+    correctAnswer: 2,
+    explanation: "Una mochila de 72 horas garantiza agua, alimento y primeros auxilios mientras arriban los servicios de auxilio."
+  },
+  {
+    id: 9,
+    question: "Si el sismo te sorprende al aire libre en la calle, ¿qué debes evitar?",
+    options: [
+      "Permanecer cerca de cables de alta tensión, postes, cornisas y fachadas de vidrio",
+      "Ubicarte en un parque o plaza abierta",
+      "Proteger tu cabeza con tus brazos",
+      "Mantener la calma"
+    ],
+    correctAnswer: 0,
+    explanation: "El desprendimiento de vidrios de fachadas y la caída de cables eléctricos representan riesgos graves en las vías públicas."
+  },
+  {
+    id: 10,
+    question: "¿Con qué frecuencia mínima se recomienda realizar simulacros de evacuación en viviendas y lugares de trabajo?",
+    options: [
+      "Al menos 2 veces al año",
+      "Una vez cada 10 años",
+      "Nunca es necesario",
+      "Solo cuando ocurra un temblor real"
+    ],
+    correctAnswer: 0,
+    explanation: "Los simulacros periódicos ayudan a automatizar las rutas de escape y reducir el tiempo de respuesta."
+  }
+];
+
+function getRandomQuizQuestions(count: number = 5): QuizQuestion[] {
+  const shuffled = [...EARTHQUAKE_QUIZ_BANK].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
 interface AulaSlide {
   title: string;
   subtitle: string;
@@ -526,6 +668,39 @@ export default function LandingPage({
   const [activeModal, setActiveModal] = useState<"aula" | "biblioteca" | "heroes" | "blogs" | null>(null);
   const [selectedAulaTopic, setSelectedAulaTopic] = useState<"terremotos" | "incendios" | "inundaciones" | "kit" | null>(null);
   const [aulaSlideIdx, setAulaSlideIdx] = useState<number>(0);
+  const [aulaTab, setAulaTab] = useState<"video" | "test" | "diapositivas">("video");
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [userAnswers, setUserAnswers] = useState<Record<number, number>>({});
+  const [quizSubmitted, setQuizSubmitted] = useState<boolean>(false);
+  const [quizScore, setQuizScore] = useState<number>(0);
+
+  const handleOpenAulaModule = (topicId: "terremotos" | "incendios" | "inundaciones" | "kit") => {
+    setSelectedAulaTopic(topicId);
+    setAulaSlideIdx(0);
+    setAulaTab("video");
+    setQuizQuestions(getRandomQuizQuestions(5));
+    setUserAnswers({});
+    setQuizSubmitted(false);
+    setQuizScore(0);
+  };
+
+  const handleRestartQuiz = () => {
+    setQuizQuestions(getRandomQuizQuestions(5));
+    setUserAnswers({});
+    setQuizSubmitted(false);
+    setQuizScore(0);
+  };
+
+  const handleSubmitQuiz = () => {
+    let score = 0;
+    quizQuestions.forEach((q, idx) => {
+      if (userAnswers[idx] === q.correctAnswer) {
+        score += 1;
+      }
+    });
+    setQuizScore(score);
+    setQuizSubmitted(true);
+  };
 
   // --- Aula Interactiva: Estado de la Simulación ---
   const [waveType, setWaveType] = useState<"P" | "S" | "Surface">("S");
@@ -776,118 +951,274 @@ export default function LandingPage({
             </p>
           </div>
 
-          {/* Las 04 Tarjetas del Aula Virtual */}
+          {/* Miniaturas Estilo YouTube para el Aula Virtual */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
             
-            {/* Tarjeta 1: Terremotos */}
+            {/* Card 1: Terremotos (Módulo 01 con Video & Test) */}
             <div 
-              onClick={() => {
-                setSelectedAulaTopic("terremotos");
-                setAulaSlideIdx(0);
-              }}
-              className="bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/50 p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer space-y-4 flex flex-col justify-between group shadow-xl"
+              onClick={() => handleOpenAulaModule("terremotos")}
+              className="bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 cursor-pointer group shadow-2xl flex flex-col justify-between"
             >
-              <div className="space-y-4">
-                <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Activity className="h-7 w-7" />
+              <div className="space-y-3">
+                {/* Miniatura estilo YouTube (16:9) */}
+                <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
+                  <img 
+                    src={earthquakeHero} 
+                    alt="Miniatura Módulo 01: Terremotos" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                  />
+                  {/* Overlay degradado YouTube */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  
+                  {/* Badge superior izquierdo: Módulo */}
+                  <div className="absolute top-2.5 left-2.5 bg-slate-950/80 backdrop-blur-md border border-cyan-500/40 px-2.5 py-1 rounded-lg flex items-center space-x-1.5">
+                    <Activity className="h-3 w-3 text-cyan-400" />
+                    <span className="text-[9px] font-mono font-bold text-cyan-300 uppercase tracking-wider">Módulo 01</span>
+                  </div>
+
+                  {/* Badge superior derecho: HD + TEST */}
+                  <div className="absolute top-2.5 right-2.5 bg-cyan-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded tracking-wider flex items-center space-x-1 shadow-lg">
+                    <span>HD 1080p • VIDEO + TEST</span>
+                  </div>
+
+                  {/* Botón de reproducción central animado */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-cyan-500/90 text-slate-950 flex items-center justify-center shadow-xl shadow-cyan-500/30 group-hover:scale-110 group-hover:bg-cyan-400 transition-all duration-300">
+                      <Play className="h-6 w-6 fill-slate-950 translate-x-0.5" />
+                    </div>
+                  </div>
+
+                  {/* Duración estilo YouTube abajo a la derecha */}
+                  <div className="absolute bottom-2.5 right-2.5 bg-slate-950/90 backdrop-blur-sm text-cyan-300 font-mono text-[10px] font-bold px-2 py-0.5 rounded border border-cyan-500/30">
+                    04:15 MP4
+                  </div>
+
+                  {/* Barra de progreso inferior de video */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-800">
+                    <div className="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 w-3/4 group-hover:w-full transition-all duration-700" />
+                  </div>
                 </div>
-                <div className="space-y-1.5 text-left">
-                  <span className="text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-widest">Módulo 01</span>
-                  <h3 className="font-display font-black text-xl text-white uppercase group-hover:text-cyan-400 transition-colors">
-                    Terremotos
-                  </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Guía de preparación ante sismos de gran magnitud: ondas P y S, fijación estructural de muebles, zonas de cobertura y protocolos de evacuación segura.
-                  </p>
+
+                {/* Metadatos estilo Canal de YouTube */}
+                <div className="p-4 space-y-2 text-left">
+                  <div className="flex items-start space-x-3">
+                    <img 
+                      src={grdesastresLogo} 
+                      alt="Avatar Canal GRDesastres" 
+                      className="w-9 h-9 rounded-full bg-slate-950 p-1 border border-cyan-500/40 shrink-0 shadow-md"
+                    />
+                    <div className="space-y-1">
+                      <h3 className="font-display font-extrabold text-sm text-white uppercase group-hover:text-cyan-300 transition-colors line-clamp-2 leading-tight">
+                        Módulo 01: Preparación y Autoprotección Sísmica
+                      </h3>
+                      <p className="text-[11px] text-slate-400 font-medium">
+                        GRDesastres • Aula Virtual LATAM
+                      </p>
+                      <p className="text-[10px] text-cyan-400/90 font-mono font-bold flex items-center space-x-1.5">
+                        <span>14.2k vistas</span>
+                        <span>•</span>
+                        <span className="text-emerald-400">Test de 5 preguntas</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono">
-                <span>Abrir Presentación</span>
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+
+              {/* Footer Botón Acción */}
+              <div className="p-4 pt-0">
+                <button className="w-full bg-slate-950 hover:bg-cyan-500 hover:text-slate-950 border border-cyan-500/30 text-cyan-300 font-bold text-xs uppercase py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 font-mono group-hover:border-cyan-400">
+                  <Play className="h-3.5 w-3.5 fill-current" />
+                  <span>Ver Video & Responder Test</span>
+                </button>
               </div>
             </div>
 
-            {/* Tarjeta 2: Incendios */}
+            {/* Card 2: Incendios */}
             <div 
-              onClick={() => {
-                setSelectedAulaTopic("incendios");
-                setAulaSlideIdx(0);
-              }}
-              className="bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-orange-500/50 p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer space-y-4 flex flex-col justify-between group shadow-xl"
+              onClick={() => handleOpenAulaModule("incendios")}
+              className="bg-slate-900/90 border border-slate-800 hover:border-orange-500/60 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 cursor-pointer group shadow-2xl flex flex-col justify-between"
             >
-              <div className="space-y-4">
-                <div className="w-14 h-14 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-orange-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Flame className="h-7 w-7" />
+              <div className="space-y-3">
+                <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
+                  <img 
+                    src={collapsedBuilding} 
+                    alt="Miniatura Módulo 02: Incendios" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  <div className="absolute top-2.5 left-2.5 bg-slate-950/80 backdrop-blur-md border border-orange-500/40 px-2.5 py-1 rounded-lg flex items-center space-x-1.5">
+                    <Flame className="h-3 w-3 text-orange-400" />
+                    <span className="text-[9px] font-mono font-bold text-orange-300 uppercase tracking-wider">Módulo 02</span>
+                  </div>
+                  <div className="absolute top-2.5 right-2.5 bg-orange-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded tracking-wider shadow-lg">
+                    HD 1080p • GUÍA VIDEO
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-orange-500/90 text-slate-950 flex items-center justify-center shadow-xl shadow-orange-500/30 group-hover:scale-110 group-hover:bg-orange-400 transition-all duration-300">
+                      <Play className="h-6 w-6 fill-slate-950 translate-x-0.5" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-2.5 right-2.5 bg-slate-950/90 backdrop-blur-sm text-orange-300 font-mono text-[10px] font-bold px-2 py-0.5 rounded border border-orange-500/30">
+                    03:40 MP4
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-800">
+                    <div className="h-full bg-gradient-to-r from-orange-500 to-amber-400 w-1/2 group-hover:w-full transition-all duration-700" />
+                  </div>
                 </div>
-                <div className="space-y-1.5 text-left">
-                  <span className="text-[9px] font-mono font-bold text-orange-400 uppercase tracking-widest">Módulo 02</span>
-                  <h3 className="font-display font-black text-xl text-white uppercase group-hover:text-orange-400 transition-colors">
-                    Incendios
-                  </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Prevención de fuego estructural e interfase forestal: triángulo del fuego, manejo de extintores (PQS/CO2), corte de suministros y desplazamiento bajo humo tóxico.
-                  </p>
+                <div className="p-4 space-y-2 text-left">
+                  <div className="flex items-start space-x-3">
+                    <img 
+                      src={grdesastresLogo} 
+                      alt="Avatar Canal GRDesastres" 
+                      className="w-9 h-9 rounded-full bg-slate-950 p-1 border border-orange-500/40 shrink-0 shadow-md"
+                    />
+                    <div className="space-y-1">
+                      <h3 className="font-display font-extrabold text-sm text-white uppercase group-hover:text-orange-300 transition-colors line-clamp-2 leading-tight">
+                        Módulo 02: Prevención y Control de Incendios
+                      </h3>
+                      <p className="text-[11px] text-slate-400 font-medium">
+                        GRDesastres • Aula Virtual LATAM
+                      </p>
+                      <p className="text-[10px] text-orange-400/90 font-mono font-bold flex items-center space-x-1.5">
+                        <span>9.8k vistas</span>
+                        <span>•</span>
+                        <span>Guía Interactiva</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-bold text-orange-400 uppercase tracking-wider font-mono">
-                <span>Abrir Presentación</span>
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <div className="p-4 pt-0">
+                <button className="w-full bg-slate-950 hover:bg-orange-500 hover:text-slate-950 border border-orange-500/30 text-orange-300 font-bold text-xs uppercase py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 font-mono group-hover:border-orange-400">
+                  <Play className="h-3.5 w-3.5 fill-current" />
+                  <span>Abrir Lección en Video</span>
+                </button>
               </div>
             </div>
 
-            {/* Tarjeta 3: Inundaciones */}
+            {/* Card 3: Inundaciones */}
             <div 
-              onClick={() => {
-                setSelectedAulaTopic("inundaciones");
-                setAulaSlideIdx(0);
-              }}
-              className="bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-blue-500/50 p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer space-y-4 flex flex-col justify-between group shadow-xl"
+              onClick={() => handleOpenAulaModule("inundaciones")}
+              className="bg-slate-900/90 border border-slate-800 hover:border-blue-500/60 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 cursor-pointer group shadow-2xl flex flex-col justify-between"
             >
-              <div className="space-y-4">
-                <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Globe className="h-7 w-7" />
+              <div className="space-y-3">
+                <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
+                  <img 
+                    src={earthStructure} 
+                    alt="Miniatura Módulo 03: Inundaciones" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  <div className="absolute top-2.5 left-2.5 bg-slate-950/80 backdrop-blur-md border border-blue-500/40 px-2.5 py-1 rounded-lg flex items-center space-x-1.5">
+                    <Globe className="h-3 w-3 text-blue-400" />
+                    <span className="text-[9px] font-mono font-bold text-blue-300 uppercase tracking-wider">Módulo 03</span>
+                  </div>
+                  <div className="absolute top-2.5 right-2.5 bg-blue-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded tracking-wider shadow-lg">
+                    HD 1080p • GUÍA VIDEO
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-blue-500/90 text-slate-950 flex items-center justify-center shadow-xl shadow-blue-500/30 group-hover:scale-110 group-hover:bg-blue-400 transition-all duration-300">
+                      <Play className="h-6 w-6 fill-slate-950 translate-x-0.5" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-2.5 right-2.5 bg-slate-950/90 backdrop-blur-sm text-blue-300 font-mono text-[10px] font-bold px-2 py-0.5 rounded border border-blue-500/30">
+                    05:10 MP4
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-800">
+                    <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 w-2/3 group-hover:w-full transition-all duration-700" />
+                  </div>
                 </div>
-                <div className="space-y-1.5 text-left">
-                  <span className="text-[9px] font-mono font-bold text-blue-400 uppercase tracking-widest">Módulo 03</span>
-                  <h3 className="font-display font-black text-xl text-white uppercase group-hover:text-blue-400 transition-colors">
-                    Inundaciones
-                  </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Mitigación de riesgos por lluvias intensas y crecidas repentinas: alertas meteorológicas, evacuación hacia zonas altas y prevención de contaminación de agua potable.
-                  </p>
+                <div className="p-4 space-y-2 text-left">
+                  <div className="flex items-start space-x-3">
+                    <img 
+                      src={grdesastresLogo} 
+                      alt="Avatar Canal GRDesastres" 
+                      className="w-9 h-9 rounded-full bg-slate-950 p-1 border border-blue-500/40 shrink-0 shadow-md"
+                    />
+                    <div className="space-y-1">
+                      <h3 className="font-display font-extrabold text-sm text-white uppercase group-hover:text-blue-300 transition-colors line-clamp-2 leading-tight">
+                        Módulo 03: Mitigación por Inundaciones
+                      </h3>
+                      <p className="text-[11px] text-slate-400 font-medium">
+                        GRDesastres • Aula Virtual LATAM
+                      </p>
+                      <p className="text-[10px] text-blue-400/90 font-mono font-bold flex items-center space-x-1.5">
+                        <span>11.5k vistas</span>
+                        <span>•</span>
+                        <span>Guía Interactiva</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-bold text-blue-400 uppercase tracking-wider font-mono">
-                <span>Abrir Presentación</span>
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <div className="p-4 pt-0">
+                <button className="w-full bg-slate-950 hover:bg-blue-500 hover:text-slate-950 border border-blue-500/30 text-blue-300 font-bold text-xs uppercase py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 font-mono group-hover:border-blue-400">
+                  <Play className="h-3.5 w-3.5 fill-current" />
+                  <span>Abrir Lección en Video</span>
+                </button>
               </div>
             </div>
 
-            {/* Tarjeta 4: Kit de Emergencias */}
+            {/* Card 4: Kit de Emergencias */}
             <div 
-              onClick={() => {
-                setSelectedAulaTopic("kit");
-                setAulaSlideIdx(0);
-              }}
-              className="bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/50 p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer space-y-4 flex flex-col justify-between group shadow-xl"
+              onClick={() => handleOpenAulaModule("kit")}
+              className="bg-slate-900/90 border border-slate-800 hover:border-emerald-500/60 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 cursor-pointer group shadow-2xl flex flex-col justify-between"
             >
-              <div className="space-y-4">
-                <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Shield className="h-7 w-7" />
+              <div className="space-y-3">
+                <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
+                  <img 
+                    src={jairoData} 
+                    alt="Miniatura Módulo 04: Kit de Emergencias" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  <div className="absolute top-2.5 left-2.5 bg-slate-950/80 backdrop-blur-md border border-emerald-500/40 px-2.5 py-1 rounded-lg flex items-center space-x-1.5">
+                    <Shield className="h-3 w-3 text-emerald-400" />
+                    <span className="text-[9px] font-mono font-bold text-emerald-300 uppercase tracking-wider">Módulo 04</span>
+                  </div>
+                  <div className="absolute top-2.5 right-2.5 bg-emerald-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded tracking-wider shadow-lg">
+                    HD 1080p • GUÍA VIDEO
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/90 text-slate-950 flex items-center justify-center shadow-xl shadow-emerald-500/30 group-hover:scale-110 group-hover:bg-emerald-400 transition-all duration-300">
+                      <Play className="h-6 w-6 fill-slate-950 translate-x-0.5" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-2.5 right-2.5 bg-slate-950/90 backdrop-blur-sm text-emerald-300 font-mono text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/30">
+                    06:00 MP4
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-800">
+                    <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 w-4/5 group-hover:w-full transition-all duration-700" />
+                  </div>
                 </div>
-                <div className="space-y-1.5 text-left">
-                  <span className="text-[9px] font-mono font-bold text-emerald-400 uppercase tracking-widest">Módulo 04</span>
-                  <h3 className="font-display font-black text-xl text-white uppercase group-hover:text-emerald-400 transition-colors">
-                    Kit de Emergencias
-                  </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Mochila de 72 horas para supervivencia familiar: insumos de primeros auxilios, agua (3L/persona/día), alimentos imperecederos, linternas y documentos resguardados.
-                  </p>
+                <div className="p-4 space-y-2 text-left">
+                  <div className="flex items-start space-x-3">
+                    <img 
+                      src={grdesastresLogo} 
+                      alt="Avatar Canal GRDesastres" 
+                      className="w-9 h-9 rounded-full bg-slate-950 p-1 border border-emerald-500/40 shrink-0 shadow-md"
+                    />
+                    <div className="space-y-1">
+                      <h3 className="font-display font-extrabold text-sm text-white uppercase group-hover:text-emerald-300 transition-colors line-clamp-2 leading-tight">
+                        Módulo 04: Mochila de 72 Horas & Kit
+                      </h3>
+                      <p className="text-[11px] text-slate-400 font-medium">
+                        GRDesastres • Aula Virtual LATAM
+                      </p>
+                      <p className="text-[10px] text-emerald-400/90 font-mono font-bold flex items-center space-x-1.5">
+                        <span>18.3k vistas</span>
+                        <span>•</span>
+                        <span>Guía Interactiva</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-bold text-emerald-400 uppercase tracking-wider font-mono">
-                <span>Abrir Presentación</span>
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <div className="p-4 pt-0">
+                <button className="w-full bg-slate-950 hover:bg-emerald-500 hover:text-slate-950 border border-emerald-500/30 text-emerald-300 font-bold text-xs uppercase py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 font-mono group-hover:border-emerald-400">
+                  <Play className="h-3.5 w-3.5 fill-current" />
+                  <span>Abrir Lección en Video</span>
+                </button>
               </div>
             </div>
 
@@ -2217,7 +2548,7 @@ export default function LandingPage({
           </motion.div>
         )}
 
-        {/* MODAL DEL AULA VIRTUAL: PRESENTACIONES GUIADAS DE CAPACITACIÓN */}
+        {/* MODAL DEL AULA VIRTUAL: LECCIONES EN VIDEO, TEST INTERACTIVO Y DIAPOSITIVAS */}
         {selectedAulaTopic && AULA_TOPICS_DATA[selectedAulaTopic] && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -2229,12 +2560,12 @@ export default function LandingPage({
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+              className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]"
             >
               {/* Header Modal */}
-              <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+              <div className="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between bg-slate-950/80">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold shrink-0">
                     {selectedAulaTopic === "terremotos" && <Activity className="h-5 w-5 text-cyan-400" />}
                     {selectedAulaTopic === "incendios" && <Flame className="h-5 w-5 text-orange-400" />}
                     {selectedAulaTopic === "inundaciones" && <Globe className="h-5 w-5 text-blue-400" />}
@@ -2244,7 +2575,7 @@ export default function LandingPage({
                     <span className="text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-wider">
                       {AULA_TOPICS_DATA[selectedAulaTopic].category}
                     </span>
-                    <h3 className="font-display font-black text-lg text-white uppercase leading-none">
+                    <h3 className="font-display font-black text-base sm:text-lg text-white uppercase leading-none">
                       {AULA_TOPICS_DATA[selectedAulaTopic].title}
                     </h3>
                   </div>
@@ -2260,99 +2591,419 @@ export default function LandingPage({
                 </button>
               </div>
 
-              {/* Progress Stepper */}
-              <div className="bg-slate-950/40 px-6 py-3 border-b border-slate-800/80 flex items-center justify-between gap-2 overflow-x-auto">
-                {AULA_TOPICS_DATA[selectedAulaTopic].slides.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setAulaSlideIdx(idx)}
-                    className={`flex-1 min-w-[100px] py-1.5 px-3 rounded-lg text-[10px] font-bold font-mono transition text-center cursor-pointer border ${
-                      aulaSlideIdx === idx
-                        ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-300"
-                        : "bg-slate-900/60 border-slate-800 text-slate-500 hover:text-slate-300"
-                    }`}
-                  >
-                    Diapositiva {idx + 1}
-                  </button>
-                ))}
-              </div>
-
-              {/* Slide Content Body */}
-              <div className="p-6 md:p-8 space-y-6 overflow-y-auto flex-1 text-left">
-                {(() => {
-                  const currentSlide = AULA_TOPICS_DATA[selectedAulaTopic].slides[aulaSlideIdx];
-                  return (
-                    <div className="space-y-6">
-                      <div className="space-y-2 border-b border-slate-800/80 pb-4">
-                        <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded uppercase">
-                          {currentSlide.badge}
-                        </span>
-                        <h4 className="font-display font-black text-xl md:text-2xl text-white uppercase pt-1">
-                          {currentSlide.title}
-                        </h4>
-                        <p className="text-xs text-slate-400 font-medium">{currentSlide.subtitle}</p>
-                      </div>
-
-                      {/* Points List */}
-                      <div className="grid grid-cols-1 gap-4">
-                        {currentSlide.points.map((pt, i) => (
-                          <div key={i} className="bg-slate-950/60 border border-slate-850 p-4 rounded-2xl space-y-1 hover:border-slate-800 transition">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-2 h-2 rounded-full bg-cyan-400" />
-                              <h5 className="text-xs font-bold text-white uppercase">{pt.title}</h5>
-                            </div>
-                            <p className="text-xs text-slate-300 leading-relaxed pl-4">{pt.desc}</p>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Expert Tip Box */}
-                      {currentSlide.tip && (
-                        <div className="bg-cyan-950/30 border border-cyan-500/30 p-4 rounded-2xl flex items-start space-x-3">
-                          <Sparkles className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5" />
-                          <div>
-                            <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest block">Recomendación Experta</span>
-                            <p className="text-xs text-cyan-100 font-medium mt-0.5">{currentSlide.tip}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
-              </div>
-
-              {/* Modal Footer Controls */}
-              <div className="p-4 md:p-6 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between gap-4">
+              {/* Navegación por Pestañas (Video / Test / Diapositivas) */}
+              <div className="bg-slate-950/60 px-6 py-2.5 border-b border-slate-800/80 flex items-center justify-start gap-2 overflow-x-auto">
                 <button
-                  disabled={aulaSlideIdx === 0}
-                  onClick={() => setAulaSlideIdx((prev) => Math.max(0, prev - 1))}
-                  className="bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 text-white font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition cursor-pointer"
+                  onClick={() => setAulaTab("video")}
+                  className={`py-2 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 cursor-pointer border ${
+                    aulaTab === "video"
+                      ? "bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-md shadow-cyan-500/10"
+                      : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
+                  }`}
                 >
-                  Anterior
+                  <Video className="h-4 w-4" />
+                  <span>📹 Video de Formación</span>
                 </button>
 
-                <span className="text-xs font-mono font-bold text-slate-400">
-                  {aulaSlideIdx + 1} de {AULA_TOPICS_DATA[selectedAulaTopic].slides.length}
-                </span>
+                <button
+                  onClick={() => {
+                    setAulaTab("test");
+                    if (quizQuestions.length === 0) {
+                      setQuizQuestions(getRandomQuizQuestions(5));
+                    }
+                  }}
+                  className={`py-2 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 cursor-pointer border ${
+                    aulaTab === "test"
+                      ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-300 shadow-md shadow-emerald-500/10"
+                      : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
+                  }`}
+                >
+                  <HelpCircle className="h-4 w-4 text-emerald-400" />
+                  <span>📝 Test de Autoevaluación (5 Preguntas)</span>
+                  {quizSubmitted && (
+                    <span className="bg-emerald-500 text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded-full ml-1">
+                      {quizScore}/5
+                    </span>
+                  )}
+                </button>
 
-                {aulaSlideIdx < AULA_TOPICS_DATA[selectedAulaTopic].slides.length - 1 ? (
-                  <button
-                    onClick={() => setAulaSlideIdx((prev) => prev + 1)}
-                    className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition shadow-lg shadow-cyan-500/20 cursor-pointer flex items-center space-x-2"
-                  >
-                    <span>Siguiente</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setSelectedAulaTopic(null);
-                      setAulaSlideIdx(0);
-                    }}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20 cursor-pointer"
-                  >
-                    Finalizar Presentación
-                  </button>
+                <button
+                  onClick={() => setAulaTab("diapositivas")}
+                  className={`py-2 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 cursor-pointer border ${
+                    aulaTab === "diapositivas"
+                      ? "bg-purple-500/20 border-purple-500/60 text-purple-300 shadow-md shadow-purple-500/10"
+                      : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
+                  }`}
+                >
+                  <BookOpen className="h-4 w-4 text-purple-400" />
+                  <span>📖 Presentación Guiada ({AULA_TOPICS_DATA[selectedAulaTopic].slides.length})</span>
+                </button>
+              </div>
+
+              {/* Contenido según la pestaña seleccionada */}
+              <div className="p-6 md:p-8 overflow-y-auto flex-1 text-left">
+                {/* 1. PESTAÑA VIDEO DE FORMACIÓN */}
+                {aulaTab === "video" && (
+                  <div className="space-y-6">
+                    {/* Reproductor de Video HD */}
+                    <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black border border-cyan-500/40 shadow-2xl">
+                      <video 
+                        src="https://res.cloudinary.com/rtzau8g7/video/upload/v1786498008/Preparaci%C3%B3n_ante_Sismos_n26b0x.mp4" 
+                        controls 
+                        playsInline 
+                        poster={earthquakeHero}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+
+                    {/* Metadatos del Video e Invitación al Test */}
+                    <div className="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl space-y-4">
+                      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
+                            Videolección Oficial • Módulo 01: Terremotos
+                          </span>
+                          <h4 className="font-display font-black text-lg text-white uppercase pt-1">
+                            Preparación y Autoprotección ante Eventos Sísmicos
+                          </h4>
+                          <p className="text-xs text-slate-400 font-medium">
+                            Producción Oficial GRDesastres • Duración: 04:15 min • Formato HD 1080p
+                          </p>
+                        </div>
+                        <button 
+                          onClick={() => {
+                            setAulaTab("test");
+                            if (quizQuestions.length === 0) {
+                              setQuizQuestions(getRandomQuizQuestions(5));
+                            }
+                          }}
+                          className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase py-2.5 px-4 rounded-xl transition shadow-lg shadow-cyan-500/20 flex items-center space-x-2 cursor-pointer font-mono"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                          <span>Ir al Test de Evaluación (5 Preguntas) →</span>
+                        </button>
+                      </div>
+
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Visualiza el contenido audiovisual completo para repasar el protocolo internacional de <strong>Agacharse, Cubrirse y Aferrarse</strong>, la fijación estructural de mobiliario pesado, zonas de cobertura seguras y acciones prioritarias tras el cese del movimiento.
+                      </p>
+
+                      {/* Tarjeta Destacada de Invitación al Test */}
+                      <div className="bg-cyan-950/40 border border-cyan-500/40 p-4 rounded-xl flex items-start space-x-3.5 shadow-lg">
+                        <Sparkles className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5" />
+                        <div className="space-y-2">
+                          <span className="text-xs font-extrabold text-cyan-300 uppercase tracking-wider block">
+                            🎬 ¿Terminaste de ver la videolección?
+                          </span>
+                          <p className="text-xs text-cyan-100/90 leading-relaxed">
+                            Te invitamos a poner a prueba lo aprendido respondiendo nuestro <strong>Test Básico de 5 preguntas aleatorias</strong>. Obtén al menos 3 aciertos de 5 para aprobar la evaluación del módulo.
+                          </p>
+                          <button 
+                            onClick={() => {
+                              setAulaTab("test");
+                              if (quizQuestions.length === 0) {
+                                setQuizQuestions(getRandomQuizQuestions(5));
+                              }
+                            }}
+                            className="inline-flex items-center space-x-2 text-xs font-extrabold text-cyan-400 hover:text-cyan-200 underline uppercase tracking-wider cursor-pointer pt-1"
+                          >
+                            <span>Responder Test de Evaluación Sísmica Ahora</span>
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. PESTAÑA TEST DE AUTOEVALUACIÓN (5 PREGUNTAS ALEATORIAS) */}
+                {aulaTab === "test" && (
+                  <div className="space-y-6">
+                    {!quizSubmitted ? (
+                      /* Formulario del Test */
+                      <div className="space-y-6">
+                        <div className="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl space-y-4">
+                          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div>
+                              <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                                Evaluación de Conocimientos • Módulo 01
+                              </span>
+                              <h4 className="font-display font-black text-base text-white uppercase">
+                                Test Básico de Autoprotección Sísmica
+                              </h4>
+                            </div>
+                            <span className="text-xs font-mono font-bold text-slate-400 bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">
+                              Respondidas: {Object.keys(userAnswers).length} de 5
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-slate-300">
+                            Responde las siguientes 5 preguntas aleatorias basadas en la información presentada en la videolección de terremotos.
+                          </p>
+
+                          {/* Lista de 5 Preguntas */}
+                          <div className="space-y-6 pt-2">
+                            {quizQuestions.map((q, qIdx) => (
+                              <div key={q.id || qIdx} className="bg-slate-900/90 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-3 shadow-md">
+                                <div className="flex items-start space-x-2.5">
+                                  <span className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-bold px-2.5 py-1 rounded shrink-0">
+                                    Pregunta {qIdx + 1} de 5
+                                  </span>
+                                  <h5 className="text-xs sm:text-sm font-bold text-white leading-snug">
+                                    {q.question}
+                                  </h5>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-2.5 pt-1">
+                                  {q.options.map((opt, optIdx) => {
+                                    const isSelected = userAnswers[qIdx] === optIdx;
+                                    return (
+                                      <button
+                                        key={optIdx}
+                                        onClick={() => {
+                                          setUserAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
+                                        }}
+                                        className={`w-full text-left p-3.5 rounded-xl text-xs font-medium transition-all flex items-center justify-between border cursor-pointer ${
+                                          isSelected 
+                                            ? "bg-cyan-500/20 border-cyan-400 text-cyan-200 font-bold shadow-md shadow-cyan-500/10"
+                                            : "bg-slate-950/60 border-slate-800/80 text-slate-300 hover:border-slate-700 hover:bg-slate-900"
+                                        }`}
+                                      >
+                                        <span className="pr-2">{String.fromCharCode(65 + optIdx)}) {opt}</span>
+                                        {isSelected && <Check className="h-4 w-4 text-cyan-400 shrink-0" />}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Botón Enviar */}
+                          <div className="pt-4 flex justify-end">
+                            <button
+                              disabled={Object.keys(userAnswers).length < 5}
+                              onClick={handleSubmitQuiz}
+                              className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 disabled:opacity-40 disabled:hover:from-cyan-500 text-slate-950 font-black text-xs uppercase px-6 py-3.5 rounded-xl transition shadow-lg shadow-cyan-500/20 flex items-center space-x-2 cursor-pointer font-mono"
+                            >
+                              <Send className="h-4 w-4" />
+                              <span>Finalizar y Evaluar Respuestas ({Object.keys(userAnswers).length}/5)</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Pantalla de Resultados */
+                      <div className="space-y-6">
+                        {(() => {
+                          const isPassed = quizScore >= 3;
+                          return (
+                            <div className="space-y-6">
+                              {/* Banner de Resultado */}
+                              <div className={`p-6 rounded-2xl border ${
+                                isPassed 
+                                  ? "bg-emerald-950/40 border-emerald-500/50 text-emerald-200"
+                                  : "bg-amber-950/40 border-amber-500/50 text-amber-200"
+                              } shadow-2xl space-y-4`}>
+                                <div className="flex items-center space-x-3.5">
+                                  {isPassed ? (
+                                    <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center shrink-0">
+                                      <Award className="h-7 w-7" />
+                                    </div>
+                                  ) : (
+                                    <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center shrink-0">
+                                      <HelpCircle className="h-7 w-7" />
+                                    </div>
+                                  )}
+                                  <div>
+                                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest block">
+                                      {isPassed ? "¡EVALUACIÓN APROBADA!" : "EVALUACIÓN INCOMPLETA"}
+                                    </span>
+                                    <h4 className="font-display font-black text-2xl text-white">
+                                      Obtuviste {quizScore} de 5 aciertos ({Math.round((quizScore/5)*100)}%)
+                                    </h4>
+                                  </div>
+                                </div>
+
+                                <p className="text-xs leading-relaxed">
+                                  {isPassed 
+                                    ? "🎉 ¡Felicidades! Demostraste un dominio práctico de las medidas fundamentales de autoprotección, zonas de resguardo seguro y protocolos de evacuación ante terremotos."
+                                    : "⚠️ Has acertado menos de 3 preguntas. Te sugerimos volver a revisar la videolección e intentarlo nuevamente con una nueva combinación de preguntas."
+                                  }
+                                </p>
+
+                                <div className="pt-2 flex flex-wrap gap-3">
+                                  <button
+                                    onClick={handleRestartQuiz}
+                                    className="bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 text-cyan-300 font-bold text-xs uppercase px-5 py-3 rounded-xl transition flex items-center space-x-2 cursor-pointer font-mono"
+                                  >
+                                    <RotateCcw className="h-4 w-4" />
+                                    <span>Intentar con 5 NUEVAS Preguntas Aleatorias</span>
+                                  </button>
+
+                                  <button
+                                    onClick={() => setAulaTab("video")}
+                                    className="bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 font-bold text-xs uppercase px-5 py-3 rounded-xl transition flex items-center space-x-2 cursor-pointer font-mono"
+                                  >
+                                    <Video className="h-4 w-4" />
+                                    <span>Volver al Video</span>
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Desglose Detallado de Respuestas */}
+                              <div className="bg-slate-950/80 border border-slate-800 p-5 sm:p-6 rounded-2xl space-y-4">
+                                <h5 className="font-display font-extrabold text-sm text-white uppercase border-b border-slate-800 pb-2">
+                                  Desglose Detallado de Respuestas ({quizScore}/5 Aciertos)
+                                </h5>
+
+                                {quizQuestions.map((q, qIdx) => {
+                                  const uAns = userAnswers[qIdx];
+                                  const isCorrect = uAns === q.correctAnswer;
+                                  return (
+                                    <div 
+                                      key={q.id || qIdx} 
+                                      className={`p-4 rounded-xl border space-y-2 ${
+                                        isCorrect 
+                                          ? "bg-emerald-950/20 border-emerald-500/30" 
+                                          : "bg-rose-950/20 border-rose-500/30"
+                                      }`}
+                                    >
+                                      <div className="flex items-start justify-between">
+                                        <span className="text-xs font-bold text-white">
+                                          {qIdx + 1}. {q.question}
+                                        </span>
+                                        {isCorrect ? (
+                                          <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30 shrink-0 ml-2">
+                                            Correcto ✓
+                                          </span>
+                                        ) : (
+                                          <span className="text-[10px] font-mono font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/30 shrink-0 ml-2">
+                                            Incorrecto ✕
+                                          </span>
+                                        )}
+                                      </div>
+
+                                      <div className="text-xs space-y-1 pl-3 border-l-2 border-slate-700">
+                                        <p className={isCorrect ? "text-emerald-300 font-medium" : "text-rose-300 font-medium"}>
+                                          Tu respuesta: {uAns !== undefined ? q.options[uAns] : "Sin responder"}
+                                        </p>
+                                        {!isCorrect && (
+                                          <p className="text-emerald-400 font-bold">
+                                            Respuesta correcta: {q.options[q.correctAnswer]}
+                                          </p>
+                                        )}
+                                        <p className="text-slate-400 text-[11px] pt-1">
+                                          💡 <span className="font-bold">Explicación:</span> {q.explanation}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* 3. PESTAÑA PRESENTACIÓN GUIADA (DIAPOSITIVAS) */}
+                {aulaTab === "diapositivas" && (
+                  <div className="space-y-6">
+                    {/* Stepper de Diapositivas */}
+                    <div className="bg-slate-950/40 p-2 rounded-xl border border-slate-800/80 flex items-center justify-between gap-2 overflow-x-auto">
+                      {AULA_TOPICS_DATA[selectedAulaTopic].slides.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setAulaSlideIdx(idx)}
+                          className={`flex-1 min-w-[100px] py-1.5 px-3 rounded-lg text-[10px] font-bold font-mono transition text-center cursor-pointer border ${
+                            aulaSlideIdx === idx
+                              ? "bg-purple-500/20 border-purple-500/50 text-purple-300"
+                              : "bg-slate-900/60 border-slate-800 text-slate-500 hover:text-slate-300"
+                          }`}
+                        >
+                          Diapositiva {idx + 1}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Contenido de la Diapositiva */}
+                    {(() => {
+                      const currentSlide = AULA_TOPICS_DATA[selectedAulaTopic].slides[aulaSlideIdx];
+                      return (
+                        <div className="space-y-6">
+                          <div className="space-y-2 border-b border-slate-800/80 pb-4">
+                            <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded uppercase">
+                              {currentSlide.badge}
+                            </span>
+                            <h4 className="font-display font-black text-xl md:text-2xl text-white uppercase pt-1">
+                              {currentSlide.title}
+                            </h4>
+                            <p className="text-xs text-slate-400 font-medium">{currentSlide.subtitle}</p>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-4">
+                            {currentSlide.points.map((pt, i) => (
+                              <div key={i} className="bg-slate-950/60 border border-slate-850 p-4 rounded-2xl space-y-1 hover:border-slate-800 transition">
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-2 h-2 rounded-full bg-cyan-400" />
+                                  <h5 className="text-xs font-bold text-white uppercase">{pt.title}</h5>
+                                </div>
+                                <p className="text-xs text-slate-300 leading-relaxed pl-4">{pt.desc}</p>
+                              </div>
+                            ))}
+                          </div>
+
+                          {currentSlide.tip && (
+                            <div className="bg-cyan-950/30 border border-cyan-500/30 p-4 rounded-2xl flex items-start space-x-3">
+                              <Sparkles className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5" />
+                              <div>
+                                <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest block">Recomendación Experta</span>
+                                <p className="text-xs text-cyan-100 font-medium mt-0.5">{currentSlide.tip}</p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Controles de Diapositiva */}
+                          <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                            <button
+                              disabled={aulaSlideIdx === 0}
+                              onClick={() => setAulaSlideIdx((prev) => Math.max(0, prev - 1))}
+                              className="bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 text-white font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition cursor-pointer"
+                            >
+                              Anterior
+                            </button>
+
+                            <span className="text-xs font-mono font-bold text-slate-400">
+                              {aulaSlideIdx + 1} de {AULA_TOPICS_DATA[selectedAulaTopic].slides.length}
+                            </span>
+
+                            {aulaSlideIdx < AULA_TOPICS_DATA[selectedAulaTopic].slides.length - 1 ? (
+                              <button
+                                onClick={() => setAulaSlideIdx((prev) => prev + 1)}
+                                className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition shadow-lg shadow-cyan-500/20 cursor-pointer flex items-center space-x-2"
+                              >
+                                <span>Siguiente</span>
+                                <ArrowRight className="h-4 w-4" />
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  setSelectedAulaTopic(null);
+                                  setAulaSlideIdx(0);
+                                }}
+                                className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20 cursor-pointer"
+                              >
+                                Finalizar Presentación
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
                 )}
               </div>
             </motion.div>
