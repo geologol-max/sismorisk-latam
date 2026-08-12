@@ -1351,17 +1351,6 @@ export default function LandingPage({
                       Indicadores consolidados de uso, efectividad de respuesta y nivel de preparación alcanzado por participantes en América Latina a través del Aula Virtual GRDesastres.
                     </p>
                   </div>
-
-                  <button
-                    onClick={() => {
-                      setTelemetry(DEFAULT_AULA_TELEMETRY);
-                      try { localStorage.removeItem("grd_aula_telemetry"); } catch(e){}
-                    }}
-                    className="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 cursor-pointer shrink-0"
-                  >
-                    <RotateCcw className="h-3.5 w-3.5" />
-                    <span>Restablecer Telemetría</span>
-                  </button>
                 </div>
 
                 {/* Tarjetas KPI de Primer Nivel (4 KPIs) */}
