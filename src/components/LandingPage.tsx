@@ -642,7 +642,7 @@ export default function LandingPage({
               <img 
                 src={grdesastresLogo} 
                 alt="Logo GRDesastres" 
-                className="w-8 h-8 object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.4)]"
+                className="w-[38px] h-[38px] object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.4)]"
               />
             </div>
             <span className="font-display font-extrabold text-sm tracking-wider uppercase bg-gradient-to-r from-white via-cyan-100 to-slate-300 bg-clip-text text-transparent">
@@ -688,7 +688,7 @@ export default function LandingPage({
               <img 
                 src={grdesastresLogo} 
                 alt="Emblema Oficial GRDesastres" 
-                className="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-[0_4px_12px_rgba(6,182,212,0.6)]"
+                className="w-[42px] h-[42px] sm:w-[52px] sm:h-[52px] object-contain drop-shadow-[0_4px_12px_rgba(6,182,212,0.6)]"
               />
             </div>
             <div className="text-left font-mono space-y-0.5">
@@ -716,7 +716,7 @@ export default function LandingPage({
                   <img 
                     src={grdesastresLogo} 
                     alt="Emblema GRDesastres" 
-                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-[0_4px_12px_rgba(6,182,212,0.5)]"
+                    className="w-[74px] h-[74px] sm:w-[92px] sm:h-[92px] object-contain drop-shadow-[0_4px_12px_rgba(6,182,212,0.5)]"
                   />
                 </div>
               </div>
@@ -1172,7 +1172,7 @@ export default function LandingPage({
               <img 
                 src={grdesastresLogo} 
                 alt="Emblema Oficial GRDesastres" 
-                className="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-[0_4px_12px_rgba(6,182,212,0.6)]"
+                className="w-[42px] h-[42px] sm:w-[52px] sm:h-[52px] object-contain drop-shadow-[0_4px_12px_rgba(6,182,212,0.6)]"
               />
             </div>
             <div className="text-left font-mono space-y-0.5">
@@ -1532,7 +1532,7 @@ export default function LandingPage({
                   <img 
                     src={grdesastresLogo} 
                     alt="Emblema GRDesastres" 
-                    className="w-10 h-10 object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.3)]"
+                    className="w-[46px] h-[46px] object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.3)]"
                   />
                 </div>
                 <span className="font-extrabold text-white text-base tracking-wider uppercase">

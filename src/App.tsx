@@ -519,7 +519,7 @@ export default function App() {
             <img 
               src={grdesastresLogo} 
               alt="Logo GRDesastres" 
-              className="w-9 h-9 object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.4)]"
+              className="w-[42px] h-[42px] object-contain drop-shadow-[0_2px_8px_rgba(6,182,212,0.4)]"
             />
           </div>
           <div>
