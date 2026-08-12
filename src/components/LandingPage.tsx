@@ -62,6 +62,7 @@ import jairoRescueSearch from "../assets/jairo_rescue_search.jpg";
 import jairoNepalClose from "../assets/jairo_nepal_close.jpg";
 import jairoEcuadorCollapse from "../assets/jairo_ecuador_collapse.jpg";
 import grdesastresLogo from "../assets/grdesastres_logo.png";
+import emergencyKitHero from "../assets/emergency_kit_hero.jpg";
 
 interface LandingPageProps {
   onNavigate: (tab: "inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
@@ -1255,7 +1256,7 @@ export default function LandingPage({
               <div className="space-y-3">
                 <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
                   <img 
-                    src={jairoData} 
+                    src={emergencyKitHero} 
                     alt="Miniatura Módulo 04: Kit de Emergencias" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
@@ -1265,7 +1266,7 @@ export default function LandingPage({
                     <span className="text-[9px] font-mono font-bold text-emerald-300 uppercase tracking-wider">Módulo 04</span>
                   </div>
                   <div className="absolute top-2.5 right-2.5 bg-emerald-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded tracking-wider shadow-lg">
-                    HD 1080p • GUÍA VIDEO
+                    HD 1080p • VIDEO + TEST
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-14 h-14 rounded-full bg-emerald-500/90 text-slate-950 flex items-center justify-center shadow-xl shadow-emerald-500/30 group-hover:scale-110 group-hover:bg-emerald-400 transition-all duration-300">
@@ -2947,61 +2948,67 @@ export default function LandingPage({
               {/* Contenido según la pestaña seleccionada */}
               <div className="p-6 md:p-8 overflow-y-auto flex-1 text-left">
                 {/* 1. PESTAÑA VIDEO DE FORMACIÓN */}
-                {aulaTab === "video" && (
-                  <div className="space-y-6">
-                    {/* Reproductor de Video HD */}
-                    <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black border border-cyan-500/40 shadow-2xl">
-                      <video 
-                        src="https://res.cloudinary.com/rtzau8g7/video/upload/v1786498008/Preparaci%C3%B3n_ante_Sismos_n26b0x.mp4" 
-                        controls 
-                        playsInline 
-                        poster={earthquakeHero}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
+                {aulaTab === "video" && (() => {
+                  const vConfig = selectedAulaTopic === "kit"
+                    ? {
+                        videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786499719/El_Kit_de_72_Horas_gu2k7m.mp4",
+                        poster: emergencyKitHero,
+                        badge: "Videolección Oficial • Módulo 04: Kit de Emergencias",
+                        title: "El Kit de 72 Horas & Mochila Táctica de Supervivencia",
+                        duration: "06:00 min"
+                      }
+                    : selectedAulaTopic === "incendios"
+                    ? {
+                        videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786498008/Preparaci%C3%B3n_ante_Sismos_n26b0x.mp4",
+                        poster: collapsedBuilding,
+                        badge: "Videolección Oficial • Módulo 02: Incendios",
+                        title: "Prevención y Control de Incendios Estructurales",
+                        duration: "03:40 min"
+                      }
+                    : selectedAulaTopic === "inundaciones"
+                    ? {
+                        videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786498008/Preparaci%C3%B3n_ante_Sismos_n26b0x.mp4",
+                        poster: earthStructure,
+                        badge: "Videolección Oficial • Módulo 03: Inundaciones",
+                        title: "Mitigación por Inundaciones y Crecidas Repentinas",
+                        duration: "05:10 min"
+                      }
+                    : {
+                        videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786498008/Preparaci%C3%B3n_ante_Sismos_n26b0x.mp4",
+                        poster: earthquakeHero,
+                        badge: "Videolección Oficial • Módulo 01: Terremotos",
+                        title: "Preparación y Autoprotección ante Eventos Sísmicos",
+                        duration: "04:15 min"
+                      };
 
-                    {/* Metadatos del Video e Invitación al Test */}
-                    <div className="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl space-y-4">
-                      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
-                        <div className="space-y-1">
-                          <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
-                            Videolección Oficial • Módulo 01: Terremotos
-                          </span>
-                          <h4 className="font-display font-black text-lg text-white uppercase pt-1">
-                            Preparación y Autoprotección ante Eventos Sísmicos
-                          </h4>
-                          <p className="text-xs text-slate-400 font-medium">
-                            Producción Oficial GRDesastres • Duración: 04:15 min • Formato HD 1080p
-                          </p>
-                        </div>
-                        <button 
-                          onClick={() => {
-                            setAulaTab("test");
-                            if (quizQuestions.length === 0) {
-                              setQuizQuestions(getRandomQuizQuestions(5));
-                            }
-                          }}
-                          className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase py-2.5 px-4 rounded-xl transition shadow-lg shadow-cyan-500/20 flex items-center space-x-2 cursor-pointer font-mono"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                          <span>Ir al Test de Evaluación (5 Preguntas) →</span>
-                        </button>
+                  return (
+                    <div className="space-y-6">
+                      {/* Reproductor de Video HD */}
+                      <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black border border-cyan-500/40 shadow-2xl">
+                        <video 
+                          key={vConfig.videoUrl}
+                          src={vConfig.videoUrl} 
+                          controls 
+                          playsInline 
+                          poster={vConfig.poster}
+                          className="w-full h-full object-contain"
+                        />
                       </div>
 
-                      <p className="text-xs text-slate-300 leading-relaxed">
-                        Visualiza el contenido audiovisual completo para repasar el protocolo internacional de <strong>Agacharse, Cubrirse y Aferrarse</strong>, la fijación estructural de mobiliario pesado, zonas de cobertura seguras y acciones prioritarias tras el cese del movimiento.
-                      </p>
-
-                      {/* Tarjeta Destacada de Invitación al Test */}
-                      <div className="bg-cyan-950/40 border border-cyan-500/40 p-4 rounded-xl flex items-start space-x-3.5 shadow-lg">
-                        <Sparkles className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5" />
-                        <div className="space-y-2">
-                          <span className="text-xs font-extrabold text-cyan-300 uppercase tracking-wider block">
-                            🎬 ¿Terminaste de ver la videolección?
-                          </span>
-                          <p className="text-xs text-cyan-100/90 leading-relaxed">
-                            Te invitamos a poner a prueba lo aprendido respondiendo nuestro <strong>Test Básico de 5 preguntas aleatorias</strong>. Obtén al menos 3 aciertos de 5 para aprobar la evaluación del módulo.
-                          </p>
+                      {/* Metadatos del Video e Invitación al Test */}
+                      <div className="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl space-y-4">
+                        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+                          <div className="space-y-1">
+                            <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
+                              {vConfig.badge}
+                            </span>
+                            <h4 className="font-display font-black text-lg text-white uppercase pt-1">
+                              {vConfig.title}
+                            </h4>
+                            <p className="text-xs text-slate-400 font-medium">
+                              Producción Oficial GRDesastres • Duración: {vConfig.duration} • Formato HD 1080p
+                            </p>
+                          </div>
                           <button 
                             onClick={() => {
                               setAulaTab("test");
@@ -3009,16 +3016,44 @@ export default function LandingPage({
                                 setQuizQuestions(getRandomQuizQuestions(5));
                               }
                             }}
-                            className="inline-flex items-center space-x-2 text-xs font-extrabold text-cyan-400 hover:text-cyan-200 underline uppercase tracking-wider cursor-pointer pt-1"
                           >
-                            <span>Responder Test de Evaluación Sísmica Ahora</span>
-                            <ArrowRight className="h-3.5 w-3.5" />
+                            <HelpCircle className="h-4 w-4" />
+                            <span>Ir al Test de Evaluación (5 Preguntas) →</span>
                           </button>
+                        </div>
+
+                        <p className="text-xs text-slate-300 leading-relaxed">
+                          Visualiza el contenido audiovisual completo para repasar los protocolos internacionales de gestión de riesgos, autoprotección y respuesta en emergencias.
+                        </p>
+
+                        {/* Tarjeta Destacada de Invitación al Test */}
+                        <div className="bg-cyan-950/40 border border-cyan-500/40 p-4 rounded-xl flex items-start space-x-3.5 shadow-lg">
+                          <Sparkles className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5" />
+                          <div className="space-y-2">
+                            <span className="text-xs font-extrabold text-cyan-300 uppercase tracking-wider block">
+                              🎬 ¿Terminaste de ver la videolección?
+                            </span>
+                            <p className="text-xs text-cyan-100/90 leading-relaxed">
+                              Te invitamos a poner a prueba lo aprendido respondiendo nuestro <strong>Test Básico de 5 preguntas aleatorias</strong>. Obtén al menos 3 aciertos de 5 para aprobar la evaluación del módulo.
+                            </p>
+                            <button 
+                              onClick={() => {
+                                setAulaTab("test");
+                                if (quizQuestions.length === 0) {
+                                  setQuizQuestions(getRandomQuizQuestions(5));
+                                }
+                              }}
+                              className="inline-flex items-center space-x-2 text-xs font-extrabold text-cyan-400 hover:text-cyan-200 underline uppercase tracking-wider cursor-pointer pt-1"
+                            >
+                              <span>Responder Test de Evaluación Ahora</span>
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
 
                 {/* 2. PESTAÑA TEST DE AUTOEVALUACIÓN (5 PREGUNTAS ALEATORIAS) */}
                 {aulaTab === "test" && (
