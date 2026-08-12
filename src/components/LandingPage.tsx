@@ -65,6 +65,7 @@ import grdesastresLogo from "../assets/grdesastres_logo.png";
 import emergencyKitHero from "../assets/emergency_kit_hero.jpg";
 import firePreventionHero from "../assets/fire_prevention_hero.jpg";
 import floodMitigationHero from "../assets/flood_mitigation_hero.jpg";
+import floodDisasterHero from "../assets/flood_disaster_hero.jpg";
 
 interface LandingPageProps {
   onNavigate: (tab: "inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
@@ -1497,7 +1498,7 @@ export default function LandingPage({
               <div className="space-y-3">
                 <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
                   <img 
-                    src={floodMitigationHero} 
+                    src={floodDisasterHero} 
                     alt="Miniatura Módulo 03: Inundaciones" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
@@ -3284,7 +3285,7 @@ export default function LandingPage({
                     : selectedAulaTopic === "inundaciones"
                     ? {
                         videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786502514/Gu%C3%ADa_ante_Inundaciones_wxopac.mp4",
-                        poster: floodMitigationHero,
+                        poster: floodDisasterHero,
                         badge: "Videolección Oficial • Módulo 03: Inundaciones",
                         title: "Guía ante Inundaciones & Mitigación de Crecidas Repentinas",
                         duration: "05:10 min"
