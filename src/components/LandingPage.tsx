@@ -375,8 +375,322 @@ const EARTHQUAKE_QUIZ_BANK: QuizQuestion[] = [
   }
 ];
 
-function getRandomQuizQuestions(count: number = 5): QuizQuestion[] {
-  const shuffled = [...EARTHQUAKE_QUIZ_BANK].sort(() => 0.5 - Math.random());
+const FIRE_QUIZ_BANK: QuizQuestion[] = [
+  {
+    id: 101,
+    question: "¿Cuáles son los 3 elementos fundamentales que componen el Triángulo del Fuego?",
+    options: [
+      "Oxígeno, Nitrógeno y Dióxido de Carbono",
+      "Combustible, Comburente (Oxígeno) y Fuente de Calor",
+      "Agua, Aceite y Electricidad",
+      "Madera, Plástico y Espuma"
+    ],
+    correctAnswer: 1,
+    explanation: "Sin combustible, oxígeno o calor suficiente, el fuego no puede iniciarse ni sostenerse."
+  },
+  {
+    id: 102,
+    question: "¿Qué significa la sigla 'PASS' en el protocolo internacional de uso de extintores?",
+    options: [
+      "Parar, Alentar, Soplar, Salir",
+      "Tirar del seguro, Apuntar a la base, Presionar la manilla y Barrer de lado a lado",
+      "Presionar, Agitar, Sacudir, Soltar",
+      "Paso 1, Apagar, Secar, Salir"
+    ],
+    correctAnswer: 1,
+    explanation: "PASS en inglés (Pull, Aim, Squeeze, Sweep) es la técnica secuencial para combatir un conato de incendio."
+  },
+  {
+    id: 103,
+    question: "En presencia de humo denso dentro de un inmueble en llamas, ¿cuál es la forma correcta de desplazarse hacia la salida?",
+    options: [
+      "Caminando erguido a paso veloz",
+      "Gateando al ras del suelo tapando nariz y boca con un paño",
+      "Corriendo mientras se inhala profundamente",
+      "Saltando por encima del humo"
+    ],
+    correctAnswer: 1,
+    explanation: "El aire más limpio y menos caliente se mantiene cerca del suelo debido a la flotabilidad de los gases calientes."
+  },
+  {
+    id: 104,
+    question: "¿Cuál es la causa principal de fatalidades durante incendios en espacios cerrados?",
+    options: [
+      "Inhalación de monóxido de carbono y humos tóxicos",
+      "Quemaduras directas de piel por llama viva",
+      "Caída de vidrios rotos",
+      "Agotamiento físico por correr"
+    ],
+    correctAnswer: 0,
+    explanation: "Los gases tóxicos e irritantes privan de oxígeno al cuerpo y causan asfixia o desorientación antes de ser alcanzado por el fuego."
+  },
+  {
+    id: 105,
+    question: "Antes de abrir una puerta cerrada durante la evacuación por incendio, ¿qué precaución se debe tomar?",
+    options: [
+      "Tocar la puerta o la perilla con el dorso de la mano para verificar si está caliente",
+      "Abrirla bruscamente para ventilación rápida",
+      "Mirar por la cerradura acercando el ojo",
+      "Patearla fuertemente para derribarla"
+    ],
+    correctAnswer: 0,
+    explanation: "Si la puerta o perilla está caliente, indica que hay fuego activo del otro lado y no debe abrirse."
+  },
+  {
+    id: 106,
+    question: "¿Qué tipo de extintor es el más adecuado para incendios que involucran equipos eléctricos energizados (Clase C)?",
+    options: [
+      "Extintor de Agua Presurizada",
+      "Extintor de Polvo Químico Seco (ABC) o CO2",
+      "Baldes de agua potable",
+      "Mantas húmedas de algodón"
+    ],
+    correctAnswer: 1,
+    explanation: "El CO2 y el Polvo Químico Seco no conducen electricidad, evitando descargas eléctricas fatales al operador."
+  },
+  {
+    id: 107,
+    question: "¿Qué debes hacer si tu ropa se enciende accidentalmente por llamas?",
+    options: [
+      "Correr velozmente para apagar el fuego con el aire",
+      "Detenerte, Tirarte al suelo y Rodar cubriendo tu rostro",
+      "Gritar mientras saltas en el mismo lugar",
+      "Quitarte la ropa tirándola hacia arriba"
+    ],
+    correctAnswer: 1,
+    explanation: "Detenerse, tirarse al suelo y rodar sofoca el fuego por sofocación al eliminar el contacto directo con el oxígeno."
+  },
+  {
+    id: 108,
+    question: "¿Con qué frecuencia se recomienda probar los detectores de humo instalados en viviendas?",
+    options: [
+      "Una vez al mes",
+      "Una vez cada 5 años",
+      "Únicamente cuando suene por cocinar",
+      "No requieren prueba"
+    ],
+    correctAnswer: 0,
+    explanation: "Probar los detectores mensualmente garantiza que la batería y los sensores fotoeléctricos funcionen activamente."
+  },
+  {
+    id: 109,
+    question: "¿Por qué está prohibido sobrecargar adaptadores múltiples ('zapatillas') en tomacorrientes?",
+    options: [
+      "Porque causa cortocircuitos y sobrecalentamiento de líneas eléctricas",
+      "Porque gasta demasiada energía de la red pública",
+      "Porque apaga las luces automáticamente",
+      "No hay ningún peligro en sobrecargarlos"
+    ],
+    correctAnswer: 0,
+    explanation: "La sobrecarga eléctrica genera calor excesivo en conductores, derritiendo aislantes e iniciando incendios internos."
+  },
+  {
+    id: 110,
+    question: "Una vez que hayas evacuado completamente hacia la zona de seguridad exterior, ¿qué regla es infranqueable?",
+    options: [
+      "Bajo ninguna circunstancia reingresar al inmueble en llamas",
+      "Volver por objetos personales de valor",
+      "Regresar a apagar las luces que quedaron encendidas",
+      "Ingresar para tomar fotos de la emergencia"
+    ],
+    correctAnswer: 0,
+    explanation: "Reingresar a un edificio incendiado es causa mayor de fatalidades; los bomberos son los únicos equipados para rescate."
+  }
+];
+
+const FLOOD_QUIZ_BANK: QuizQuestion[] = [
+  {
+    id: 201,
+    question: "¿Qué profundidad de agua en movimiento rápido es suficiente para derribar a una persona adulta?",
+    options: [
+      "Apenas 15 cm de corriente de agua",
+      "2 metros de profundidad",
+      "5 metros de profundidad",
+      "El agua no puede derribar a un adulto"
+    ],
+    correctAnswer: 0,
+    explanation: "Solo 15 cm de agua en movimiento ejercen fuerza suficiente para hacer perder el equilibrio y arrastrar a un adulto."
+  },
+  {
+    id: 202,
+    question: "¿Qué profundidad de flujo de agua puede hacer flotar o desplazar un automóvil convencional fuera de la vía?",
+    options: [
+      "Entre 30 y 50 cm de agua",
+      "3 metros de profundidad",
+      "Solo si llega al techo",
+      "Los autos nunca flotan"
+    ],
+    correctAnswer: 0,
+    explanation: "30 a 50 cm de agua generan flotabilidad suficiente en neumáticos y chasis para desplazar un vehículo fuera de control."
+  },
+  {
+    id: 203,
+    question: "¿Cuál es la primera acción preventiva en la vivienda si el agua de crecida comienza a subir e ingresar?",
+    options: [
+      "Desconectar el interruptor general de luz antes de que el agua toque los tomacorrientes",
+      "Encender todos los electrodomésticos",
+      "Abrir la manguera del jardín",
+      "Quedarse descalzo sobre el agua"
+    ],
+    correctAnswer: 0,
+    explanation: "Cortar el suministro eléctrico evita electrocuciones masivas si el agua alcanza tableros o enchufes."
+  },
+  {
+    id: 204,
+    question: "Si debes evacuar una zona inundable a pie, ¿por dónde debes evitar transitar?",
+    options: [
+      "Por corrientes de agua rápida, zanjas, alcantarillas sin tapa y puentes socavados",
+      "Por rutas altas señalizadas",
+      "Por lomas y cerros elevados",
+      "Por pasarelas elevadas secas"
+    ],
+    correctAnswer: 0,
+    explanation: "Las alcantarillas abiertas bajo el agua y el flujo turbulento arrastran a las personas impidiendo su rescate."
+  },
+  {
+    id: 205,
+    question: "Tras una inundación, ¿qué precaución sanitaria se debe tomar con el agua de consumo?",
+    options: [
+      "Consumir únicamente agua embotellada o hervirla durante 3 a 5 minutos",
+      "Tomar directamente del grifo sin filtrar",
+      "Tomar agua estancada de las calles",
+      "Mezclar el agua con aceite"
+    ],
+    correctAnswer: 0,
+    explanation: "Las inundaciones contaminan las redes de agua con bacterias y aguas servidas; hervir elimina patógenos mortales."
+  }
+];
+
+const KIT_QUIZ_BANK: QuizQuestion[] = [
+  {
+    id: 301,
+    question: "¿Cuál es el volumen de agua potable de cálculo recomendado por persona en la fórmula de la Mochila de 72 Horas?",
+    options: [
+      "1 litro total",
+      "9 litros por persona (3 litros/día durante 3 días)",
+      "50 litros por persona",
+      "No se requiere agua en la mochila"
+    ],
+    correctAnswer: 1,
+    explanation: "La regla estandarizada es 1 persona × 3 días × 3 L/día = 9 Litros totales para consumo biológico e higiene básica."
+  },
+  {
+    id: 302,
+    question: "¿Por qué el horizonte temporal estándar de la mochila de supervivencia es de 72 horas?",
+    options: [
+      "Porque es el tiempo promedio estadístico que tardan en desplegarse los equipos de asistencia y rescate externo",
+      "Porque los alimentos se vencen exactamente a los 3 días",
+      "Porque las linternas solo duran 72 horas encendidas",
+      "Fue una cifra elegida al azar"
+    ],
+    correctAnswer: 0,
+    explanation: "En desastres mayores, las primeras 72 horas son la ventana crítica de autonomía ciudadana previa a la llegada de apoyo externo."
+  },
+  {
+    id: 303,
+    question: "¿Cómo deben almacenarse los documentos personales de propiedad e identificación dentro del kit?",
+    options: [
+      "Sueltos en el fondo de la mochila",
+      "En bolsas plásticas herméticas estancas impermeables (Ziploc) o formato digital protegido",
+      "En un sobre de papel simple",
+      "En el automóvil estacionado fuera"
+    ],
+    correctAnswer: 1,
+    explanation: "Las bolsas estancas protegen los documentos de identificación y registros legales contra agua, lodo y roturas."
+  },
+  {
+    id: 304,
+    question: "En el sistema de nutrición táctica para la mochila de 72 horas, ¿qué tipo de alimentos deben priorizarse?",
+    options: [
+      "Alimentos frescos que requieran refrigeración",
+      "Barras de proteína calórica, enlatados con abre fácil y comida lista para consumir sin cocción",
+      "Carnes crudas para cocinar a la parrilla",
+      "Sopas congeladas"
+    ],
+    correctAnswer: 1,
+    explanation: "Los alimentos no perecibles, de alta densidad calórica y listos para comer garantizan nutrición sin depender de gas o estufas."
+  },
+  {
+    id: 305,
+    question: "¿En qué lugar de la vivienda debe ubicarse la Mochila de Emergencia?",
+    options: [
+      "En un lugar visible de fácil acceso cercano a la ruta principal de salida",
+      "Guardada bajo llave al fondo de un depósito",
+      "En el entretecho o altillo de la casa",
+      "En el sótano sin iluminación"
+    ],
+    correctAnswer: 0,
+    explanation: "Estar ubicada junto a la vía de evacuación permite tomarla en segundos al momento de abandonar el inmueble."
+  },
+  {
+    id: 306,
+    question: "¿Qué tipo de linterna es la más funcional y recomendada para mantener las manos libres en labores de evacuación?",
+    options: [
+      "Linterna frontal de cabeza (Headlamp) LED",
+      "Linterna pesada de mano de cristal",
+      "La luz del teléfono celular únicamente",
+      "Velas de cera tradicionales"
+    ],
+    correctAnswer: 0,
+    explanation: "La linterna de cabeza ilumina la trayectoria mientras deja libres ambas manos para escalar, sujetarse o portar niños."
+  },
+  {
+    id: 307,
+    question: "Además de linternas, ¿qué dispositivo de comunicación e información a batería es indispensable en el kit?",
+    options: [
+      "Televisor de pantalla plana",
+      "Radio portátil a batería o manivela dinamo (AM/FM/NOAA)",
+      "Consola de videojuegos portátil",
+      "Computadora de escritorio"
+    ],
+    correctAnswer: 1,
+    explanation: "La radio a baterías o dinamo permite captar partes informativos de emergencia cuando las redes móviles caen."
+  },
+  {
+    id: 308,
+    question: "¿Por qué debe evitarse el uso de velas tradicionales como fuente de iluminación durante y después de un sismo o emergencia?",
+    options: [
+      "Porque iluminan demasiado",
+      "Porque la llama abierta puede iniciar un incendio ante fugas imperceptibles de gas",
+      "Porque gastan demasiada energía",
+      "Porque son prohibidas por ley"
+    ],
+    correctAnswer: 1,
+    explanation: "Las fugas de gas por ruptura de tuberías son comunes tras desastres; cualquier llama abierta causa explosiones instantáneas."
+  },
+  {
+    id: 309,
+    question: "¿Qué elemento acústico liviano se debe incluir en la mochila para señalización en caso de quedar atrapado bajo escombros?",
+    options: [
+      "Un silbato de emergencia sin bola interna",
+      "Un parlante Bluetooth de alta potencia",
+      "Una campana pesada de bronce",
+      "Una bocina de aire comprimido"
+    ],
+    correctAnswer: 0,
+    explanation: "El silbato emite un sonido agudo de alcance prolongado que requiere mínimo esfuerzo físico para ser detectado por rescatistas USAR."
+  },
+  {
+    id: 310,
+    question: "¿Con qué frecuencia se debe revisar y actualizar el contenido de la Mochila de Emergencia (vencimiento de agua, alimentos y baterías)?",
+    options: [
+      "Al menos 1 a 2 veces al año",
+      "Una vez cada 20 años",
+      "Nunca es necesario revisarla",
+      "Solo cuando se use en un desastre real"
+    ],
+    correctAnswer: 0,
+    explanation: "Inspeccionar el kit periódicamente asegura que los insumos médicos, agua embotellada y baterías estén vigentes y operativos."
+  }
+];
+
+function getRandomQuizQuestions(topicId: "terremotos" | "incendios" | "inundaciones" | "kit" = "terremotos", count: number = 5): QuizQuestion[] {
+  let bank = EARTHQUAKE_QUIZ_BANK;
+  if (topicId === "incendios") bank = FIRE_QUIZ_BANK;
+  if (topicId === "inundaciones") bank = FLOOD_QUIZ_BANK;
+  if (topicId === "kit") bank = KIT_QUIZ_BANK;
+
+  const shuffled = [...bank].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }
 
@@ -718,7 +1032,7 @@ export default function LandingPage({
     setSelectedAulaTopic(topicId);
     setAulaSlideIdx(0);
     setAulaTab("video");
-    setQuizQuestions(getRandomQuizQuestions(5));
+    setQuizQuestions(getRandomQuizQuestions(topicId, 5));
     setUserAnswers({});
     setQuizSubmitted(false);
     setQuizScore(0);
@@ -734,7 +1048,7 @@ export default function LandingPage({
   };
 
   const handleRestartQuiz = () => {
-    setQuizQuestions(getRandomQuizQuestions(5));
+    setQuizQuestions(getRandomQuizQuestions(selectedAulaTopic || "terremotos", 5));
     setUserAnswers({});
     setQuizSubmitted(false);
     setQuizScore(0);
@@ -2915,7 +3229,7 @@ export default function LandingPage({
                   onClick={() => {
                     setAulaTab("test");
                     if (quizQuestions.length === 0) {
-                      setQuizQuestions(getRandomQuizQuestions(5));
+                      setQuizQuestions(getRandomQuizQuestions(selectedAulaTopic || "terremotos", 5));
                     }
                   }}
                   className={`py-2 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 cursor-pointer border ${
@@ -3014,7 +3328,7 @@ export default function LandingPage({
                             onClick={() => {
                               setAulaTab("test");
                               if (quizQuestions.length === 0) {
-                                setQuizQuestions(getRandomQuizQuestions(5));
+                                setQuizQuestions(getRandomQuizQuestions(selectedAulaTopic || "terremotos", 5));
                               }
                             }}
                           >
@@ -3041,7 +3355,7 @@ export default function LandingPage({
                               onClick={() => {
                                 setAulaTab("test");
                                 if (quizQuestions.length === 0) {
-                                  setQuizQuestions(getRandomQuizQuestions(5));
+                                  setQuizQuestions(getRandomQuizQuestions(selectedAulaTopic || "terremotos", 5));
                                 }
                               }}
                               className="inline-flex items-center space-x-2 text-xs font-extrabold text-cyan-400 hover:text-cyan-200 underline uppercase tracking-wider cursor-pointer pt-1"
@@ -3066,10 +3380,16 @@ export default function LandingPage({
                           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                             <div>
                               <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                                Evaluación de Conocimientos • Módulo 01
+                                {selectedAulaTopic === "incendios" ? "Evaluación de Conocimientos • Módulo 02" :
+                                 selectedAulaTopic === "inundaciones" ? "Evaluación de Conocimientos • Módulo 03" :
+                                 selectedAulaTopic === "kit" ? "Evaluación de Conocimientos • Módulo 04" :
+                                 "Evaluación de Conocimientos • Módulo 01"}
                               </span>
                               <h4 className="font-display font-black text-base text-white uppercase">
-                                Test Básico de Autoprotección Sísmica
+                                {selectedAulaTopic === "incendios" ? "Test Básico de Prevención de Incendios" :
+                                 selectedAulaTopic === "inundaciones" ? "Test Básico de Mitigación por Inundaciones" :
+                                 selectedAulaTopic === "kit" ? "Test Básico de Mochila de 72h y Kit de Emergencia" :
+                                 "Test Básico de Autoprotección Sísmica"}
                               </h4>
                             </div>
                             <span className="text-xs font-mono font-bold text-slate-400 bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">
@@ -3078,7 +3398,7 @@ export default function LandingPage({
                           </div>
 
                           <p className="text-xs text-slate-300">
-                            Responde las siguientes 5 preguntas aleatorias basadas en la información presentada en la videolección de terremotos.
+                            Responde las siguientes 5 preguntas aleatorias basadas en la lección y los conceptos clave del módulo.
                           </p>
 
                           {/* Lista de 5 Preguntas */}
