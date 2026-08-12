@@ -64,6 +64,7 @@ import jairoEcuadorCollapse from "../assets/jairo_ecuador_collapse.jpg";
 import grdesastresLogo from "../assets/grdesastres_logo.png";
 import emergencyKitHero from "../assets/emergency_kit_hero.jpg";
 import firePreventionHero from "../assets/fire_prevention_hero.jpg";
+import floodMitigationHero from "../assets/flood_mitigation_hero.jpg";
 
 interface LandingPageProps {
   onNavigate: (tab: "inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
@@ -1496,7 +1497,7 @@ export default function LandingPage({
               <div className="space-y-3">
                 <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
                   <img 
-                    src={earthStructure} 
+                    src={floodMitigationHero} 
                     alt="Miniatura Módulo 03: Inundaciones" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
@@ -1506,7 +1507,7 @@ export default function LandingPage({
                     <span className="text-[9px] font-mono font-bold text-blue-300 uppercase tracking-wider">Módulo 03</span>
                   </div>
                   <div className="absolute top-2.5 right-2.5 bg-blue-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded tracking-wider shadow-lg">
-                    HD 1080p • GUÍA VIDEO
+                    HD 1080p • VIDEO + TEST
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-14 h-14 rounded-full bg-blue-500/90 text-slate-950 flex items-center justify-center shadow-xl shadow-blue-500/30 group-hover:scale-110 group-hover:bg-blue-400 transition-all duration-300">
@@ -1558,7 +1559,7 @@ export default function LandingPage({
               <div className="p-4 pt-0">
                 <button className="w-full bg-slate-950 hover:bg-blue-500 hover:text-slate-950 border border-blue-500/30 text-blue-300 font-bold text-xs uppercase py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 font-mono group-hover:border-blue-400">
                   <Play className="h-3.5 w-3.5 fill-current" />
-                  <span>Abrir Lección en Video</span>
+                  <span>Ver Video & Responder Test</span>
                 </button>
               </div>
             </div>
@@ -3282,10 +3283,10 @@ export default function LandingPage({
                       }
                     : selectedAulaTopic === "inundaciones"
                     ? {
-                        videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786498008/Preparaci%C3%B3n_ante_Sismos_n26b0x.mp4",
-                        poster: earthStructure,
+                        videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786502514/Gu%C3%ADa_ante_Inundaciones_wxopac.mp4",
+                        poster: floodMitigationHero,
                         badge: "Videolección Oficial • Módulo 03: Inundaciones",
-                        title: "Mitigación por Inundaciones y Crecidas Repentinas",
+                        title: "Guía ante Inundaciones & Mitigación de Crecidas Repentinas",
                         duration: "05:10 min"
                       }
                     : {
