@@ -63,6 +63,7 @@ import jairoNepalClose from "../assets/jairo_nepal_close.jpg";
 import jairoEcuadorCollapse from "../assets/jairo_ecuador_collapse.jpg";
 import grdesastresLogo from "../assets/grdesastres_logo.png";
 import emergencyKitHero from "../assets/emergency_kit_hero.jpg";
+import firePreventionHero from "../assets/fire_prevention_hero.jpg";
 
 interface LandingPageProps {
   onNavigate: (tab: "inicio" | "modelo" | "espectro" | "vulnerabilidad" | "fema" | "gndt" | "simulador") => void;
@@ -1106,7 +1107,7 @@ export default function LandingPage({
               <div className="space-y-3">
                 <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
                   <img 
-                    src={collapsedBuilding} 
+                    src={firePreventionHero} 
                     alt="Miniatura Módulo 02: Incendios" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
@@ -1116,7 +1117,7 @@ export default function LandingPage({
                     <span className="text-[9px] font-mono font-bold text-orange-300 uppercase tracking-wider">Módulo 02</span>
                   </div>
                   <div className="absolute top-2.5 right-2.5 bg-orange-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded tracking-wider shadow-lg">
-                    HD 1080p • GUÍA VIDEO
+                    HD 1080p • VIDEO + TEST
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-14 h-14 rounded-full bg-orange-500/90 text-slate-950 flex items-center justify-center shadow-xl shadow-orange-500/30 group-hover:scale-110 group-hover:bg-orange-400 transition-all duration-300">
@@ -2959,10 +2960,10 @@ export default function LandingPage({
                       }
                     : selectedAulaTopic === "incendios"
                     ? {
-                        videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786498008/Preparaci%C3%B3n_ante_Sismos_n26b0x.mp4",
-                        poster: collapsedBuilding,
+                        videoUrl: "https://res.cloudinary.com/rtzau8g7/video/upload/v1786501027/Plano_de_Supervivencia_w7cx73.mp4",
+                        poster: firePreventionHero,
                         badge: "Videolección Oficial • Módulo 02: Incendios",
-                        title: "Prevención y Control de Incendios Estructurales",
+                        title: "Plano de Supervivencia & Prevención de Incendios Estructurales",
                         duration: "03:40 min"
                       }
                     : selectedAulaTopic === "inundaciones"
